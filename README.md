@@ -4,7 +4,7 @@
 
 Целевой уровень качества — **микробизнес по функциональности, корпоративный класс по надёжности и контролю**.
 
-Документация публикуется на GitHub Pages: [bestdeejay-design.github.io/lovii-crm](https://bestdeejay-design.github.io/lovii-crm/) (сборка MkDocs Material, workflow `.github/workflows/pages.yml`).
+Документация публикуется на GitHub Pages: [bestdeejay-design.github.io/lovii-crm](https://bestdeejay-design.github.io/lovii-crm/). Сборка — MkDocs Material; workflow `.github/workflows/pages.yml` автоматически публикует собранный сайт в корень ветки при изменениях в `docs/` (`.nojekyll` отключает Jekyll).
 
 ## Структура репозитория
 

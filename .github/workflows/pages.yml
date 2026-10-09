@@ -1,5 +1,10 @@
 name: Docs → GitHub Pages
 
+# Собирает документацию (MkDocs Material) и публикует её в корень ветки.
+# Страницы репозитория отдают корень ветки напрямую, поэтому сайт доступен на
+# https://bestdeejay-design.github.io/lovii-crm/ без изменения настроек репозитория.
+# Файл .nojekyll отключает Jekyll — файлы отдаются как есть.
+
 on:
   push:
     branches: [main, "arena/3e31bd7c-lovii-crm"]
@@ -10,37 +15,42 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Install MkDocs Material
         run: pip install --quiet mkdocs-material
+
       - name: Build docs
         run: mkdocs build
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Publish built site to branch root
+        run: |
+          # убираем ранее сгенерированные файлы сайта в корне (но не исходники)
+          rm -rf index.html 404.html assets search research sitemap.xml sitemap.xml.gz
+          cp -r site/. .
+          touch .nojekyll
+          git config user.name "lovii docs bot"
+          git config user.email "lovii-docs-bot@users.noreply.github.com"
+          git add -A -- index.html 404.html assets search research sitemap.xml sitemap.xml.gz .nojekyll
+          if ! git diff --cached --quiet; then
+            git commit -m "docs(site): publish built documentation"
+            git push
+          else
+            echo "Site unchanged — nothing to publish."
+          fi
