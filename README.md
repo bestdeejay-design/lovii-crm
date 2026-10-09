@@ -4,6 +4,8 @@
 
 Целевой уровень качества — **микробизнес по функциональности, корпоративный класс по надёжности и контролю**.
 
+Документация публикуется на GitHub Pages: [bestdeejay-design.github.io/lovii-crm](https://bestdeejay-design.github.io/lovii-crm/) (сборка MkDocs Material, workflow `.github/workflows/pages.yml`).
+
 ## Структура репозитория
 
 | Раздел | Что внутри |

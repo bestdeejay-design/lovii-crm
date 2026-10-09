@@ -4,19 +4,28 @@
 
 ## Карта документов
 
+### 0. Резюме и аудит корпуса
+
+| Файл | Содержание |
+|---|---|
+| [`research/executive-summary.md`](research/executive-summary.md) | Резюме исследования на одной странице — для руководства |
+| [`research/audit-report.md`](research/audit-report.md) | Аудит корпуса документации: проверки, пробелы, оценки |
+
 ### 1. Рынок и архитектура
 
 | Файл | Содержание |
 |---|---|
 | [`research/00-market-landscape.md`](research/00-market-landscape.md) | Рынок общепита РФ в цифрах, сегменты автоматизации, глобальный контекст |
 | [`research/01-reference-architecture.md`](research/01-reference-architecture.md) | Референс-модель: 13 доменов, сквозной процесс, модель данных, роли |
+| [`research/02-personas-cjm.md`](research/02-personas-cjm.md) | Персоны и сценарии: гость, курьер, франчайзи, УК, повар |
+| [`research/glossary.md`](research/glossary.md) | Глоссарий отраслевых и регуляторных терминов |
 
 ### 2. Компоненты (детальные спецификации)
 
 | Файл | Домен |
 |---|---|
 | [`components/01-pos-fiscal.md`](research/components/01-pos-fiscal.md) | Касса, чеки, фискализация (54-ФЗ, ФФД 1.2, ОФД) |
-| [`components/02-order-channels.md`](research/components/02-order-channels.md) | Каналы приёма заказов: зал, киоск, QR, сайт, приложение, агрегаторы |
+| [`components/02-order-channels.md`](research/components/02-order-channels.md) | Каналы приёма заказов: зал, киоск, бронь/банкеты, сайт, приложение, агрегаторы |
 | [`components/03-kitchen-kds.md`](research/components/03-kitchen-kds.md) | Кухня: KDS, цеха, тайминги, ТТК на экране |
 | [`components/04-inventory-procurement.md`](research/components/04-inventory-procurement.md) | Склад, техкарты, фудкост, закупки, поставщики, ЭДО |
 | [`components/05-delivery-couriers.md`](research/components/05-delivery-couriers.md) | Доставка: свои курьеры, маршрутизация, агрегаторы |
@@ -25,7 +34,8 @@
 | [`components/08-finance-analytics.md`](research/components/08-finance-analytics.md) | Финансы, P&L, BI, видеоконтроль, антифрод |
 | [`components/09-franchise-network.md`](research/components/09-franchise-network.md) | Франшиза и управляющая компания: роялти, стандарты, онбординг точек |
 | [`components/10-compliance-safety.md`](research/components/10-compliance-safety.md) | Пищевая безопасность, ХАССП, ЕГАИС, Честный ЗНАК, Меркурий |
-| [`components/11-integration-platform.md`](research/components/11-integration-platform.md) | Платформа: API, события, офлайн-режим, мультитенантность |
+| [`components/11-integration-platform.md`](research/components/11-integration-platform.md) | Платформа: API, события, офлайн-режим, мультитенантность, безопасность |
+| [`components/12-data-model.md`](research/components/12-data-model.md) | Модель данных: сущности, атрибуты, контракты |
 
 ### 3. Аудиты аналогов
 

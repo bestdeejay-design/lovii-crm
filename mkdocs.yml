@@ -1,0 +1,88 @@
+# MkDocs configuration — документация платформы lovii
+# Публикуется на GitHub Actions → GitHub Pages (.github/workflows/pages.yml)
+
+site_name: lovii — платформа ресторанного бизнеса
+site_description: Исследование, аудит аналогов и продуктовые спецификации ресторанной CRM/ERP платформы полного цикла
+site_url: https://bestdeejay-design.github.io/lovii-crm/
+repo_url: https://github.com/bestdeejay-design/lovii-crm
+repo_name: bestdeejay-design/lovii-crm
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: ru
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-night
+        name: Тёмная тема
+    - scheme: slate
+      primary: deep purple
+      accent: amber
+      toggle:
+        icon: material/weather-sunny
+        name: Светлая тема
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.path
+    - toc.follow
+    - search.highlight
+    - content.code.copy
+
+markdown_extensions:
+  - tables
+  - admonition
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+extra:
+  generator: false
+
+nav:
+  - Главная: README.md
+  - Резюме и аудит:
+    - Резюме исследования: research/executive-summary.md
+    - Аудит корпуса документации: research/audit-report.md
+  - Рынок и архитектура:
+    - Обзор рынка: research/00-market-landscape.md
+    - Референс-архитектура: research/01-reference-architecture.md
+    - Персоны и сценарии (CJM): research/02-personas-cjm.md
+    - Глоссарий: research/glossary.md
+  - Компоненты:
+    - 01. Касса и фискализация: research/components/01-pos-fiscal.md
+    - 02. Каналы приёма заказов: research/components/02-order-channels.md
+    - 03. Кухня и KDS: research/components/03-kitchen-kds.md
+    - 04. Склад, ТТК, закупки: research/components/04-inventory-procurement.md
+    - 05. Доставка и курьеры: research/components/05-delivery-couriers.md
+    - 06. CRM, лояльность, отзывы: research/components/06-crm-loyalty-feedback.md
+    - 07. Персонал: research/components/07-hr-staff.md
+    - 08. Финансы и аналитика: research/components/08-finance-analytics.md
+    - 09. Франшиза и УК: research/components/09-franchise-network.md
+    - 10. Комплаенс и безопасность: research/components/10-compliance-safety.md
+    - 11. Платформа и интеграции: research/components/11-integration-platform.md
+    - 12. Модель данных: research/components/12-data-model.md
+  - Аудиты аналогов:
+    - Россия:
+      - iiko: research/competitors/iiko.md
+      - r_keeper: research/competitors/rkeeper.md
+      - Poster POS: research/competitors/poster.md
+      - Quick Resto: research/competitors/quick-resto.md
+      - Saby Presto: research/competitors/saby-presto.md
+      - 1С Общепит/Ресторан: research/competitors/1c.md
+      - Tillypad, Fusion POS, Yuma: research/competitors/ru-smaller.md
+    - Мир:
+      - Toast: research/competitors/toast.md
+      - Lightspeed: research/competitors/lightspeed.md
+      - Square, TouchBistro, Revel: research/competitors/square-touchbistro-revel.md
+      - Middleware доставки: research/competitors/middleware-delivery.md
+      - Гостевые CRM и лояльность: research/competitors/loyalty-crm-vendors.md
+      - Контроль стандартов: research/competitors/audit-standards-vendors.md
+  - Выводы и план:
+    - Разрывы рынка: research/gap-analysis.md
+    - Продуктовый blueprint: research/product-blueprint.md

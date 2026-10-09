@@ -1,0 +1,7 @@
+# Python / venv
+.venv/
+__pycache__/
+*.pyc
+
+# MkDocs build output (публикуется через GitHub Actions)
+site/
