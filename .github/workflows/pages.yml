@@ -23,8 +23,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Build docs (MkDocs Material)
-        run: docker run --rm -v "$PWD":/docs squidfunk/mkdocs-material:latest build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install MkDocs Material
+        run: pip install --quiet mkdocs-material
+      - name: Build docs
+        run: mkdocs build
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
