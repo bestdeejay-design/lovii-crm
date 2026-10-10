@@ -39,6 +39,27 @@ jobs:
       - name: Build docs
         run: mkdocs build
 
+      - name: Add non-MkDocs pages to sitemap
+        run: |
+          python3 - <<'EOF'
+          import gzip, re, datetime
+          path = "site/sitemap.xml"
+          xml = open(path, encoding="utf-8").read()
+          m = re.search(r"<loc>(https://[^<]*?/lovii-crm/)</loc>", xml)
+          base = m.group(1) if m else "https://bestdeejay-design.github.io/lovii-crm/"
+          today = datetime.date.today().isoformat()
+          extra = ""
+          for rel in ["demo/"]:
+              loc = base + rel
+              if f"<loc>{loc}</loc>" not in xml:
+                  extra += f"<url><loc>{loc}</loc><lastmod>{today}</lastmod></url>"
+          if extra:
+              xml = xml.replace("</urlset>", extra + "</urlset>")
+              open(path, "w", encoding="utf-8").write(xml)
+              gzip.open("site/sitemap.xml.gz", "wt", encoding="utf-8").write(xml)
+              print("sitemap extended:", extra)
+          EOF
+
       - name: Publish built site to branch root
         run: |
           # убираем ранее сгенерированные файлы сайта в корне (но не исходники)

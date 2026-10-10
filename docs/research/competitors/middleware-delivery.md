@@ -1,5 +1,7 @@
 # Аудит класса систем: middleware доставки и курьерские сервисы
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 Слой между каналами заказов (агрегаторы, сайт, приложение) и кухней/кассой. Класс доказал, что омниканальность и логистика — отдельные продукты, за которые платят.
 
 Модель работы класса:
@@ -59,3 +61,14 @@ flowchart LR
 1. Встроенный омниканальный слой (как Otter/Deliverect) + интеграции агрегаторов РФ — базовая поставка, не премиум.
 2. Курьерская логистика — своё приложение курьера и диспетчеризация, а математика маршрутов — по API роутинг-провайдеров (Яндекс Маршрутизация) до появления своей зрелой.
 3. Белая витрина (сайт + приложение бренда) должна собираться из меню автоматически — конструктор, а не услуга веб-студии.
+
+## Источники
+
+1. https://www.deliverect.com/en-us
+2. https://www.tryotter.com/integrations
+3. https://www.tryotter.com/products/pos-integration
+4. https://www.tryotter.com/
+5. https://merchants.ubereats.com/us/en/resources/articles/pos-integration/
+6. https://lemma-group.ru/articles/avtomatizatsiya-kanalov-polucheniya-zakazov-i-protsessov-dostavki-edy/
+7. https://toolfox.ru/services/programmy-dlya-dostavki-edy
+8. https://picktech.ru/catalog/food-delivery-software/

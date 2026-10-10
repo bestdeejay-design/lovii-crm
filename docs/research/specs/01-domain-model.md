@@ -1,5 +1,7 @@
 # Спецификация 01. Доменная модель (схемы сущностей)
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 > Атрибутные схемы по доменам. Полное описание атрибутов — в [`../components/12-data-model.md`](../components/12-data-model.md); здесь — визуальные связи. Имена сущностей на английском (код), подписи связей — по смыслу.
 
 ## 1. Ядро: заказы, оплаты, чеки
@@ -131,7 +133,7 @@ erDiagram
     }
 ```
 
-Типы движений: `receive` (приёмка), `sale_writeoff` (продажа по ТТК), `production_in` / `production_out` (заготовки), `transfer` (перемещение), `writeoff_spoilage` (порча), `inventory_adjust` (инвентаризация), `return` (возврат).
+Типы движений (9, канонический словарь — в [`../components/12-data-model.md`](../components/12-data-model.md), §0): `receive` (приёмка), `sale_writeoff` (продажа по ТТК), `production_in` / `production_out` (заготовки), `transfer` (перемещение), `writeoff_spoilage` (порча), `writeoff_staff` (списание на персонал — антифрод), `inventory_adjust` (инвентаризация), `return` (возврат).
 
 ## 4. Доставка
 
@@ -163,19 +165,20 @@ erDiagram
         datetime assigned_at
         datetime delivered_at
         string proof_photo
+        string proof_code
     }
 ```
 
-Статусы назначения:
+Статусы назначения (канонический словарь — в [`../components/12-data-model.md`](../components/12-data-model.md), §0; токен `picked` заменён на `picked_up`, отказ — пара `DeliveryIncident` + `failed`):
 
 ```mermaid
 stateDiagram-v2
     [*] --> assigned : "назначен"
-    assigned --> picked : "забрал заказ"
-    picked --> delivering : "в пути"
-    delivering --> delivered : "вручён (фото)"
-    assigned --> failed : "не удалось"
-    picked --> failed : "не удалось"
+    assigned --> picked_up : "забрал заказ"
+    picked_up --> delivering : "в пути"
+    delivering --> delivered : "вручён (фото или код)"
+    assigned --> failed : "инцидент не устранён"
+    picked_up --> failed : "инцидент не устранён"
     failed --> [*]
     delivered --> [*]
 ```
@@ -254,6 +257,8 @@ erDiagram
 ```
 
 ## 7. Жизненный цикл заказа (единый для всех каналов)
+
+Статусы заказа — канонический словарь [`../components/12-data-model.md`](../components/12-data-model.md), §0; статусы кухонного тикета (`queued | cooking | ready | served`) и назначения доставки — там же.
 
 ```mermaid
 stateDiagram-v2

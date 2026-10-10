@@ -1,5 +1,7 @@
 # Аудит аналога: r_keeper (РФ)
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 **Позиция:** старейшая (20+ лет) ресторанная система РФ; >70 000 заведений по оценкам рынка [1](https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana). Позиционирование 2026: «увеличиваем EBITDA ресторана на 3–10% за счёт данных и автоматизации» [2](https://rkeeper.ru/).
 
 ## 1. Модульная структура
@@ -46,3 +48,12 @@
 ## 6. Итог
 
 r_keeper — эталон **модульности и франшизно-фабричных сценариев** в РФ. Его потолок — стоимость и восприятие «для больших». Наша ниша — те же процессы, но доступные с первого дня любой точке франшизы через облако.
+
+## Источники
+
+1. https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana
+2. https://rkeeper.ru/
+3. https://eto-razvod.ru/review/rkeeper/
+4. https://rkeeper.ru/solutions/restaurant/
+5. https://vimtex.ru/stati/programma-r_keeper-kompleksnoe-reshenie-dlya-restorannogo-biznesa/
+6. https://prowizard.store/company/articles/vybiraem_programmnoe_obespechenie_ucheta_dlya_obshchepita/

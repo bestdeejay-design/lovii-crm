@@ -1,5 +1,7 @@
 # Аудит аналогов: Square for Restaurants, TouchBistro, Revel Systems
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 Три западные системы «второго круга», каждая со своей стратегией. В РФ не работают, но задают отраслевые стандарты.
 
 ## 1. Square for Restaurants
@@ -33,3 +35,10 @@
 | Revel | сетевое централизованное управление и кастомные процессы кухни — стандарт «энтерпрайза» |
 
 Общее ограничение всех троих — инвентарь/персонал/бухгалтерия через интеграции и аддоны, а не своим ядром. Наша стратегия «ядро + встроенные модули» (как у Toast) при цене уровня Square — дифференциатор в РФ.
+
+## Источники
+
+1. https://www.bangaloreorbit.com/blog/top-10-restaurant-management-systems/
+2. https://www.owner.com/blog/best-pos-system-for-restaurants
+3. https://tabcommerce.com/blog/best-restaurant-management-software
+4. https://www.devopsschool.com/blog/top-10-kitchen-display-systems-kds-features-pros-cons-comparison/

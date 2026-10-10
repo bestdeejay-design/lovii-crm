@@ -1,6 +1,28 @@
 # Компонент 12. Модель данных и контракты
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 > Атрибутный уровень референс-модели. Документ — вход для проектирования схемы БД и открытого API. Все идентификаторы глобально уникальны (по тенанту + сущность).
+
+## 0. Канонические перечисления (единый словарь платформы)
+
+Этот раздел — единственный источник правды для статусов и каналов. Все компоненты и спецификации ссылаются сюда; изменение словаря делается только здесь (ревизия №1 внешнего аудита, находки F-01…F-03, F-32).
+
+| Сущность | Поле | Канонические значения |
+|---|---|---|
+| Order | `status` | `new` → `accepted` → `kitchen` → `ready` → `served` (зал) \| `packed` → `delivered` (доставка) \| `cancelled` |
+| KitchenTicket | `status` | `queued` \| `cooking` \| `ready` \| `served` |
+| DeliveryAssignment | `status` | `assigned` \| `picked_up` \| `delivering` \| `delivered` \| `failed` |
+| Order | `channel` | `pos \| site \| app \| miniapp \| kiosk \| phone \| aggregator:{name}` |
+| StockMovement | `type` | `receive \| sale_writeoff \| production_in \| production_out \| transfer \| writeoff_spoilage \| writeoff_staff \| inventory_adjust \| return` |
+
+Правила чтения и маппинг устаревших токенов:
+
+1. **Два уровня статусов не смешиваются.** `Order.status` — жизненный цикл заказа (единый для всех каналов); `KitchenTicket.status` — жизненный цикл тикета станции. «Окно экспо» (готовое блюдо ждёт выдачи) — не отдельный статус, а время между `ready` и `served` заказа; если точке нужен отдельный экран экспо, он фильтрует заказы в состоянии `ready`.
+2. **Доставка — две сущности.** `Order` доходит до `packed`, дальше работает `DeliveryAssignment` (`assigned → picked_up → delivering → delivered`); отказ моделируется парой: запись `DeliveryIncident` + статус `failed` у назначения. Токен `courier` из ранних ревизий не используется: «передан курьеру» = назначение в `picked_up`, заказ остаётся в `packed` до `delivered`.
+3. **Подтверждение вручения** — `proof_photo` и/или `proof_code` (сценарий «фото или код» из компонента 05 поддерживается обоими полями).
+4. **Канал `phone`** — заказ через колл-центр (полноценный канал приёма, компонент 02); в аналитике каналов участвует наравне с остальными.
+5. **Списание по ТТК** — движением `sale_writeoff` при переводе тикета в `ready` (а не в момент пробития чека); корректировки — движением `return`/`inventory_adjust`.
 
 Обзор связей между доменами (атрибутные схемы — в разделе ниже, полные контрактные спецификации — в [спецификациях](../specs/01-domain-model.md)):
 
@@ -60,7 +82,8 @@ flowchart LR
 ## 3. Заказы и платежи
 
 ### Order
-`id, location_id, channel (pos | site | app | miniapp | aggregator:{name} | kiosk | phone), guest_id?, table_id?, delivery?, status (new → accepted → kitchen → ready → served | packed → delivered | cancelled), created_at, promised_at, total, discount_total, source_meta (aggregator_order_id?, commission_pct?)`
+`id, location_id, channel (pos | site | app | miniapp | kiosk | phone | aggregator:{name}), guest_id?, table_id?, delivery? (address, zone_id, slot), status (new → accepted → kitchen → ready → served | packed → delivered | cancelled), created_at, promised_at, total, discount_total, source_meta (aggregator_order_id?, commission_pct?)`
+> Перечисления `channel` и `status` — канонические (§0); контракт создания заказа — в спецификации 03, источник гостя — объект `guest {phone, consent}`, согласие фиксируется по 152-ФЗ.
 
 ### OrderItem
 `id, order_id, menu_item_id, qty, modifiers[], price, comment_to_kitchen, station_routing, course_no, status`
@@ -94,7 +117,7 @@ flowchart LR
 
 ### KitchenTicket (тикет станции)
 `id, order_id, station_id, items[], status (queued | cooking | ready | served), created_at, started_at?, ready_at?`
-> Норматив времени берётся из Recipe; факт — из статусов.
+> Норматив времени берётся из Recipe; факт — из статусов. Перевод в `ready` триггерит списание по ТТК (§0, правило 5).
 
 ### ProductionBatch (акт производства)
 `id, location_id, recipe_id, qty_out, consumed[] (ссылки на StockMovement), yield_pct, author_id, created_at, label_printed`
@@ -108,7 +131,8 @@ flowchart LR
 `id, tenant_id, employment (staff | self_employed), transport (foot | bike | car), status, rating`
 
 ### DeliveryAssignment
-`id, order_id, courier_id, status (assigned | picked | delivering | delivered | failed), assigned_at, picked_at, delivered_at, proof_photo?, failure_reason?`
+`id, order_id, courier_id, status (assigned | picked_up | delivering | delivered | failed), assigned_at, picked_up_at, delivered_at, proof_photo?, proof_code?, failure_reason?`
+> Статусы — канонический словарь §0 (токен `picked` ранних ревизий заменён на `picked_up`); отказ — пара `DeliveryIncident` + `failed`.
 
 ### DeliveryIncident
 `id, assignment_id, type (no_answer | wrong_address | accident | refusal), resolution, resolved_by`
@@ -170,8 +194,8 @@ flowchart LR
 ```
 
 ### Контракт заказа внутрь (для всех каналов)
-`POST /v1/orders`: `location_id, channel, items[{menu_item_id, qty, modifiers[]}], guest_phone?, delivery{address, zone_id}?, payment_intent`
-Ответ: `order_id, promise_time, status_url`.
+`POST /v1/orders`: `location_id, channel, items[{menu_item_id, qty, modifiers[]}], guest?{phone, consent}, delivery?{address, zone_id, slot}, payment_intent?, idempotency_key`
+Ответ: `order_id, promise_time, status_url`. Полная контрактная форма с примером — в [`../specs/03-api-contracts.md`](../specs/03-api-contracts.md) (источник контракта — спецификация 03; источник модели — этот документ).
 
 ### Контракт меню наружу (витрины/агрегаторы)
 `GET /v1/menu?location=` → категории, позиции с модификаторами, цены по каналам, стоп-лист, доступность.

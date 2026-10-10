@@ -1,5 +1,7 @@
 # Аудит аналога: Quick Resto (РФ)
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 **Позиция:** облачная система «полного цикла» для МСБ; 10 000+ заведений, входит в реестр российского ПО [1](https://prowizard.store/company/articles/vybiraem_programmnoe_obespechenie_ucheta_dlya_obshchepita/). Цены — от ~4 990 ₽/мес [2](https://iikoservice.ru/blog/chto-vybrat-dlya-avtomatizaczii-predpriyatiya/).
 
 ## 1. Возможности
@@ -40,3 +42,10 @@
 - Quick Resto подтверждает спрос на «всё в одном» по ~5 тыс ₽/мес — прямой ценовой конкурент нашего стартового тарифа.
 - Уязвимые места, по которым нужно бить: нативные госсистемы из коробки (ЕГАИС/ЧЗ/Меркурий/ЭДО), поддержка 24/7, кроссплатформенность кассы (не привязываться к iOS/Windows).
 - Гостевое приложение у МСБ-системы — обязательный элемент нашего предложения: отзывы, баллы и история прямо в телефоне гостя.
+
+## Источники
+
+1. https://prowizard.store/company/articles/vybiraem_programmnoe_obespechenie_ucheta_dlya_obshchepita/
+2. https://iikoservice.ru/blog/chto-vybrat-dlya-avtomatizaczii-predpriyatiya/
+3. https://vc.ru/services/2492795-programmy-avtomatizatsii-obshchepita-top-14-luchshikh-pos-sistem
+4. https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana

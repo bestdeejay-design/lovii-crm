@@ -1,5 +1,7 @@
 # Аудит аналогов: второй эшелон РФ — Tillypad, Fusion POS, Yuma, Эвотор-решения
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 ## 1. Tillypad
 
 **Позиция:** модульная система от небольших кафе до крупных сетей; заявлено 15 000 заведений [1](https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana).
@@ -39,3 +41,11 @@
 | Fusion POS | микро с бесплатным входом | монетизация вокруг бесплатной кассы, пуш-алерты владельцу |
 | Yuma | доставка/дарк китчен | белая витрина + курьер как пакет |
 | Эвотор | микроточки | поддержка дешёвого железа для массового онбординга франчайзи |
+
+## Источники
+
+1. https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana
+2. https://vc.ru/services/2492795-programmy-avtomatizatsii-obshchepita-top-14-luchshikh-pos-sistem
+3. https://fusionpos.ru/
+4. https://a2is.ru/catalog/programmy-dlya-kafe-i-restoranov/pos-fusion
+5. https://picktech.ru/catalog/food-delivery-software/

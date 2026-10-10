@@ -1,5 +1,7 @@
 # Аудит аналога: iiko (РФ)
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 **Позиция:** фактический стандарт автоматизации ресторанов РФ; >70 000 заведений по оценкам партнёрских обзоров [1](https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana). Полный цикл: касса, склад, производство, доставка, лояльность, франшиза.
 
 ## 1. Продуктовая структура
@@ -48,3 +50,12 @@
 ## 6. Итог
 
 iiko — главный ориентир глубины функциональности в РФ и главный конкурент в верхнем сегменте. Стратегия против него: **та же глубина, но облачная архитектура, быстрее внедрение, дешевле вход и франшиза как встроенный режим работы, а не корпоративный тариф**.
+
+## Источники
+
+1. https://multi-bit.com/avt_iiko/avtomatizatsiya-restorana
+2. https://www.restohub.pro/avtomatizaciya-restorana-iiko-2026
+3. https://multi-bit.com/avt_iiko/iiko_chto_eto
+4. https://iikoservice.ru/
+5. https://journal.sovcombank.ru/biznesu/programma-iiko-aiko-dlya-restoranov-opisanie-preimuschestva
+6. https://lemma-group.ru/articles/kak-organizovat-sluzhbu-dostavki-s-pomoshchyu-iiko/

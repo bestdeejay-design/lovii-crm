@@ -1,5 +1,7 @@
 # Спецификация 03. Контракты API и событий
 
+> **Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.** Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.
+
 > Наружная поверхность платформы: для витрин, агрегаторов, партнёров и внутренних фронтендов. Версия контрактов — `v1`. Формат — JSON; время — ISO 8601 (UTC); деньги — десятичные строки.
 
 ## 1. Поверхность REST (ресурсы)
@@ -29,7 +31,7 @@
 ```json
 {
   "location_id": "loc_01",
-  "channel": "pos | site | app | miniapp | kiosk | aggregator:yandex",
+  "channel": "pos | site | app | miniapp | kiosk | phone | aggregator:yandex",
   "items": [
     {
       "menu_item_id": "mi_123",
@@ -45,6 +47,13 @@
 ```
 
 Ответ: `201` с `order_id`, `promise_time`, `status_url`. Ошибки: `409` стоп-лист, `422` вне зоны, `423` точка закрыта.
+
+Канонические словари статусов (источник — [`../components/12-data-model.md`](../components/12-data-model.md), §0):
+
+- `Order.status`: `new | accepted | kitchen | ready | served | packed | delivered | cancelled` — используется в `POST /v1/orders/{id}/status` и событиях `order.status_changed`.
+- `KitchenTicket.status`: `queued | cooking | ready | served` — события `kitchen.ticket_status`.
+- `DeliveryAssignment.status`: `assigned | picked_up | delivering | delivered | failed` — `POST /v1/courier/assignments/{id}/status` принимает `picked_up | delivering | delivered | failed` с `proof_photo` и/или `proof_code`; события `delivery.status_changed` питают обещания времени и уведомления гостя.
+- `channel`: `pos | site | app | miniapp | kiosk | phone | aggregator:{name}` (канал колл-центра `phone` равноправен в аналитике).
 
 ## 3. Каталог событий шины (наружу — вебхуки)
 
