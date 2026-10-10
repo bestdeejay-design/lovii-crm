@@ -93,6 +93,7 @@ nav:
     - Обзор рынка: research/00-market-landscape.md
     - Референс-архитектура: research/01-reference-architecture.md
     - Персоны и сценарии (CJM): research/02-personas-cjm.md
+    - Дизайн-система и UI-кит: research/design-system.md
     - Глоссарий: research/glossary.md
   - Компоненты:
     - 01. Касса и фискализация: research/components/01-pos-fiscal.md
@@ -113,8 +114,9 @@ nav:
     - "02. Ключевые процессы (последовательности)": research/specs/02-processes.md
     - "03. Контракты API и событий": research/specs/03-api-contracts.md
     - "04. Деплой, офлайн и безопасность": research/specs/04-deployment-offline.md
-  - "Платёжная инфраструктура":
+  - "Инфраструктура и эксплуатация":
     - "Банки, онлайн-кассы и ОФД: роли, экономика, лучшие примеры": research/infrastructure/banks-kassa-ofd.md
+    - "Эксплуатация платформы и SLA": research/infrastructure/02-operations-sla.md
   - "SaaS-платформа":
     - "Карта платформы: app, crm, erp — один комплекс": research/saas/00-platform-map.md
     - "Правила и схемы движения информации": research/saas/01-information-flow.md
@@ -123,6 +125,8 @@ nav:
   - "Бизнес: модель и тарифы":
     - "Финансовая модель платформы": research/business/01-financial-model.md
     - "Тарифная сетка и ценообразование": research/business/02-pricing.md
+    - "Стратегия выхода на рынок (GTM)": research/business/03-gtm-strategy.md
+    - "План метрик и измерений": research/business/04-metrics-plan.md
   - "Юридический пакет":
     - "Юрминимум запуска: состав и статусы": research/legal/01-legal-package.md
     - "Драфт: политика конфиденциальности и согласия": research/legal/02-privacy-policy-draft.md

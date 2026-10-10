@@ -53,6 +53,7 @@
 | [`research/00-market-landscape.md`](research/00-market-landscape.md) | Рынок общепита РФ в цифрах, сегменты автоматизации, глобальный контекст |
 | [`research/01-reference-architecture.md`](research/01-reference-architecture.md) | Референс-модель: 13 доменов, сквозной процесс, модель данных, роли |
 | [`research/02-personas-cjm.md`](research/02-personas-cjm.md) | Персоны и сценарии: гость, курьер, франчайзи, УК, повар |
+| [`research/design-system.md`](research/design-system.md) | Дизайн-система и UI-кит: токены, каркас, компоненты, правила разработки |
 | [`research/glossary.md`](research/glossary.md) | Глоссарий отраслевых и регуляторных терминов |
 
 ### 2. Компоненты (детальные спецификации)
@@ -82,11 +83,12 @@
 | [`research/specs/03-api-contracts.md`](research/specs/03-api-contracts.md) | Ресурсы REST, контракт заказа, каталог событий, вебхуки, надёжность |
 | [`research/specs/04-deployment-offline.md`](research/specs/04-deployment-offline.md) | Топология деплоя, мультитенантность, офлайн-синхронизация, безопасность |
 
-### 2.6. Платёжная инфраструктура
+### 2.6. Инфраструктура и эксплуатация
 
 | Файл | Содержание |
 |---|---|
 | [`research/infrastructure/banks-kassa-ofd.md`](research/infrastructure/banks-kassa-ofd.md) | Банки-эквайеры, онлайн-кассы и ОФД: роли, экономика (сколько съедают от выручки), лучшие примеры 2026, контракт мок-сервисов |
+| [`research/infrastructure/02-operations-sla.md`](research/infrastructure/02-operations-sla.md) | Эксплуатация платформы и SLA: уровни сервиса, мониторинг, инциденты, бэкапы, поддержка |
 
 ### 2.7. SaaS-платформа и демо
 
@@ -103,6 +105,8 @@
 |---|---|
 | [`research/business/01-financial-model.md`](research/business/01-financial-model.md) | Финансовая модель платформы: 4 потока выручки, затраты на постройку, сценарии на 24 мес, чувствительность |
 | [`research/business/02-pricing.md`](research/business/02-pricing.md) | Тарифная сетка «Старт/Базовый/Про/УК», принципы монетизации, положение на рынке против 30+ вендоров, франшизные условия |
+| [`research/business/03-gtm-strategy.md`](research/business/03-gtm-strategy.md) | Стратегия выхода на рынок: волны продаж, позиционирование, воронка пилотов, план первых 90 дней |
+| [`research/business/04-metrics-plan.md`](research/business/04-metrics-plan.md) | План метрик и измерений: дерево целей, формулы, источники событий, бизнес-метрики платформы |
 
 ### 2.9. Юридический пакет и франч-бук
 
