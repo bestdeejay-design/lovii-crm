@@ -68,3 +68,11 @@
 |---|---|
 | [`research/gap-analysis.md`](research/gap-analysis.md) | Матрица «компонент × система», разрывы, окно возможностей |
 | [`research/product-blueprint.md`](research/product-blueprint.md) | Архитектура платформы lovii, фазы, MVP, метрики, риски |
+
+### 5. План реализации и систематизация
+
+| Файл | Содержание |
+|---|---|
+| [`research/plan/01-implementation-plan.md`](research/plan/01-implementation-plan.md) | Фазы с гейтами, план первых 90 дней, команда, риски |
+| [`research/plan/02-systems-roadmap.md`](research/plan/02-systems-roadmap.md) | Какие системы нужны по фазам: строить / покупать / интегрировать |
+| [`research/plan/03-backbone-stack.md`](research/plan/03-backbone-stack.md) | Опорный стек до выхода на целевые показатели, правила миграций, бюджет |

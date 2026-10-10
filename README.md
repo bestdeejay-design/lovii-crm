@@ -25,6 +25,7 @@
 4. [Аудиты аналогов](docs/research/competitors/) — iiko, r_keeper, Poster, Quick Resto, Saby Presto, 1С, Tillypad, Fusion POS, Toast, Lightspeed, Square, TouchBistro/Revel, middleware доставки, CRM/лояльность, аудиты стандартов.
 5. [Разрывы рынка](docs/research/gap-analysis.md) — что не закрывает никто и где наше окно возможностей.
 6. [Продуктовый blueprint](docs/research/product-blueprint.md) — как это всё собирается в платформу lovii.
+7. [План реализации](docs/research/plan/01-implementation-plan.md) — фазы, вехи, первые 90 дней, [карта систем](docs/research/plan/02-systems-roadmap.md) и [опорный стек](docs/research/plan/03-backbone-stack.md).
 
 ## Статус
 
