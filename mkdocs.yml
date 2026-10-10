@@ -100,6 +100,8 @@ nav:
     - "02. Ключевые процессы (последовательности)": research/specs/02-processes.md
     - "03. Контракты API и событий": research/specs/03-api-contracts.md
     - "04. Деплой, офлайн и безопасность": research/specs/04-deployment-offline.md
+  - "Платёжная инфраструктура":
+    - "Банки, онлайн-кассы и ОФД: роли, экономика, лучшие примеры": research/infrastructure/banks-kassa-ofd.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md

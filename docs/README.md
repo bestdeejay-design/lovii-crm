@@ -73,6 +73,12 @@
 | [`research/specs/03-api-contracts.md`](research/specs/03-api-contracts.md) | Ресурсы REST, контракт заказа, каталог событий, вебхуки, надёжность |
 | [`research/specs/04-deployment-offline.md`](research/specs/04-deployment-offline.md) | Топология деплоя, мультитенантность, офлайн-синхронизация, безопасность |
 
+### 2.6. Платёжная инфраструктура
+
+| Файл | Содержание |
+|---|---|
+| [`research/infrastructure/banks-kassa-ofd.md`](research/infrastructure/banks-kassa-ofd.md) | Банки-эквайеры, онлайн-кассы и ОФД: роли, экономика (сколько съедают от выручки), лучшие примеры 2026, контракт мок-сервисов |
+
 ### 3. Аудиты аналогов
 
 **Россия**
