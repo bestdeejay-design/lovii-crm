@@ -159,6 +159,73 @@
     });
   });
 
+  // ---------- Отзывы и сервис-рекавери ----------
+  route("crm/reviews", (el) => {
+    const revs = DS.reviews;
+    const avg = (revs.reduce((s, r) => s + r.rating, 0) / revs.length).toFixed(1);
+    const neg = revs.filter((r) => r.rating <= 2);
+    const nps = Math.round((revs.filter((r) => r.rating >= 4).length - neg.length) / revs.length * 100);
+    el.innerHTML =
+      "<h1>⭐ Отзывы и сервис-рекавери</h1>" +
+      '<p class="muted">Все площадки в одной ленте: Яндекс, 2ГИС, приложение. Каждый отзыв привязан к заказу, смене и курьеру — есть с кого спросить и кому помочь.</p>' +
+      '<div class="grid cols-4 mb">' +
+      UI.kpi("Средняя оценка", avg + " ★", "за 30 дней") +
+      UI.kpi("NPS", nps, "цель ≥ 50", nps >= 50) +
+      UI.kpi("Негативных", neg.length, "требуют ответа за 24 ч", false) +
+      UI.kpi("Закрыто рекавери", "7 из 9", "гостей возвращено", true) +
+      "</div>" +
+      '<div class="rowline mb">Фильтр: ' +
+      '<select id="rev-filter"><option value="all">Все отзывы</option><option value="neg">Только негатив (1–2★)</option><option value="pos">Только позитив (4–5★)</option></select>' +
+      '<select id="rev-loc"><option value="all">Все точки</option>' +
+      DS.locations.filter((l) => l.type !== "Производство").map((l) => '<option value="' + l.id + '">' + l.name + "</option>").join("") + "</select></div>" +
+      '<div id="rev-list"></div>';
+    function draw() {
+      const f = document.getElementById("rev-filter").value;
+      const l = document.getElementById("rev-loc").value;
+      const rows = revs.filter((r) =>
+        (f === "all" || (f === "neg" ? r.rating <= 2 : r.rating >= 4)) &&
+        (l === "all" || r.loc === l)).slice(0, 30);
+      document.getElementById("rev-list").innerHTML = rows.map((r) =>
+        '<div class="card mb" style="border-left:4px solid var(--' + (r.rating <= 2 ? "err" : r.rating === 3 ? "warn" : "ok") + ')">' +
+        '<div class="rowline"><b>' + r.src + "</b> " + UI.stars(r.rating) +
+        '<span class="spacer"></span><span class="small muted">' + locName(r.loc) + " · " + DS.fmtDay(r.ts) + "</span></div>" +
+        '<div class="small mt">🍽 ' + esc(r.dish) + (r.courier ? ' · 🛵 ' + esc(r.courier) : "") + (r.order ? ' · ' + r.order : "") + "</div>" +
+        '<div class="mt">' + esc(r.text) + "</div>" +
+        '<div class="rowline mt">' +
+        (r.answered ? UI.badge("ответ опубликован", "ok") :
+          '<button class="btn small primary" data-ans="' + r.id + '">Ответить</button>') +
+        (r.rating <= 2 && !r.recovery ? '<button class="btn small warn" data-rec="' + r.id + '">Сервис-рекавери</button>' : "") +
+        (r.recovery ? UI.badge("рекавери: задача создана", "warn") : "") +
+        "</div><div id='ans-" + r.id + "'></div></div>").join("");
+      document.querySelectorAll("[data-ans]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const box = document.getElementById("ans-" + b.dataset.ans);
+          box.innerHTML = '<div class="rowline mt"><input type="text" style="flex:1" placeholder="Текст ответа гостю…" value="Спасибо за отзыв! Проработали смену, следующий заказ — комплимент от заведения.">' +
+            '<button class="btn small ok" data-pub="' + b.dataset.ans + '">Опубликовать</button></div>';
+          b.remove();
+        }));
+      document.querySelectorAll("[data-pub]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const r = revs.find((x) => x.id === b.dataset.pub);
+          r.answered = true;
+          emit("ПЛАТФОРМА", "Ответ на отзыв " + r.src + " (" + r.rating + "★) опубликован, гость уведомлён", "ok");
+          toast("Ответ опубликован.");
+          draw();
+        }));
+      document.querySelectorAll("[data-rec]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const r = revs.find((x) => x.id === b.dataset.rec);
+          r.recovery = true;
+          emit("ПЛАТФОРМА", "Сервис-рекавери по отзыву " + r.rating + "★: создана задача управляющему, бонус 300 ₽ гостю", "warn");
+          toast("Задача сервис-рекавери создана.");
+          draw();
+        }));
+    }
+    document.getElementById("rev-filter").addEventListener("change", draw);
+    document.getElementById("rev-loc").addEventListener("change", draw);
+    draw();
+  });
+
   // ---------- Стоп-лист ----------
   route("crm/stoplist", (el) => {
     el.innerHTML =
@@ -186,9 +253,15 @@
   // ---------- Смена и чеки ----------
   route("crm/shift", (el) => {
     const sh = state.cashShift;
+    const zBlock = sh.lastZ ?
+      '<div class="card mb" style="border-left:4px solid var(--ok)"><h3>🧾 Z-отчёт закрытой смены</h3>' +
+      '<div class="rowline"><span>Чеков: <b>' + sh.lastZ.receipts + "</b></span><span>Выручка: <b>" + fmt.money(sh.lastZ.sum) + "</b></span>" +
+      "<span>ОФД: <b>" + (sh.lastZ.ofdOk ? "все чеки ушли ✓" : "есть неотправленные") + "</b></span>" +
+      "<span>Закрыта: <b>" + fmt.t(sh.lastZ.ts) + "</b></span></div>" +
+      '<p class="small muted mt">Итоги автоматически ушли в дашборд точки, отчёт УК и расчёт роялти франчайзи.</p></div>' : "";
     el.innerHTML =
       "<h1>💰 Смена и чеки</h1>" +
-      '<p class="muted">ККТ: ' + (sh.opened ? "смена открыта" : "смена не открыта") + " · ОФД-мониторинг активен.</p>" +
+      '<p class="muted">ККТ: ' + (sh.opened ? "смена открыта" : "смена не открыта") + " · ОФД-мониторинг активен.</p>" + zBlock +
       '<div class="grid cols-3 mb">' +
       UI.kpi("Чеков в смене", sh.receipts.length, "пробито в демо") +
       UI.kpi("Выручка смены", fmt.money(sh.receipts.reduce((s, r) => s + r.sum, 0))) +
@@ -200,12 +273,25 @@
           sh.receipts.map((r) => ({
             cells: { n: r.num, fd: r.fd, t: fmt.t(r.ts), s: fmt.money(r.sum), o: UI.badge(r.ofd, r.ofd === "принят" ? "ok" : "warn") }
           })))) +
+      (sh.opened ? '<div class="rowline mt"><button class="btn warn" id="close-shift">Закрыть смену (Z-отчёт)</button></div>' : "") +
       '<div class="card mt2"><h3>Мониторинг «чеки не уходят»</h3>' +
       '<p class="small muted">По сети одна касса в зоне риска: ККТ 00004881 («Ловии Суши · Кировский») — 34 минуты без передачи.</p>' +
       '<button class="btn warn" id="ofd-alert">Симулировать алерт ОФД</button></div>';
     if (!sh.opened) document.getElementById("open-shift").addEventListener("click", () => {
       sh.opened = true;
       emit("ККТ", "Смена открыта: кассир " + (state.role === "cashier" ? "демо-пользователь" : "Ольга Петрова") + ", ККТ 00004512", "ok");
+      nav("crm", "shift");
+    });
+    const cs = document.getElementById("close-shift");
+    if (cs) cs.addEventListener("click", () => {
+      sh.lastZ = {
+        ts: Date.now(), receipts: sh.receipts.length,
+        sum: sh.receipts.reduce((s, r) => s + r.sum, 0),
+        ofdOk: sh.receipts.every((r) => r.ofd === "принят")
+      };
+      sh.opened = false;
+      emit("ККТ", "Смена закрыта: Z-отчёт — " + sh.lastZ.receipts + " чеков на " + fmt.money(sh.lastZ.sum) + ", сверка с ОФД " + (sh.lastZ.ofdOk ? "без расхождений" : "есть расхождения"), "ok");
+      toast("Смена закрыта, Z-отчёт сформирован.");
       nav("crm", "shift");
     });
     const al = document.getElementById("ofd-alert");

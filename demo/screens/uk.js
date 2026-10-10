@@ -13,6 +13,153 @@
     return Math.round((r.filter((x) => x.rating >= 4).length - r.filter((x) => x.rating <= 2).length) / (r.length || 1) * 100);
   }
 
+  // ---------- Собственник ----------
+  let ownerTimer = null;
+  route("uk/owner", (el) => {
+    const shops = DS.locations.filter((l) => l.type !== "Производство");
+    const rev28 = shops.reduce((s, l) => s + DS.dailyByLoc[l.id].slice(-28).reduce((a, d) => a + d.revenue, 0), 0);
+    const revM = Math.round(rev28 / 28 * 30); // месячная проекция
+    const fcBase = +(shops.reduce((s, l) => s + DS.foodcostPct(l.id), 0) / shops.length).toFixed(1);
+    const LABOR = 30, RENT = 9, OTHER = 5, ROY = 7; // % выручки
+    const winPct = Math.round(DS.orders.filter((o) => o.delivery && o.inWindow).length / (DS.orders.filter((o) => o.delivery).length || 1) * 100);
+    const revsAll = DS.reviews;
+    const nps = Math.round((revsAll.filter((r) => r.rating >= 4).length - revsAll.filter((r) => r.rating <= 2).length) / revsAll.length * 100);
+    const stdAvg = Math.round(shops.reduce((s, l) => s + stdIndex(l.id), 0) / shops.length);
+
+    const owner = window.__ownerLive || { today: 0, orders: 0, tickTs: Date.now() };
+    if (!owner.today) {
+      owner.today = shops.reduce((s, l) => s + DS.dailyByLoc[l.id][29].revenue, 0);
+      owner.orders = 236;
+    }
+    window.__ownerLive = owner;
+
+    function profit(fc, labor, rev) {
+      return Math.round(rev * (1 - fc / 100 - labor / 100 - RENT / 100 - OTHER / 100 - ROY / 100));
+    }
+    const baseProfit = profit(fcBase, LABOR, revM);
+
+    el.innerHTML =
+      "<h1>👑 Кабинет собственника</h1>" +
+      '<p class="muted"><span class="owner-live"></span>Данные обновляются в реальном времени. Ваша задача — не разбирать инциденты, а <b>влиять на систему</b>: показатель → причина → рычаг.</p>' +
+      '<div class="grid cols-4" id="owner-kpis"></div>' +
+      '<div class="grid cols-2 mt2">' +
+      '<div class="card"><h3>Показатель → причина → как повлиять</h3><div id="owner-levers"></div></div>' +
+      '<div class="card"><h3>🧪 Песочница решений</h3><p class="small muted">Подвигайте рычаги — система пересчитает прибыль месяца. Это модель на фактических данных сети.</p>' +
+      '<div id="owner-sandbox"></div><div class="mt" id="sandbox-out"></div></div>' +
+      "</div>" +
+      '<div class="card mt2"><h3>✅ Ваши решения на сегодня</h3><p class="small muted">Одобренное решение мгновенно становится задачей исполнителю (УК, точка, поставщик) и фиксируется в журнале.</p><div id="owner-decisions"></div></div>' +
+      '<div class="card mt2"><h3>Куда смотреть дальше</h3><div class="rowline">' +
+      '<a class="btn" href="#/uk/recs">💡 Все рекомендации по сети</a><a class="btn" href="#/uk/pulse">🌐 Пульс сети</a><a class="btn" href="#/uk/audits">📋 Аудиты</a></div></div>';
+
+    function drawKpis() {
+      document.getElementById("owner-kpis").innerHTML =
+        UI.kpi("Выручка сегодня", fmt.money(owner.today), "заказов: " + owner.orders + " · обновлено " + fmt.ago(owner.tickTs), true) +
+        UI.kpi("Выручка 28 дней", fmt.money(rev28), "+9% к прошлому периоду", true) +
+        UI.kpi("Прибыль месяца (прогноз)", fmt.money(profit(fcBase, LABOR, revM)), "маржа " + (baseProfit / revM * 100).toFixed(1) + "% · цель ≥ 15%", true) +
+        UI.kpi("Фудкост сети", fcBase + "%", "цель ≤ 30% · Кировский тянет вверх", fcBase <= 30);
+    }
+    drawKpis();
+
+    // Рычаги влияния
+    const levers = [
+      { m: "Фудкост «Кировский»: 33,6%", bad: true, why: "Лосось +12% у «Рыбного Дома» и недостача 2,4 кг сыра по инвентаризации.", act: "Одобрить тендер по лососю + слепая инвентаризация", ev: "Собственник одобрил: тендер по лососю и внеплановая инвентаризация «Кировский» — задачи ушли закупщику и управляющему" },
+      { m: "Доставка в окно: " + winPct + "%", bad: winPct < 90, why: "Просрочка кухонных тикетов 11% на вечерних пиках 19:00–21:00.", act: "Одобрить второго повара 18:30–21:30 (Северный)", ev: "Собственник одобрил усиление вечернего слота — график передан управляющему" },
+      { m: "ККТ 00004881 не передаёт чеки", bad: true, why: "Риск штрафов по 54-ФЗ: 34 минуты без передачи в ОФД.", act: "Вызвать техника сегодня", ev: "Собственник вызвал техника на «Кировский» — заявка в сервис, контроль через 2 часа" },
+      { m: "NPS: " + nps, bad: nps < 50, why: "Негатив по скорости доставки и одному сорванному заказу.", act: "Одобрить сервис-рекавери: бонус 300 ₽ за негативный отзыв", ev: "Программа сервис-рекавери одобрена собственником — кампании запущены" },
+      { m: "Роялти: " + DS.royalty.filter((r) => !r.paid).length + " точка не оплатила", bad: DS.royalty.some((r) => !r.paid), why: "Задолженность тянет больше 2 недель; риск кассового разрыва по маркетинговому фонду.", act: "Поручить УК переговоры + график платежей", ev: "Собственник поручил УК переговоры по задолженности роялти" }
+    ];
+    document.getElementById("owner-levers").innerHTML = levers.map((l, i) =>
+      '<div class="mb" style="border:1px solid var(--line);border-left:4px solid var(--' + (l.bad ? "err" : "ok") + ');border-radius:10px;padding:10px 12px">' +
+      '<div class="rowline"><b>' + l.m + "</b>" + UI.badge(l.bad ? "вне цели" : "в цели", l.bad ? "err" : "ok") + "</div>" +
+      '<div class="small muted mt"><b>Причина:</b> ' + l.why + "</div>" +
+      '<div class="rowline mt"><span class="small"><b>Рычаг:</b> ' + l.act + '</span><span class="spacer"></span>' +
+      '<button class="btn small primary" data-lever="' + i + '">Одобрить</button></div></div>').join("");
+    el.querySelectorAll("[data-lever]").forEach((b) =>
+      b.addEventListener("click", () => {
+        emit("РЕШЕНИЕ", levers[+b.dataset.lever].ev, "ok");
+        toast("Решение зафиксировано, задачи ушли исполнителям.");
+        b.disabled = true; b.textContent = "✓ Решение принято";
+        b.classList.remove("primary"); b.classList.add("ok");
+      }));
+
+    // Песочница
+    const sb = document.getElementById("owner-sandbox");
+    sb.innerHTML =
+      '<div class="slider-row"><span class="small">Средний чек (цены)</span><input type="range" id="sl-price" min="0" max="10" step="0.5" value="0"><b class="small right" id="v-price">+0%</b></div>' +
+      '<div class="slider-row"><span class="small">Поток заказов</span><input type="range" id="sl-orders" min="0" max="20" step="1" value="0"><b class="small right" id="v-orders">+0%</b></div>' +
+      '<div class="slider-row"><span class="small">Фудкост (снижение)</span><input type="range" id="sl-fc" min="0" max="4" step="0.5" value="0"><b class="small right" id="v-fc">−0 п.п.</b></div>' +
+      '<div class="slider-row"><span class="small">ФОТ (оптимизация)</span><input type="range" id="sl-labor" min="0" max="5" step="0.5" value="0"><b class="small right" id="v-labor">−0 п.п.</b></div>';
+    function calcSandbox() {
+      const p = +document.getElementById("sl-price").value / 100;
+      const o = +document.getElementById("sl-orders").value / 100;
+      const z = +document.getElementById("sl-fc").value;
+      const w = +document.getElementById("sl-labor").value;
+      document.getElementById("v-price").textContent = "+" + (p * 100) + "%";
+      document.getElementById("v-orders").textContent = "+" + (o * 100) + "%";
+      document.getElementById("v-fc").textContent = "−" + z + " п.п.";
+      document.getElementById("v-labor").textContent = "−" + w + " п.п.";
+      const demand = 1 - p * 0.9; // эластичность: рост цен съедает часть заказов
+      const newRev = Math.round(revM * (1 + p) * demand * (1 + o));
+      const newProfit = profit(fcBase - z, LABOR - w, newRev);
+      const delta = newProfit - baseProfit;
+      document.getElementById("sandbox-out").innerHTML =
+        '<div class="rowline"><span>Выручка: <b>' + fmt.money(newRev) + "</b></span>" +
+        '<span class="spacer"></span><span>Прибыль: <b>' + fmt.money(newProfit) + "</b></span></div>" +
+        '<div class="rowline mt"><span class="small muted">Маржа: ' + (newProfit / newRev * 100).toFixed(1) + "%</span>" +
+        '<span class="spacer"></span><b style="color:var(--' + (delta >= 0 ? "ok" : "err") + ')">' + (delta >= 0 ? "+" : "") + fmt.money(delta) + " к прибыли месяца</b></div>" +
+        (p > 0 ? '<p class="small muted mt">Модель учитывает эластичность: +10% цен ≈ −9% заказов.</p>' : "");
+    }
+    ["sl-price", "sl-orders", "sl-fc", "sl-labor"].forEach((id) =>
+      document.getElementById(id).addEventListener("input", calcSandbox));
+    calcSandbox();
+
+    // Решения дня
+    const decisions = [
+      "Тендер по лососю среди альтернативных поставщиков (экономия ~86 тыс ₽/мес)",
+      "Усиление вечернего слота вторым поваром на «Северном»",
+      "Выезд техника к ККТ 00004881 («Кировский»)",
+      "Кампания реактивации «Спящих»: 312 гостей, прогноз +7% заказов",
+      "Переговоры с должниками по роялти: график платежей"
+    ];
+    const decBox = document.getElementById("owner-decisions");
+    decBox.innerHTML = decisions.map((d, i) =>
+      '<div class="rowline mt" style="gap:10px;border-bottom:1px dashed var(--line);padding-bottom:10px"><span style="flex:1">' + d + "</span>" +
+      '<button class="btn small ok" data-dec-ok="' + i + '">Одобрить</button>' +
+      '<button class="btn small" data-dec-del="' + i + '">Делегировать УК</button>' +
+      '<button class="btn small warn" data-dec-no="' + i + '">Отклонить</button></div>').join("");
+    decBox.querySelectorAll("[data-dec-ok]").forEach((b) =>
+      b.addEventListener("click", () => {
+        emit("РЕШЕНИЕ", "Собственник одобрил: " + decisions[+b.dataset.decOk], "ok");
+        mark(b, "✓ Одобрено — задача создана");
+      }));
+    decBox.querySelectorAll("[data-dec-del]").forEach((b) =>
+      b.addEventListener("click", () => {
+        emit("РЕШЕНИЕ", "Собственник делегировал УК: " + decisions[+b.dataset.decDel], "info");
+        mark(b, "✓ Делегировано УК");
+      }));
+    decBox.querySelectorAll("[data-dec-no]").forEach((b) =>
+      b.addEventListener("click", () => {
+        emit("РЕШЕНИЕ", "Собственник отклонил: " + decisions[+b.dataset.decNo], "warn");
+        mark(b, "Отклонено");
+      }));
+    function mark(b, text) {
+      const row = b.closest(".rowline");
+      row.querySelectorAll("button").forEach((x) => x.remove());
+      row.insertAdjacentHTML("beforeend", UI.badge(text, text.startsWith("Отклонено") ? "warn" : "ok"));
+    }
+
+    // Живое обновление выручки
+    if (ownerTimer) clearInterval(ownerTimer);
+    ownerTimer = setInterval(() => {
+      if (!document.getElementById("owner-kpis")) { clearInterval(ownerTimer); ownerTimer = null; return; }
+      const inc = 900 + Math.floor(Math.random() * 3300);
+      owner.today += inc;
+      owner.orders += Math.random() > 0.4 ? 1 : 0;
+      owner.tickTs = Date.now();
+      drawKpis();
+    }, 6000);
+  });
+
   // ---------- Пульс сети ----------
   route("uk/pulse", (el) => {
     const rev = DS.locations.filter((l) => l.type !== "Производство")

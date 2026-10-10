@@ -255,6 +255,7 @@
     const o = pick(orders);
     reviews.push({
       id: "RV-" + i, order: o.id, loc: o.loc, guest: o.guest,
+      src: pick(["Яндекс Карты", "2ГИС", "Приложение", "Google Maps"]),
       rating: r, text: pick(revTexts[r]),
       ts: o.ts + ri(40, 200) * 60000,
       dish: pick(o.items).name,

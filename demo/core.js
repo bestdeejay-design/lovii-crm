@@ -33,7 +33,8 @@
     { id: "buyer", title: "Закупщик", entrance: "erp", home: "purchasing" },
     { id: "supplier", title: "Поставщик (Рыбный Дом)", entrance: "erp", home: "supplier" },
     { id: "franchisee", title: "Франчайзи (Фуд Восток)", entrance: "crm", home: "franchisee" },
-    { id: "uk", title: "Менеджер УК", entrance: "uk", home: "pulse" }
+    { id: "uk", title: "Менеджер УК", entrance: "uk", home: "pulse" },
+    { id: "owner", title: "Собственник бизнеса", entrance: "uk", home: "owner" }
   ];
   const ENTRANCES = [
     { id: "app", url: "app.lovii.ru", title: "Гость", home: "shop" },
@@ -120,7 +121,11 @@
   // ---------- Роутер ----------
   const screens = {};
   function route(id, fn) { screens[id] = fn; }
-  function nav(entrance, screen) { location.hash = "#/" + entrance + "/" + screen; }
+  function nav(entrance, screen) {
+    const h = "#/" + entrance + "/" + screen;
+    if (location.hash === h) render(); // повторный вход на тот же экран — перерисовать
+    else location.hash = h;
+  }
   function parseHash() {
     const m = (location.hash || "").replace(/^#\//, "").split("/");
     return { entrance: m[0] || null, screen: m[1] || null };
@@ -147,28 +152,59 @@
     el.innerHTML = "";
     if (screens[key]) screens[key](el);
     else el.innerHTML = '<div class="card"><h2>Экран «' + esc(h.screen || "") + '» в очереди сборки</h2><p class="muted">Демо собирается поэтапно — этот экран появится в следующей итерации.</p></div>';
+    if (window.LOVII.guide) window.LOVII.guide.roleBanner(el);
     window.scrollTo(0, 0);
   }
 
   function drawLanding(el) {
     renderSidebarLanding();
+    const intro = {
+      guest: "Закажите и оплатите: банк → касса → ОФД → кухня → курьер → отзыв.",
+      cashier: "Откройте смену, пробейте чек, оформите возврат, закройте смену.",
+      manager: "Дашборд, отзывы, стоп-лист и кампании вашей точки.",
+      chef: "Тикеты с таймерами: закройте тикет — спишутся ингредиенты по ТТК.",
+      courier: "Заберите заказ и доставьте с фото — гость получит статус.",
+      buyer: "Автозаказ по прогнозу, заказы поставщикам, контроль фудкоста.",
+      supplier: "Ваш прайс, его конкурентность и заявки от точек сети.",
+      franchisee: "Свои точки по договору: выручка, роялти, стандарты.",
+      uk: "Пульс сети, аудиты, рекомендации и роялти по всем точкам.",
+      owner: "Живые показатели, причины, песочница решений и шаги дня."
+    };
+    const roleCards = ROLES.map((r) => {
+      const g = window.LOVII.guide ? window.LOVII.guide.GUIDES[r.id] : null;
+      return '<div class="card role-card"><div class="rowline"><span class="rc-emoji">' + (g ? g.emoji : "▸") +
+        "</span><span class='spacer'></span><span class='badge brand'>" + ENTRANCES.find((e) => e.id === r.entrance).url + "</span></div>" +
+        "<h3 style='margin-top:6px'>" + r.title + "</h3>" +
+        '<div class="rc-sub">' + intro[r.id] + "</div>" +
+        '<div class="rowline"><button class="btn small primary" data-role="' + r.id + '">Войти в роль</button>' +
+        '<button class="btn small" data-guide-role="' + r.id + '">Сценарий</button></div></div>';
+    }).join("");
     el.innerHTML =
       '<div class="landing-hero"><div class="big">lovii<span>·</span>demo</div>' +
-      '<p class="muted" style="max-width:640px;margin:10px auto">Демо-кабинет платформы: одна система — три входа. Мок-данные корпоративного уровня, роли и журнал событий. Данные вымышленные, сценарии — настоящие.</p></div>' +
-      '<div class="grid cols-3">' +
-      '<div class="card entr-card"><h3>🍣 Гостевой контур</h3><div class="url">app.lovii.ru</div><p class="small muted">Меню, корзина, оплата (мок банка), чек (мок ККТ), статусы, бонусы, отзывы.</p><button class="btn primary" data-go="app">Войти как гость</button></div>' +
-      '<div class="card entr-card"><h3>🧾 Клиентский контур</h3><div class="url">crm.lovii.ru</div><p class="small muted">Кассы и очередь заказов всех каналов, гости и сегменты, кампании, дашборд точки, кабинет франчайзи.</p><button class="btn primary" data-go="crm">Войти как персонал</button></div>' +
-      '<div class="card entr-card"><h3>🍳 Операционный контур</h3><div class="url">erp.lovii.ru</div><p class="small muted">Кухня (KDS), склад и фудкост, закупки, доставка, портал поставщика.</p><button class="btn primary" data-go="erp">Войти как операция</button></div>' +
+      '<p class="muted" style="max-width:700px;margin:10px auto">Это <b>полный интерактив</b>, а не макеты: все данные — вымышленный, но согласованный периметр сети (УК, 2 франчайзи, 4 точки, 5 поставщиков, 2 000 гостей), и каждое ваше действие меняет состояние платформы и пишется в общий журнал событий. Выберите роль — и пройдите свой рабочий день.</p></div>' +
+      '<div class="card"><h3>Как пользоваться демо</h3><div class="steps-how">' +
+      "<div><b>Выберите роль</b> — внизу или переключателем в шапке. Баннер сверху каждого экрана напомнит, кто вы и что делать дальше.</div>" +
+      "<div><b>Идите по сценарию</b> — кнопка «🧭 Сценарий роли» ведёт по шагам; каждый шаг кликабелен и открывает нужный экран.</div>" +
+      "<div><b>Смотрите журнал</b> — «⚡ События» в шапке показывает, как ваше действие разлетается по системе: кухня, склад, ОФД, УК.</div>" +
       "</div>" +
-      '<div class="card mt2"><h3>🌐 Кабинет УК и журнал платформы</h3><div class="rowline">' +
-      '<button class="btn primary" data-go="uk">Открыть кабинет УК</button>' +
-      '<button class="btn" id="land-events">⚡ Показать журнал событий</button>' +
-      '<a class="btn" href="../research/saas/00-platform-map/">📚 Схема-цель платформы</a></div>' +
-      '<p class="small muted mt">Роль можно сменить в любой момент — переключатель в шапке. Каждое действие пишется в общий журнал событий: откройте «⚡ События».</p></div>';
-    el.querySelectorAll("[data-go]").forEach((b) =>
+      '<div class="rowline"><button class="btn" id="land-events">⚡ Журнал событий</button>' +
+      '<a class="btn" href="../research/saas/00-platform-map/">📚 Схема-цель платформы</a>' +
+      '<a class="btn" href="../research/saas/02-demo-cabinet/">🎭 Спецификация демо</a></div></div>' +
+      "<h2 class='mt2'>10 ролей — 10 рабочих мест одной платформы</h2>" +
+      '<div class="grid cols-3">' + roleCards + "</div>";
+    el.querySelectorAll("[data-role]").forEach((b) =>
       b.addEventListener("click", () => {
-        const e = b.dataset.go;
-        nav(e, ENTRANCES.find((x) => x.id === e).home);
+        const r = ROLES.find((x) => x.id === b.dataset.role);
+        state.role = r.id;
+        const sel = document.getElementById("role-select");
+        if (sel) sel.value = r.id;
+        emit("ПЛАТФОРМА", "Вход в демо под ролью: " + r.title, "info");
+        nav(r.entrance, r.home);
+        if (window.LOVII.guide) window.LOVII.guide.openGuide(r.id);
+      }));
+    el.querySelectorAll("[data-guide-role]").forEach((b) =>
+      b.addEventListener("click", () => {
+        if (window.LOVII.guide) window.LOVII.guide.openGuide(b.dataset.guideRole);
       }));
     const ev = document.getElementById("land-events");
     if (ev) ev.addEventListener("click", () => {
@@ -281,6 +317,7 @@
       { s: "dashboard", i: "📊", t: "Дашборд точки" },
       { s: "guests", i: "👥", t: "Гости и сегменты" },
       { s: "campaigns", i: "🎯", t: "Кампании" },
+      { s: "reviews", i: "⭐", t: "Отзывы" },
       { s: "stoplist", i: "🚫", t: "Стоп-лист" },
       { s: "shift", i: "💰", t: "Смена и чеки" },
       { s: "franchisee", i: "🤝", t: "Кабинет франчайзи" }
@@ -295,6 +332,7 @@
       { s: "supplier", i: "🏭", t: "Портал поставщика" }
     ],
     uk: [
+      { s: "owner", i: "👑", t: "Собственник" },
       { s: "pulse", i: "🌐", t: "Пульс сети" },
       { s: "royalty", i: "💳", t: "Роялти" },
       { s: "audits", i: "📋", t: "Аудиты и стандарты" },
@@ -314,6 +352,7 @@
       '<div class="grow"></div>' +
       '<select id="role-select" title="Роль">' +
       ROLES.map((r) => '<option value="' + r.id + '">' + r.title + "</option>").join("") + "</select>" +
+      '<button class="btn small" id="guide-btn" title="Сценарий текущей роли">🧭 Гид</button>' +
       '<button class="btn small" id="ev-btn" title="Журнал событий платформы">⚡ События</button>' +
       '<button class="btn small" id="theme-btn" title="Тема">🌓</button>' +
       '<a class="btn small" href="../index.html" title="Документация">📚 Документы</a>';
@@ -336,6 +375,9 @@
     document.getElementById("ev-btn").addEventListener("click", () => {
       document.getElementById("drawer").classList.toggle("open");
       renderDrawer();
+    });
+    document.getElementById("guide-btn").addEventListener("click", () => {
+      if (window.LOVII.guide) window.LOVII.guide.openGuide();
     });
     document.getElementById("theme-btn").addEventListener("click", () => {
       document.body.classList.toggle("dark");
