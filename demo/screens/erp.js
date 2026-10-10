@@ -8,9 +8,34 @@
 
   // ---------- KDS ----------
   route("erp/kds", (el) => {
+    const load = DS.kitchenLoad[state.loc] || [];
+    const curH = new Date(DS.NOW).getHours();
+    const forecast = load.filter((x) => x.h > curH && x.h <= curH + 2).reduce((s, x) => s + x.v, 0);
+    const nowTickets = DS.tickets.filter((t) => t.loc === state.loc);
+    const lateNow = nowTickets.filter((t) => t.status !== "Готов" && (DS.NOW - t.startedAt) / 1000 > t.normSec).length;
     el.innerHTML =
       "<h1>🍳 Кухня (KDS) — " + locName(state.loc) + "</h1>" +
       '<p class="muted">Тикеты из всех каналов в одну очередь; норматив из ТТК; просрочка подсвечивается. Статус «Готов» спишет ингредиенты по ТТК.</p>' +
+      '<div class="grid cols-4 mb">' +
+      UI.kpi("Тикетов в работе", nowTickets.filter((t) => t.status !== "Готов").length, "каналы: зал, сайт, агрегаторы") +
+      UI.kpi("Просрочено сейчас", lateNow, lateNow ? "нужно решение" : "всё в нормативе", !lateNow) +
+      UI.kpi("Прогноз на 2 часа", "≈ " + forecast + " тикетов", "по истории загрузки дня") +
+      UI.kpi("Среднее по цехам", fmt.timer(Math.round(Object.values(DS.stationAvg).reduce((s, v) => s + v, 0) / 4)), "норматив из ТТК") +
+      "</div>" +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>Загрузка кухни сегодня — по часам</h3>' +
+      UI.svgBars(load.map((x) => ({
+        label: x.h, v: x.v, title: x.h + ":00 — " + x.v + " тикетов",
+        color: x.h === curH ? "#f59e0b" : x.h < curH ? "#7c3aed" : "var(--line)"
+      })), { h: 140 }) +
+      '<div class="small muted">Фиолетовое — прошло, оранжевое — текущий час, серое — прогноз из истории аналогичных дней.</div></div>' +
+      '<div class="card"><h3>Среднее время приготовления по цехам</h3>' +
+      Object.keys(DS.stationAvg).map((st) =>
+        '<div class="rowline mb" style="gap:8px"><div style="width:150px" class="small">' + st +
+        '</div><div class="bar" style="flex:1"><i style="width:' + Math.round(DS.stationAvg[st] / 780 * 100) + '%"></i></div>' +
+        '<div class="small right" style="width:64px">' + fmt.timer(DS.stationAvg[st]) + "</div></div>").join("") +
+      '<div class="small muted">Норматив тикета = максимум по позициям ТТК. Задержка на станции двигает обещание гостю автоматически.</div></div>' +
+      "</div>" +
       '<div class="kanban" id="kds"></div>';
     function draw() {
       const list = DS.tickets.filter((t) => t.loc === state.loc);
@@ -63,7 +88,7 @@
       '<div class="grid cols-4 mb">' +
       UI.kpi("Позиций на складе", locLots.length) +
       UI.kpi("Партий с истекающим сроком", soon.length, "≤ 2 дня", soon.length > 0 ? false : true) +
-      UI.kpi("Движений за сутки", "47", "приёмки, списания, акты") +
+      UI.kpi("Движений за сутки", (DS.stockMoves[state.loc] || []).filter((m) => DS.NOW - m.ts < DS.DAY).length, "приёмки, списания, акты") +
       UI.kpi("Инвентаризация", "через 3 дня", "слепая, по зонам") +
       "</div>" +
       (soon.length ? '<div class="card mb" style="border-left:4px solid var(--warn)"><b>⚠ Срочно в заготовки/списание:</b> ' +
@@ -75,7 +100,39 @@
         return "<tr><td><b>" + g.name + "</b></td><td class='small muted'>" + l.id + "</td><td class='right'>" + l.qty + " " + g.unit + "</td>" +
           "<td>" + (days <= 2 ? UI.badge(days + " дн — риск", "err") : days <= 5 ? UI.badge(days + " дн", "warn") : UI.badge(days + " дн", "ok")) + "</td>" +
           "<td class='right'>" + fmt.money(l.qty * g.price) + "</td></tr>";
-      }).join("") + "</table></div>";
+      }).join("") + "</table></div>" +
+      '<div class="card mt2"><h3>Журнал движений: откуда берутся остатки</h3>' +
+      '<div class="rowline mb"><select id="wm-ing"></select>' +
+      '<span class="small muted">Приход — приёмка по УПД; расход — списание по ТТК; каждое движение ссылается на документ.</span></div>' +
+      '<div id="wm-body"></div></div>';
+    // движение по выбранному ингредиенту
+    const moves = DS.stockMoves[state.loc] || [];
+    const ingIds = [...new Set(moves.map((m) => m.ing))]
+      .sort((a, b) => moves.filter((m) => m.ing === b).length - moves.filter((m) => m.ing === a).length);
+    const wmSel = document.getElementById("wm-ing");
+    wmSel.innerHTML = ingIds.map((id) => {
+      const cnt = moves.filter((m) => m.ing === id).length;
+      return '<option value="' + id + '">' + ingName(id) + " — " + cnt + " движ.</option>";
+    }).join("");
+    function drawMoves() {
+      const id = wmSel.value;
+      const list = moves.filter((m) => m.ing === id);
+      const cls = { "Приход": "ok", "Расход": "info", "Списание": "err", "Перемещение": "warn" };
+      const sign = { "Приход": "+", "Расход": "−", "Списание": "−", "Перемещение": "→" };
+      const g = DS.ing.find((x) => x.id === id);
+      document.getElementById("wm-body").innerHTML =
+        UI.table(
+          [{ k: "t", t: "Время" }, { k: "k", t: "Тип" }, { k: "q", t: "Кол-во", right: 1 }, { k: "d", t: "Документ-основание" }],
+          list.map((m) => ({
+            cells: {
+              t: fmt.dt(m.ts), k: UI.badge(m.kind, cls[m.kind] || "gray"),
+              q: "<b>" + sign[m.kind] + m.qty + "</b> " + g.unit, d: '<span class="small muted">' + m.doc + "</span>"
+            }
+          }))) +
+        (list.length ? "" : '<p class="muted">По позиции движений за последние 40 часов нет.</p>');
+    }
+    wmSel.addEventListener("change", drawMoves);
+    drawMoves();
   });
 
   // ---------- Закупки ----------
@@ -110,7 +167,25 @@
             s: supName(p.supplier), l: locName(p.loc), d: DS.fmtDay(p.created), sum: fmt.money(p.sum),
             st: UI.badge(p.status, p.status === "Принят" ? "ok" : p.status === "Ожидает подтверждения" ? "warn" : "info")
           }
-        }))) + "</div>";
+        }))) + "</div>" +
+      '<div class="card mt2"><h3>Надёжность поставщиков (90 дней)</h3>' +
+      UI.table(
+        [{ k: "s", t: "Поставщик" }, { k: "ot", t: "Вовремя, %", right: 1 }, { k: "ld", t: "Плечо, дн", right: 1 }, { k: "q", t: "Качество", right: 1 }, { k: "v", t: "Объём 30 дн", right: 1 }, { k: "r", t: "Класс" }],
+        DS.suppliers.map((s) => {
+          const k = DS.supplierKpi[s.id];
+          const open = DS.purchaseOrders.filter((p) => p.supplier === s.id && p.status !== "Принят").length;
+          const grade = k.onTime >= 95 && k.quality >= 98 ? "A" : k.onTime >= 90 ? "B" : "C";
+          return {
+            cells: {
+              s: "<b>" + s.name + "</b><div class='small muted'>" + s.cat + (open ? " · открытых заказов: " + open : "") + "</div>",
+              ot: UI.badge(k.onTime + "%", k.onTime >= 95 ? "ok" : k.onTime >= 90 ? "warn" : "err"),
+              ld: k.leadDays, q: k.quality + "%",
+              v: fmt.money(k.vol30),
+              r: UI.badge("класс " + grade, grade === "A" ? "ok" : grade === "B" ? "warn" : "err")
+            }
+          };
+        })) +
+      '<div class="small muted mt">Класс считается из своевременности поставок, качества приёмки и плеча. Класс ниже B — повод для тендера по позициям.</div></div>';
     state.purchCart = state.purchCart || [];
     function drawCart() {
       const cc = document.getElementById("purch-cart");
@@ -169,6 +244,25 @@
       "</div>" +
       '<div class="card"><h3>Фудкост по точкам (факт 30 дней)</h3>' +
       UI.barsH(rows.map((r) => ({ label: r.l.name, v: r.pct, text: r.pct + "%", cls: r.pct > 30 ? "err" : "ok" })), 40) + "</div>" +
+      '<div class="card mt2"><h3>Фудкост сети — по неделям</h3>' +
+      UI.svgBars(DS.foodcostWeeks.map((w) => ({
+        label: DS.fmtDay(w.ts), v: w.pct, title: "Неделя от " + DS.fmtDay(w.ts) + ": " + w.pct + "%",
+        color: w.pct > 29 ? "#dc2626" : "#7c3aed"
+      })), { h: 150 }) +
+      '<div class="small muted">Рост последних недель — эффект подорожания лосося и сыра. Прогноз при сохранении цен: 29,4% через 2 недели. Красным — недели выше цели 29%.</div></div>' +
+      '<div class="card mt2"><h3>Маржинальная карта блюд (ТТК × прайсы)</h3>' +
+      '<p class="small muted">Себестоимость из ТТК по текущим ценам поставщиков. Красная зона — блюда, которые тянут фудкост вверх: кандидат на пересмотр ТТК, цены или поставщика.</p>' +
+      UI.table(
+        [{ k: "n", t: "Блюдо" }, { k: "c", t: "Себестоимость", right: 1 }, { k: "p", t: "Цена", right: 1 }, { k: "m", t: "Маржа", right: 1 }, { k: "s", t: "Продажи 30 дн", right: 1 }, { k: "t", t: "Тренд" }],
+        DS.dishAnalytics.slice().sort((a, b) => a.margin - b.margin).slice(0, 12).map((d) => ({
+          cells: {
+            n: "<b>" + d.name + "</b> <span class='tag'>" + d.cat + "</span>",
+            c: fmt.money(d.cost), p: fmt.money(d.price),
+            m: UI.badge(d.margin + "%", d.margin < 62 ? "err" : d.margin < 70 ? "warn" : "ok"),
+            s: fmt.num(d.sales30) + (d.sales30 > 380 ? ' <span class="tag">хит</span>' : ""),
+            t: d.trend >= 0 ? '<span style="color:var(--ok)">▲ +' + d.trend + "%</span>" : '<span style="color:var(--err)">▼ ' + d.trend + "%</span>"
+          }
+        }))) + "</div>" +
       '<div class="card mt2"><h3>Отклонения и действия</h3>' +
       UI.table(
         [{ k: "l", t: "Точка" }, { k: "d", t: "Отклонение", right: 1 }, { k: "c", t: "Вероятная причина" }, { k: "a", t: "Рекомендация" }],
@@ -221,7 +315,18 @@
             s: UI.badge(o.status, "info")
           }
           }))) + "</div>" +
-        "</div>";
+        "</div>" +
+      '<div class="card mt2"><h3>Зоны доставки</h3>' +
+      UI.table(
+        [{ k: "z", t: "Зона" }, { k: "o", t: "Заказов сегодня", right: 1 }, { k: "t", t: "Среднее время", right: 1 }, { k: "w", t: "В окно", right: 1 }, { k: "c", t: "Курьеров", right: 1 }],
+        (DS.deliveryZones[state.loc] || []).map((z) => ({
+          cells: {
+            z: "<b>" + z.name + "</b>", o: z.orders, t: z.avgMin + " мин",
+            w: UI.badge(z.inWin + "%", z.inWin >= 90 ? "ok" : "err"),
+            c: z.couriers
+          }
+        }))) +
+      '<div class="small muted mt">Зоны ниже 90% «в окно» — кандидат на корректировку обещания времени или добавление курьера в пик.</div></div>';
     el.querySelectorAll("[data-callg]").forEach((b) =>
       b.addEventListener("click", () => toast("Звонок гостю через ВАТС платформы…")));
     el.querySelectorAll("[data-resolve]").forEach((b) =>
@@ -316,6 +421,10 @@
             a: p.status === "Ожидает подтверждения" ? '<button class="btn small ok" data-conf="' + p.id + '">Подтвердить и отправить УПД</button>' : ""
           }
         }))) + "</div>" +
+      '<div class="card mb"><h3>Динамика цены позиции — 12 недель</h3>' +
+      '<div class="rowline mb"><select id="ph-pos"></select><span id="ph-spark"></span><span id="ph-delta"></span>' +
+      '<span class="small muted">Сплошная линия — ваш прайс, пунктир — средняя рынка.</span></div>' +
+      '<div id="ph-body"></div></div>' +
       '<div class="card"><h3>Мой прайс-лист</h3>' +
       UI.table(
         [{ k: "i", t: "Позиция" }, { k: "p", t: "Цена", right: 1 }, { k: "c", t: "Рыночная", right: 1 }, { k: "d", t: "Конкурентность" }],
@@ -349,6 +458,41 @@
         toast("Подтверждено! УПД ушёл в точку.");
         nav("erp", "supplier");
       }));
+    // динамика цен позиций: ваш прайс против рынка
+    const phSel = document.getElementById("ph-pos");
+    const myTracked = myPrices.map((p) => p.ing).filter((id) => DS.priceHistory[id] && DS.priceHistory[id].bySup[s.id]);
+    if (!myTracked.length) {
+      document.getElementById("ph-body").innerHTML = '<p class="muted">По позициям прайса пока нет накопленной истории цен.</p>';
+    } else {
+      phSel.innerHTML = myTracked.map((id) => '<option value="' + id + '">' + ingName(id) + "</option>").join("");
+      function drawPh() {
+        const ph = DS.priceHistory[phSel.value];
+        const mine = ph.bySup[s.id];
+        const last = ph.weeks.length - 1;
+        const delta = Math.round((mine[last] / mine[0] - 1) * 100);
+        const vsMarket = Math.round((mine[last] / ph.market[last] - 1) * 100);
+        document.getElementById("ph-spark").innerHTML =
+          UI.spark(mine, { vals2: ph.market, color: vsMarket > 8 ? "var(--err)" : "var(--brand)", w: 190 });
+        document.getElementById("ph-delta").innerHTML =
+          UI.badge((delta >= 0 ? "+" : "") + delta + "% за 12 нед", delta > 5 ? "warn" : "ok") + " " +
+          UI.badge(vsMarket > 8 ? "+" + vsMarket + "% к рынку" : vsMarket < -3 ? vsMarket + "% — дешевле рынка" : "в рынке",
+            vsMarket > 8 ? "err" : vsMarket < -3 ? "ok" : "gray");
+        document.getElementById("ph-body").innerHTML =
+          UI.table(
+            [{ k: "w", t: "Неделя от" }, { k: "m", t: "Ваша цена", right: 1 }, { k: "r", t: "Рынок", right: 1 }, { k: "d", t: "Откл.", right: 1 }],
+            ph.weeks.map((ts, i) => ({ ts, i })).slice(-6).reverse().map((x) => {
+              const dev = Math.round((mine[x.i] / ph.market[x.i] - 1) * 100);
+              return {
+                cells: {
+                  w: DS.fmtDay(x.ts), m: "<b>" + fmt.money(mine[x.i]) + "</b>", r: fmt.money(ph.market[x.i]),
+                  d: dev > 0 ? '<span style="color:var(--err)">+' + dev + "%</span>" : dev < 0 ? '<span style="color:var(--ok)">' + dev + "%</span>" : "0%"
+                }
+              };
+            }));
+      }
+      phSel.addEventListener("change", drawPh);
+      drawPh();
+    }
   });
 
   // ---------- Инвентаризация (слепая) ----------
@@ -360,6 +504,13 @@
       "<h1>🔍 Инвентаризация — " + locName(state.loc) + "</h1>" +
       '<p class="muted">Слепой пересчёт: счётчик вносит факт, система сравнивает с книжными остатками постфактум. Итоги идут в фудкост и журнал.</p>' +
       '<div class="grid cols-4 mb" id="inv-kpis"></div>' +
+      '<div class="card mb"><h3>Тренд отклонений — последние 8 пересчётов</h3>' +
+      UI.svgBars((DS.invHistory[state.loc] || []).map((h) => ({
+        label: DS.fmtDay(h.ts), v: h.varPct,
+        title: "Пересчёт " + DS.fmtDay(h.ts) + ": " + h.varPct + "% (" + (h.devRub > 0 ? "+" : "") + fmt.money(h.devRub) + ")",
+        color: h.varPct > 1.5 ? "#dc2626" : h.varPct > 0.8 ? "#d97706" : "#16a34a"
+      })), { h: 120 }) +
+      '<div class="small muted">Красным — пересчёты с расхождением выше 1,5% (сигнал на внеплановую проверку зоны). Столбец наведите — покажет сумму отклонения.</div></div>' +
       '<div class="rowline mb"><label class="small"><input type="checkbox" id="inv-blind"' + (blind ? " checked" : "") + '> Слепой режим (скрыть книжный остаток)</label>' +
       '<span class="spacer"></span><button class="btn primary" id="inv-confirm">Утвердить итоги</button></div>' +
       '<div class="card pad0"><table class="tbl" id="inv-tbl"></table></div>' +

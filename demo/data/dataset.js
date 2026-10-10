@@ -361,12 +361,143 @@
     return Math.round((menuCostPct + adj) * 10) / 10;
   }
 
+  // =====================================================================
+  // Обогащение ERP: история, динамика и аналитика (детерминированное).
+  // Отдельный PRNG R2 — существующие последовательности не сдвигаются.
+  // =====================================================================
+  const R2 = rng(771771);
+  const ri2 = (a, b) => a + Math.floor(R2() * (b - a + 1));
+
+  // 1) Динамика цен ключевых позиций: 12 недель, рынок и каждый поставщик
+  const priceHistory = {};
+  ["Лосось", "Рис для суши", "Сыр сливочный", "Говядина", "Креветка",
+    "Авокадо", "Мука", "Сыр моцарелла", "Кофе зерно", "Нори"].forEach((nm) => {
+    const g = ing.find((x) => x.name === nm);
+    if (!g) return;
+    const sups = suppliers.filter((s) => prices[s.id].some((p) => p.ing === g.id)).map((s) => s.id);
+    const weeks = [], market = [], bySup = {};
+    sups.forEach((sid) => { bySup[sid] = []; });
+    let p = g.price * (nm === "Лосось" ? 0.93 : 0.97);
+    for (let w = 11; w >= 0; w--) {
+      let drift;
+      if (nm === "Лосось") drift = w <= 2 ? 1.045 : 1.006;      // скачок последних недель (+12% с 01.10)
+      else if (nm === "Сыр сливочный") drift = 1.005;            // медленный рост
+      else if (nm === "Говядина") drift = w > 6 ? 1.008 : 0.994; // сезонное снижение
+      else drift = 0.996 + R2() * 0.012;                          // лёгкий шум
+      p = p * drift * (0.995 + R2() * 0.01);
+      weeks.push(NOW.getTime() - w * 7 * DAY);
+      market.push(Math.round(p));
+      sups.forEach((sid) => {
+        const base = prices[sid].find((x) => x.ing === g.id);
+        const k = base ? base.price / g.price : 1; // относительная позиция прайса поставщика
+        bySup[sid].push(Math.round(p * k * (0.99 + R2() * 0.02)));
+      });
+    }
+    priceHistory[g.id] = { weeks, market, bySup };
+  });
+
+  // 2) Загрузка кухни по часам + среднее время по цехам
+  const kitchenLoad = {};
+  locations.forEach((l) => {
+    if (l.type === "Производство") return;
+    kitchenLoad[l.id] = [];
+    for (let h = 10; h <= 23; h++) {
+      let base = 4 + R2() * 5;
+      if (h >= 12 && h <= 14) base *= 2.1; // обеденный пик
+      if (h >= 18 && h <= 20) base *= 2.4; // вечерний пик
+      if (h === 23) base *= 0.5;
+      kitchenLoad[l.id].push({ h, v: Math.max(1, Math.round(base * (l.factor || 1))) });
+    }
+  });
+  const stationAvg = { "Горячий цех": 640, "Холодный цех": 380, "Гриль": 720, "Суши-станция": 460 };
+
+  // 3) Движения склада — ответ на вопрос «почему −3 кг сыра?»
+  const stockMoves = {};
+  locations.forEach((l) => {
+    if (l.type === "Производство") return;
+    const ms = [];
+    // концентрируем движения на часто используемых позициях, чтобы журнал был содержательным
+    const hot = ["Лосось", "Рис для суши", "Сыр сливочный", "Куриное филе", "Помидоры", "Мука", "Сыр моцарелла", "Креветка"]
+      .map((n) => ing.find((g) => g.name === n)).filter(Boolean);
+    for (let i = 0; i < 40; i++) {
+      const g = R2() < 0.55 ? hot[ri2(0, hot.length - 1)] : ing[ri2(0, ing.length - 1)];
+      const r = R2();
+      const kind = r < 0.3 ? "Приход" : r < 0.75 ? "Расход" : r < 0.85 ? "Списание" : "Перемещение";
+      const qty = +(R2() * 8 + 0.5).toFixed(1);
+      const doc = kind === "Приход" ? "УПД-" + (2400 + ri2(10, 89))
+        : kind === "Расход" ? "Тикет KDS T-" + ri2(100, 999)
+          : kind === "Списание" ? "Акт списания А-" + ri2(10, 59)
+            : "Накладная ФК-" + ri2(10, 39);
+      ms.push({ ts: NOW.getTime() - ri2(1, 40) * 3600000, ing: g.id, kind, qty, doc });
+    }
+    ms.sort((a, b) => b.ts - a.ts);
+    stockMoves[l.id] = ms;
+  });
+
+  // 4) История инвентаризаций — 8 еженедельных пересчётов
+  const invHistory = {};
+  locations.forEach((l) => {
+    if (l.type === "Производство") return;
+    const bad = l.id === "l3"; // точка с проблемным фудкостом
+    invHistory[l.id] = Array.from({ length: 8 }, (_, i) => {
+      const varPct = bad ? +(1.4 + R2() * 2.4).toFixed(1) : +(0.3 + R2() * 1.1).toFixed(1);
+      const sign = R2() < 0.8 ? -1 : 1; // чаще недостача, реже излишек
+      return { ts: NOW.getTime() - (7 - i) * 7 * DAY, varPct, devRub: sign * Math.round(varPct * (bad ? 900 : 520)) };
+    });
+  });
+
+  // 5) Надёжность поставщиков (90 дней)
+  const supplierKpi = {};
+  suppliers.forEach((s) => {
+    supplierKpi[s.id] = {
+      onTime: s.id === "s2" ? 87 : ri2(91, 99),
+      leadDays: +(0.8 + R2() * 1.6).toFixed(1),
+      vol30: settlements.find((x) => x.sup === s.id).delivered,
+      quality: +(96 + R2() * 3.5).toFixed(1)
+    };
+  });
+
+  // 6) Зоны доставки
+  const zoneNames = {
+    l1: ["Центральный", "Заречье", "Старый город", "Вокзальный"],
+    l2: ["Северный", "Северный парк", "Ивушка", "Снегирь"],
+    l3: ["Кировский", "Слобода", "Ботаника", "Соловьи"],
+    l4: ["Аэропорт", "Аэродром", "Полевой", "Южный"]
+  };
+  const deliveryZones = {};
+  locations.forEach((l) => {
+    if (!zoneNames[l.id]) return;
+    deliveryZones[l.id] = zoneNames[l.id].map((z, i) => ({
+      name: z,
+      orders: ri2(6, 26),
+      avgMin: ri2(24, 52),
+      inWin: i === 0 ? ri2(92, 98) : ri2(78, 96),
+      couriers: ri2(1, 3)
+    }));
+  });
+
+  // 7) Маржинальность блюд (ТТК-себестоимость уже в menu; продажи — 30 дней)
+  const dishAnalytics = menu.map((m) => ({
+    dish: m.id, name: m.name, cat: m.catName, cost: m.cost, price: m.price,
+    margin: Math.round((1 - m.cost / m.price) * 1000) / 10,
+    sales30: Math.round((m.hit ? 380 : 60) + R2() * (m.hit ? 220 : 180)),
+    trend: +(R2() * 24 - 9).toFixed(1)
+  }));
+
+  // 8) Фудкост сети по неделям (8 недель, тренд вверх из-за роста цен)
+  const foodcostWeeks = Array.from({ length: 8 }, (_, i) => ({
+    ts: NOW.getTime() - (7 - i) * 7 * DAY,
+    pct: +(27.2 + i * 0.22 + (R2() * 0.8 - 0.4)).toFixed(1)
+  }));
+
   window.DS = {
     NOW: NOW.getTime(), DAY, fmtDay, tenants, locations, cats, menu, ing, ttk,
     suppliers, prices, lots, stock, staff, couriers, guests,
     channels, orders, dailyByLoc, tickets, reviews, purchaseOrders,
     auditTemplates, audits, royalty, stopList, foodcostPct,
     requests, settlements, semifinished,
+    priceHistory, kitchenLoad, stationAvg, stockMoves, invHistory,
+    supplierKpi, deliveryZones, dishAnalytics, foodcostWeeks,
     helpers: { pick, ri, chance }
   };
 })();

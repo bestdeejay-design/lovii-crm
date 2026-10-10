@@ -272,6 +272,7 @@
         '<div class="small right" style="width:80px">' + i.text + "</div></div>").join("");
     },
     svgBars(series, opts) {
+      opts = opts || {};
       const W = opts.w || 560, H = opts.h || 130, pad = 6;
       const mx = Math.max.apply(null, series.map((s) => s.v)) || 1;
       const bw = (W - pad * 2) / series.length;
@@ -304,7 +305,26 @@
       return '<svg viewBox="0 0 100 100" style="width:130px;height:130px">' + paths + "</svg>";
     },
     badge(text, cls) { return '<span class="badge ' + (cls || "gray") + '">' + text + "</span>"; },
-    stars(n) { return '<span class="stars">' + "★".repeat(n) + "</span><span class='muted'>" + "★".repeat(5 - n) + "</span>"; }
+    stars(n) { return '<span class="stars">' + "★".repeat(n) + "</span><span class='muted'>" + "★".repeat(5 - n) + "</span>"; },
+    // спарклайн: основная линия + опциональная вторая (например, рыночная цена)
+    spark(vals, opts) {
+      const o = opts || {};
+      const W = o.w || 150, H = o.h || 34;
+      if (!vals.length) return "";
+      const all = vals.concat(o.vals2 || []);
+      const mn = Math.min.apply(null, all), mx = Math.max.apply(null, all);
+      const rv = (mx - mn) || 1;
+      const pts = (vs) => vs.map((v, i) =>
+        (i / Math.max(1, vs.length - 1) * (W - 6) + 3).toFixed(1) + "," +
+        (H - 4 - (v - mn) / rv * (H - 8)).toFixed(1)).join(" ");
+      let svg = '<svg viewBox="0 0 ' + W + " " + H + '" style="width:' + W + "px;height:" + H + 'px" aria-hidden="true">';
+      if (o.vals2) svg += '<polyline points="' + pts(o.vals2) + '" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-dasharray="3 3"/>';
+      const col = o.color || "var(--brand)";
+      const lastY = (H - 4 - (vals[vals.length - 1] - mn) / rv * (H - 8)).toFixed(1);
+      svg += '<polyline points="' + pts(vals) + '" fill="none" stroke="' + col + '" stroke-width="2"/>' +
+        '<circle cx="' + (W - 3) + '" cy="' + lastY + '" r="2.5" fill="' + col + '"/></svg>';
+      return svg;
+    }
   };
 
   // ---------- Тосты ----------
