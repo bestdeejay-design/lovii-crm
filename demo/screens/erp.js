@@ -22,9 +22,19 @@
           '<div class="small muted">' + t.station + " · норматив " + fmt.timer(t.normSec) + "</div>" +
           "<ul>" + t.items.map((i) => "<li>" + esc(i.name) + (i.note ? ' <span class="badge warn">' + esc(i.note) + "</span>" : "") + "</li>").join("") + "</ul>" +
           UI.badge(t.status, t.status === "Готов" ? "ok" : late ? "err" : "info") +
-          (t.status !== "Готов" ? ' <button class="btn small ok" data-done="' + t.id + '">Готово</button>' : ' <button class="btn small" data-serve="' + t.id + '">Выдано</button>') +
+          (t.status !== "Готов"
+            ? ' <button class="btn small ok" data-done="' + t.id + '">Готово</button> <button class="btn small" data-late="' + t.id + '">Задержка +5 мин</button>'
+            : ' <button class="btn small" data-serve="' + t.id + '">Выдано</button>') +
           "</div>";
       }).join("");
+      document.querySelectorAll("[data-late]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const t = DS.tickets.find((x) => x.id === b.dataset.late);
+          t.normSec += 300;
+          emit("ПЛАТФОРМА", "Задержка по тикету " + t.id + ": +5 минут — гость получил уведомление, диспетчер сдвинул обещание доставки", "warn");
+          toast("Гость уведомлён о задержке, обещание сдвинуто.");
+          draw();
+        }));
       document.querySelectorAll("[data-done]").forEach((b) =>
         b.addEventListener("click", () => {
           const t = DS.tickets.find((x) => x.id === b.dataset.done);
@@ -89,7 +99,8 @@
             s: a.sup, p: fmt.money(a.price),
             a: '<button class="btn small primary" data-sg="' + i + '">В заказ</button>'
           }
-        }))) + "</div>" +
+        }))) +
+      '<div id="purch-cart" class="mt"></div></div>' +
       '<div class="card"><h3>Заказы поставщикам</h3>' +
       UI.table(
         [{ k: "id", t: "Заказ" }, { k: "s", t: "Поставщик" }, { k: "l", t: "Точка" }, { k: "d", t: "Создан" }, { k: "sum", t: "Сумма", right: 1 }, { k: "st", t: "Статус" }],
@@ -100,12 +111,44 @@
             st: UI.badge(p.status, p.status === "Принят" ? "ok" : p.status === "Ожидает подтверждения" ? "warn" : "info")
           }
         }))) + "</div>";
+    state.purchCart = state.purchCart || [];
+    function drawCart() {
+      const cc = document.getElementById("purch-cart");
+      if (!state.purchCart.length) { cc.innerHTML = ""; return; }
+      const bySup = {};
+      state.purchCart.forEach((c) => { (bySup[c.sup] = bySup[c.sup] || []).push(c); });
+      cc.innerHTML = "<h3>🧺 В заказе</h3>" +
+        Object.keys(bySup).map((sup) =>
+          '<div class="mb"><b>' + sup + "</b>: " + bySup[sup].map((c) => c.ing + " (" + c.need + ")").join(", ") + "</div>").join("") +
+        '<button class="btn primary" id="po-create">Сформировать заказы поставщикам</button>';
+      const pc = document.getElementById("po-create");
+      if (pc) pc.addEventListener("click", () => {
+        Object.keys(bySup).forEach((sup) => {
+          const s = DS.suppliers.find((x) => x.name === sup) || DS.suppliers[0];
+          const sum = bySup[sup].reduce((x, c) => x + c.qty * c.price, 0);
+          DS.purchaseOrders.unshift({
+            id: "PO-NEW-" + (DS.purchaseOrders.length + 1),
+            supplier: s.id, loc: state.loc, created: DS.NOW, sum: Math.round(sum),
+            status: "Ожидает подтверждения", auto: true
+          });
+          emit("ПЛАТФОРМА", "Заказ поставщику «" + sup + "» сформирован из автозаказа на " + fmt.money(sum) + " — отправлен в портал поставщика", "ok");
+        });
+        toast("Заказы отправлены поставщикам. Подтверждение — в их портале.");
+        state.purchCart = [];
+        nav("erp", "purchasing");
+      });
+    }
+    drawCart();
     el.querySelectorAll("[data-sg]").forEach((b) =>
       b.addEventListener("click", () => {
         const a = autoSuggest[+b.dataset.sg];
-        emit("ПЛАТФОРМА", "Автозаказ: «" + a.ing + "» добавлен в заказ поставщику " + a.sup, "ok");
+        if (!state.purchCart.find((c) => c.ing === a.ing)) {
+          state.purchCart.push({ ing: a.ing, need: a.need, sup: a.sup, price: a.price, qty: parseFloat(a.need.replace(",", ".")) || 1 });
+        }
+        emit("ПЛАТФОРМА", "Автозаказ: «" + a.ing + "» добавлен в заказ поставщику " + a.sup, "info");
         toast("Добавлено в заказ поставщику.");
         b.disabled = true; b.textContent = "✓";
+        drawCart();
       }));
   });
 
@@ -143,9 +186,15 @@
     const cs = DS.couriers.filter((c) => c.loc === state.loc);
     const recent = DS.orders.filter((o) => o.loc === state.loc && o.delivery).slice(0, 10);
     const inWin = Math.round(recent.filter((o) => o.inWindow).length / recent.length * 100);
+    const probs = window.__courierProblems || [];
     el.innerHTML =
       "<h1>🛵 Доставка — диспетчеризация</h1>" +
       '<p class="muted">Обещание времени = норматив кухни + упаковка + маршрут (единая формула для всех каналов).</p>' +
+      (probs.length ? '<div class="card mb" style="border-left:4px solid var(--err)"><h3>⚠ Проблемы от курьеров (требуют реакции)</h3>' +
+        probs.map((p, i) =>
+          '<div class="rowline mt"><b>' + p.id + "</b> · " + p.reason + '<span class="small muted">' + p.addr + "</span>" +
+          '<span class="spacer"></span><button class="btn small" data-callg="' + i + '">Позвонить гостю</button>' +
+          '<button class="btn small ok" data-resolve="' + i + '">Решено</button></div>').join("") + "</div>" : "") +
       '<div class="grid cols-4 mb">' +
       UI.kpi("В обещанное окно", inWin + "%", "цель ≥ 90%", inWin >= 90) +
       UI.kpi("Курьеров на линии", cs.filter((c) => c.status === "В пути").length, "из " + cs.length) +
@@ -171,8 +220,17 @@
             w: o.inWindow ? UI.badge("вовремя", "ok") : UI.badge("опоздание", "err"),
             s: UI.badge(o.status, "info")
           }
-        }))) + "</div>" +
-      "</div>";
+          }))) + "</div>" +
+        "</div>";
+    el.querySelectorAll("[data-callg]").forEach((b) =>
+      b.addEventListener("click", () => toast("Звонок гостю через ВАТС платформы…")));
+    el.querySelectorAll("[data-resolve]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const p = window.__courierProblems.splice(+b.dataset.resolve, 1)[0];
+        emit("ПЛАТФОРМА", "Проблема " + p.id + " решена диспетчером: " + p.reason + " — гость предупреждён, доставка продолжается", "ok");
+        toast("Проблема закрыта.");
+        nav("erp", "delivery");
+      }));
   });
 
   // ---------- Мои доставки (курьер) ----------
@@ -194,6 +252,7 @@
         (o.st === "Везу"
           ? '<button class="btn small ok" data-deliv="' + i + '">Доставлено (фото)</button> <button class="btn small" data-call="' + i + '">Позвонить гостю</button>'
           : '<button class="btn small primary" data-pick="' + i + '">Забрал заказ</button>') +
+        (o.st === "Проблема" ? UI.badge("диспетчер уведомлён", "warn") : ' <button class="btn small warn" data-prob="' + i + '">Проблема</button>') +
         "</div><div id='c-log-" + i + "' class='mt'></div></div>").join("") +
       '<div class="card"><h3>Итог смены</h3><div class="rowline"><span>Доставок: <b>7</b></span><span>Чаевые: <b>420 ₽</b></span><span>Рейтинг: <b>4.9 ★</b></span></div></div>';
     el.querySelectorAll("[data-deliv]").forEach((b) =>
@@ -211,6 +270,26 @@
       }));
     el.querySelectorAll("[data-call]").forEach((b) =>
       b.addEventListener("click", () => toast("Звонок гостю через ВАТС платформы…")));
+    el.querySelectorAll("[data-prob]").forEach((b) =>
+      b.addEventListener("click", () => {
+        document.getElementById("c-log-" + b.dataset.prob).innerHTML =
+          '<div class="rowline"><select data-reason><option>Гостя нет дома</option><option>Адрес не найден</option><option>Не дозвониться до гостя</option><option>Повреждена упаковка</option></select>' +
+          '<button class="btn small warn" data-sendprob="' + b.dataset.prob + '">Сообщить диспетчеру</button></div>';
+        b.remove();
+        // вставленная кнопка: привязываем обработчик сразу после вставки
+        const sb = document.querySelector('[data-sendprob="' + b.dataset.prob + '"]');
+        sb.addEventListener("click", () => {
+          const i = +sb.dataset.sendprob;
+          const wrap = sb.closest(".rowline");
+          const reason = wrap.querySelector("[data-reason]").value;
+          my[i].st = "Проблема";
+          window.__courierProblems = window.__courierProblems || [];
+          window.__courierProblems.push({ id: my[i].id, addr: my[i].addr, reason, courier: "демо-курьер", ts: Date.now() });
+          emit("ПЛАТФОРМА", "⚠ Проблема на доставке " + my[i].id + ": " + reason + " — диспетчер видит алерт и свяжется с гостем", "err");
+          toast("Диспетчер получил алерт.");
+          nav("erp", "courier");
+        });
+      }));
   });
 
   // ---------- Портал поставщика ----------
@@ -240,17 +319,28 @@
       '<div class="card"><h3>Мой прайс-лист</h3>' +
       UI.table(
         [{ k: "i", t: "Позиция" }, { k: "p", t: "Цена", right: 1 }, { k: "c", t: "Рыночная", right: 1 }, { k: "d", t: "Конкурентность" }],
-        myPrices.slice(0, 14).map((pr) => {
+        myPrices.slice(0, 14).map((pr, idx) => {
           const g = DS.ing.find((x) => x.id === pr.ing);
           const delta = Math.round((pr.price / g.price - 1) * 100);
           return {
             cells: {
               i: g.name + " <span class='muted small'>(" + g.unit + ")</span>",
               p: fmt.money(pr.price), c: fmt.money(g.price),
-              d: delta > 8 ? UI.badge("+" + delta + "% дороже рынка", "err") : delta < -3 ? UI.badge(delta + "% — выгодно", "ok") : UI.badge("в рынке", "gray")
+              d: delta > 8
+                ? UI.badge("+" + delta + "% дороже рынка", "err") + ' <button class="btn small" data-cut="' + idx + '">Дешевле на 5%</button>'
+                : delta < -3 ? UI.badge(delta + "% — выгодно", "ok") : UI.badge("в рынке", "gray")
             }
           };
         })) + "</div>";
+    el.querySelectorAll("[data-cut]").forEach((b) =>
+      b.addEventListener("click", () => {
+        const pr = myPrices[+b.dataset.cut];
+        const g = DS.ing.find((x) => x.id === pr.ing);
+        pr.price = Math.round(pr.price * 0.95);
+        emit("ПЛАТФОРМА", "«" + s.name + "» пересмотрел цену: " + g.name + " → " + fmt.money(pr.price) + ". Точки получили обновлённый прайс", "ok");
+        toast("Цена снижена на 5% — прайс обновлён у всех точек.");
+        nav("erp", "supplier");
+      }));
     el.querySelectorAll("[data-conf]").forEach((b) =>
       b.addEventListener("click", () => {
         const p = DS.purchaseOrders.find((x) => x.id === b.dataset.conf);

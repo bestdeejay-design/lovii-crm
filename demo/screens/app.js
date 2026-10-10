@@ -10,6 +10,7 @@
     if (ex) ex.qty++; else state.cart.push({ id: m.id, name: m.name, price: m.price, qty: 1 });
     emit("ПЛАТФОРМА", "Гость: в корзину добавлено «" + m.name + "»", "info");
     toast("Добавлено: " + m.name);
+    if (window.LOVII.guide) window.LOVII.guide.refreshBanner();
   }
 
   // ---------- Витрина ----------
@@ -79,18 +80,27 @@
       const btn = document.getElementById("checkout");
       btn.disabled = true;
       const sum = cartSum();
+      const guest = DS.guests[41];
+      let bonuses = 0;
+      if (method.indexOf("Бонусы") === 0) {
+        bonuses = Math.min(guest.points, Math.floor(sum * 0.3)); // баллы закрывают до 30% чека
+        emit("ПЛАТФОРМА", "Гость списывает " + bonuses + " бонусов (до 30% чека)", "info");
+      }
+      const bankSum = sum - bonuses;
       log.innerHTML = UI.badge("БАНК: авторизация…", "info");
-      MockBank.authorize({ method, sum }).then((res) => {
+      MockBank.authorize({ method: bonuses ? "Карта" : method, sum: bankSum }).then((res) => {
         if (!res.ok) {
           log.innerHTML = UI.badge("БАНК: отказ — " + res.reason, "err") +
             ' <button class="btn small" onclick="location.reload()">Попробовать снова</button>';
           btn.disabled = false;
           return;
         }
+        if (bonuses) guest.points -= bonuses;
+        const payLabel = bonuses ? "Карта + " + bonuses + " бонусов" : method;
         const order = {
           id: "ORD-NEW-" + (state.myOrders.length + 1), sum,
           items: state.cart.map((c) => ({ name: c.name, qty: c.qty, price: c.price })),
-          pay: method, ts: Date.now(), status: "Принят"
+          pay: payLabel, ts: Date.now(), status: "Принят"
         };
         const rec = MockKKT.printReceipt(order);
         state.myOrders.unshift(order);
@@ -101,9 +111,11 @@
         cc.innerHTML +=
           '<div class="receipt" id="checkout-log">ООО «ФУД ВОСТОК»\nЛовии Суши · Центральный\nЧек прихода №' + rec.num +
           "  ФД " + rec.fd + "\n" + order.items.map((i) => i.name + " x" + i.qty + "  " + fmt.money(i.price * i.qty)).join("\n") +
-          "\nИТОГО  " + fmt.money(sum) + "\nОплата: " + method + "  RRN " + res.rrn + "\nФН " + rec.fn + "\nОФД: " + rec.ofd + "</div>" +
+          (bonuses ? "\nБонусы  −" + bonuses : "") +
+          "\nИТОГО  " + fmt.money(sum) + "\nОплата: " + payLabel + "  RRN " + res.rrn + "\nФН " + rec.fn + "\nОФД: " + rec.ofd + "</div>" +
           '<p class="small muted">Статусы заказа и бонусы — в «Мои заказы» и «Профиль». Через секунду чек подтвердит ОФД.</p>';
         toast("Заказ оформлен! Чек уходит в ОФД…");
+        if (window.LOVII.guide) window.LOVII.guide.refreshBanner();
         btn.disabled = false;
       });
     }
@@ -138,14 +150,14 @@
           '<div class="rowline mt">Оценка: <select data-stars><option>5</option><option>4</option><option>3</option><option>2</option><option>1</option></select>' +
           '<input type="text" placeholder="Комментарий" style="flex:1" data-comment><button class="btn small ok" data-send="' + b.dataset.rev + '">Отправить</button></div>';
         b.remove();
-      }));
-    box.querySelectorAll("[data-send]").forEach((b) =>
-      b.addEventListener("click", () => {
-        const wrap = b.closest(".rowline");
-        const stars = +wrap.querySelector("[data-stars]").value;
-        emit("ПЛАТФОРМА", "Отзыв на " + b.dataset.send + ": " + stars + "★ — привязан к заказу, смене и курьеру", stars >= 4 ? "ok" : "warn");
-        toast("Спасибо! Отзыв привязан к заказу.");
-        wrap.innerHTML = UI.badge("Отзыв принят ✓", "ok");
+        const snd = document.querySelector('[data-send="' + b.dataset.rev + '"]');
+        snd.addEventListener("click", () => {
+          const wrap = snd.closest(".rowline");
+          const stars = +wrap.querySelector("[data-stars]").value;
+          emit("ПЛАТФОРМА", "Отзыв на " + snd.dataset.send + ": " + stars + "★ — привязан к заказу, смене и курьеру", stars >= 4 ? "ok" : "warn");
+          toast("Спасибо! Отзыв привязан к заказу.");
+          wrap.innerHTML = UI.badge("Отзыв принят ✓", "ok");
+        });
       }));
   });
 

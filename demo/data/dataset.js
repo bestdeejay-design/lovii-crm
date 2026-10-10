@@ -101,6 +101,17 @@
       price: Math.round(g.price * (1 - s.discount / 100) * (s.id === "s2" && g.name === "Лосось" ? 1.12 : 1) * (0.94 + R() * 0.12))
     }));
   });
+  // Для демо-сценария поставщика гарантируем у «Рыбного Дома» позиции вне рынка:
+  // лосось и ещё одна позиция заведомо дороже рынка — их можно «пересмотреть».
+  (function ensureOverpriced() {
+    const s2 = prices.s2;
+    const los = ing.find((g) => g.name === "Лосось");
+    const other = ing.find((g) => g.id !== los.id);
+    if (!s2.find((p) => p.ing === los.id)) s2.unshift({ ing: los.id, price: 0 });
+    s2.find((p) => p.ing === los.id).price = Math.round(los.price * 1.12);
+    if (!s2.find((p) => p.ing === other.id)) s2.unshift({ ing: other.id, price: 0 });
+    s2.find((p) => p.ing === other.id).price = Math.round(other.price * 1.15);
+  })();
 
   // --- Склад: партии и остатки ---
   const lots = [];

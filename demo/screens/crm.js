@@ -143,19 +143,58 @@
       { n: "Вторая пицца −50%", trg: "сегмент «Регулярный», пятница", ch: "Пуш", res: "запущена вчера", st: "Активна" },
       { n: "Отзыв → бонус 300", trg: "оценка 1–2★ в течение 7 дней", ch: "Сервис-рекавери", res: "9 обращений, 7 возвращены", st: "Активна" }
     ];
+    const CONV = { "Пуш": 0.11, "СМС": 0.06, "Мессенджер": 0.18 };
+    const COST = { "Пуш": 0.8, "СМС": 2.5, "Мессенджер": 1.2 };
+    const CHECK = 1450;
     el.innerHTML =
       "<h1>🎯 Кампании и триггеры</h1>" +
-      '<p class="muted">Сегменты строятся из журнала заказов (RFM), коммуникации уходят автоматически, результат — в отчёт канала.</p>' +
-      UI.table(
-        [{ k: "n", t: "Кампания" }, { k: "t", t: "Триггер" }, { k: "c", t: "Канал" }, { k: "r", t: "Результат" }, { k: "s", t: "Статус" }],
-        camps.map((c) => ({ cells: { n: "<b>" + c.n + "</b>", t: c.trg, c: c.ch, r: c.r, s: UI.badge(c.st, "ok") } }))) +
-      '<div class="card mt2"><h3>Новая кампания (демо-конструктор)</h3><div class="rowline">' +
-      '<select><option>Сегмент: Спящие</option><option>Сегмент: Именинники</option><option>Сегмент: VIP</option></select>' +
-      '<select><option>Канал: Пуш</option><option>Канал: СМС</option><option>Канал: Мессенджер</option></select>' +
-      '<button class="btn primary" id="camp-create">Запустить</button></div></div>';
+      '<p class="muted">Сегменты строятся из журнала заказов (RFM). Перед запуском система показывает прогноз: охват, заказы, выручку и ROMI.</p>' +
+      '<div id="camp-table"></div>' +
+      '<div class="card mt2"><h3>Новая кампания — прогноз до запуска</h3><div class="rowline">' +
+      '<select id="camp-seg"><option>Спящие</option><option>Именинники</option><option>VIP</option><option>Регулярный</option></select>' +
+      '<select id="camp-ch"><option>Пуш</option><option>СМС</option><option>Мессенджер</option></select>' +
+      '<button class="btn primary" id="camp-create">Запустить кампанию</button></div>' +
+      '<div class="mt" id="camp-forecast"></div></div>';
+    function drawTable() {
+      document.getElementById("camp-table").innerHTML = UI.table(
+        [{ k: "n", t: "Кампания" }, { k: "t", t: "Триггер" }, { k: "c", t: "Канал" }, { k: "r", t: "Результат / прогноз" }, { k: "s", t: "Статус" }],
+        camps.map((c) => ({ cells: { n: "<b>" + c.n + "</b>", t: c.trg, c: c.ch, r: c.res, s: UI.badge(c.st, "ok") } })));
+    }
+    function forecast() {
+      const seg = document.getElementById("camp-seg").value;
+      const ch = document.getElementById("camp-ch").value;
+      const aud = DS.guests.filter((g) => g.seg === (seg === "Именинники" ? "Лояльный" : seg)).length;
+      const aud2 = seg === "Именинники" ? Math.round(aud / 12) : aud; // окно ±3 дня
+      const conv = CONV[ch];
+      const orders = Math.round(aud2 * conv * 0.5);
+      const revenue = orders * CHECK;
+      const cost = Math.round(aud2 * COST[ch]);
+      const romi = Math.round((revenue * 0.35 - cost) / Math.max(cost, 1) * 100);
+      return { seg, ch, aud: aud2, conv, orders, revenue, cost, romi };
+    }
+    function drawForecast() {
+      const f = forecast();
+      document.getElementById("camp-forecast").innerHTML =
+        '<div class="grid cols-4">' +
+        UI.kpi("Охват", fmt.num(f.aud) + " гостей", "сегмент «" + f.seg + "»") +
+        UI.kpi("Прогноз заказов", fmt.num(f.orders), "конверсия канала " + Math.round(f.conv * 100) + "%", true) +
+        UI.kpi("Прогноз выручки", fmt.money(f.revenue), "при среднем чеке " + fmt.money(CHECK), true) +
+        UI.kpi("ROMI", (f.romi > 0 ? "+" : "") + f.romi + "%", "рассылка ≈ " + fmt.money(f.cost), f.romi > 0) +
+        "</div>";
+    }
+    drawTable();
+    drawForecast();
+    document.getElementById("camp-seg").addEventListener("change", drawForecast);
+    document.getElementById("camp-ch").addEventListener("change", drawForecast);
     document.getElementById("camp-create").addEventListener("click", () => {
-      emit("ПЛАТФОРМА", "Кампания запущена: сегмент × канал, рассылка поставлена в очередь", "ok");
-      toast("Кампания запущена.");
+      const f = forecast();
+      camps.unshift({
+        n: "Кампания: сегмент «" + f.seg + "»", trg: "запущена из конструктора демо",
+        ch: f.ch, res: "прогноз: " + f.orders + " заказов / " + fmt.money(f.revenue), st: "Активна"
+      });
+      emit("ПЛАТФОРМА", "Кампания запущена: «" + f.seg + "» × " + f.ch + " — охват " + fmt.num(f.aud) + ", прогноз " + fmt.money(f.revenue) + ", ROMI +" + f.romi + "%", "ok");
+      toast("Кампания запущена. Прогноз: " + f.orders + " заказов.");
+      drawTable();
     });
   });
 
@@ -203,14 +242,14 @@
           box.innerHTML = '<div class="rowline mt"><input type="text" style="flex:1" placeholder="Текст ответа гостю…" value="Спасибо за отзыв! Проработали смену, следующий заказ — комплимент от заведения.">' +
             '<button class="btn small ok" data-pub="' + b.dataset.ans + '">Опубликовать</button></div>';
           b.remove();
-        }));
-      document.querySelectorAll("[data-pub]").forEach((b) =>
-        b.addEventListener("click", () => {
-          const r = revs.find((x) => x.id === b.dataset.pub);
-          r.answered = true;
-          emit("ПЛАТФОРМА", "Ответ на отзыв " + r.src + " (" + r.rating + "★) опубликован, гость уведомлён", "ok");
-          toast("Ответ опубликован.");
-          draw();
+          const pb = box.querySelector("[data-pub]");
+          pb.addEventListener("click", () => {
+            const r = revs.find((x) => x.id === pb.dataset.pub);
+            r.answered = true;
+            emit("ПЛАТФОРМА", "Ответ на отзыв " + r.src + " (" + r.rating + "★) опубликован, гость уведомлён", "ok");
+            toast("Ответ опубликован.");
+            draw();
+          });
         }));
       document.querySelectorAll("[data-rec]").forEach((b) =>
         b.addEventListener("click", () => {
@@ -391,7 +430,9 @@
           sh.receipts.map((r) => ({
             cells: { n: r.num, fd: r.fd, t: fmt.t(r.ts), s: fmt.money(r.sum), o: UI.badge(r.ofd, r.ofd === "принят" ? "ok" : "warn") }
           })))) +
-      (sh.opened ? '<div class="rowline mt"><button class="btn warn" id="close-shift">Закрыть смену (Z-отчёт)</button></div>' : "") +
+      (sh.opened ? '<div class="rowline mt"><button class="btn" id="x-report">X-отчёт (промежуточный)</button>' +
+        '<button class="btn" id="cash-in">Внесение наличных</button>' +
+        '<button class="btn warn" id="close-shift">Закрыть смену (Z-отчёт)</button></div>' : "") +
       '<div class="card mt2"><h3>Мониторинг «чеки не уходят»</h3>' +
       '<p class="small muted">По сети одна касса в зоне риска: ККТ 00004881 («Ловии Суши · Кировский») — 34 минуты без передачи.</p>' +
       '<button class="btn warn" id="ofd-alert">Симулировать алерт ОФД</button></div>';
@@ -411,6 +452,18 @@
       emit("ККТ", "Смена закрыта: Z-отчёт — " + sh.lastZ.receipts + " чеков на " + fmt.money(sh.lastZ.sum) + ", сверка с ОФД " + (sh.lastZ.ofdOk ? "без расхождений" : "есть расхождения"), "ok");
       toast("Смена закрыта, Z-отчёт сформирован.");
       nav("crm", "shift");
+    });
+    const xr = document.getElementById("x-report");
+    if (xr) xr.addEventListener("click", () => {
+      const sum = sh.receipts.reduce((s, r) => s + r.sum, 0);
+      emit("ККТ", "X-отчёт (без закрытия смены): " + sh.receipts.length + " чеков на " + fmt.money(sum) + (sh.cashIn ? ", внесено наличных " + fmt.money(sh.cashIn) : ""), "info");
+      toast("X-отчёт: " + sh.receipts.length + " чеков на " + fmt.money(sum) + ". Смена продолжается.");
+    });
+    const ci = document.getElementById("cash-in");
+    if (ci) ci.addEventListener("click", () => {
+      sh.cashIn = (sh.cashIn || 0) + 5000;
+      emit("ККТ", "Внесение наличных: 5 000 ₽ (размен), операция зафиксирована в ФН", "info");
+      toast("Внесено 5 000 ₽. Сумма видна в X-отчёте.");
     });
     const al = document.getElementById("ofd-alert");
     if (al) al.addEventListener("click", () => { MockOFD.alert(); toast("Алерт отправлен владельцу и УК."); });
@@ -457,7 +510,25 @@
       '<div class="rowline mt"><select id="req-subj"><option>Оборудование</option><option>Маркетинг</option><option>Обучение</option><option>ИТ</option><option>Снабжение</option></select>' +
       '<input type="text" id="req-text" style="flex:1" placeholder="Опишите проблему или запрос для УК…">' +
       '<button class="btn primary" id="req-create">Отправить в УК</button></div>' +
-      '<p class="small muted mt">Заявка уходит менеджеру УК с таймером SLA; вы видите статусы в реальном времени.</p></div>';
+      '<p class="small muted mt">Заявка уходит менеджеру УК с таймером SLA; вы видите статусы в реальном времени.</p></div>' +
+      '<div class="card mt2"><h3>Маркетинговый фонд (2%)</h3>' +
+      '<div class="grid cols-3">' +
+      UI.kpi("Накоплено за месяц", fmt.money(myRoy.reduce((s, r) => s + r.marketing, 0)), "с ваших точек") +
+      UI.kpi("Израсходовано", fmt.money(Math.round(myRoy.reduce((s, r) => s + r.marketing, 0) * 0.62)), "кампании сети, таргет, блогеры") +
+      UI.kpi("Прогноз начислений", fmt.money(Math.round(myRoy.reduce((s, r) => s + r.revenue, 0) / 28 * 30 * 0.02)), "по текущему темпу выручки", true) +
+      "</div>" +
+      '<div class="rowline mt"><span class="small muted">Средний эффект кампаний фонда: +6% заказов у участвующих точек. Детализация трат — по запросу в УК.</span>' +
+      '<span class="spacer"></span><button class="btn small" id="mkt-report">Запросить детальный отчёт</button></div></div>';
+    const mr = document.getElementById("mkt-report");
+    if (mr) mr.addEventListener("click", () => {
+      DS.requests.unshift({
+        id: "REQ-" + (106 + DS.requests.length), from: "l1", tenant: "fr1",
+        subject: "Маркетинг", text: "Запрос детального отчёта по маркетинговому фонду за месяц",
+        ts: Date.now(), status: "Новая", slaH: 48
+      });
+      emit("ПЛАТФОРМА", "Франчайзи запросил отчёт по маркетинговому фонду — заявка ушла в УК (SLA 48 ч)", "info");
+      toast("Отчёт запрошен, заявка создана в УК.");
+    });
     el.querySelectorAll("[data-pay]").forEach((b) =>
       b.addEventListener("click", () => {
         DS.royalty.find((r) => r.loc === b.dataset.pay).paid = true;

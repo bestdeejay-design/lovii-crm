@@ -339,7 +339,9 @@
         '<div class="card mb" style="border-left:4px solid var(--' + (r.sev === "err" ? "err" : r.sev === "warn" ? "warn" : "info") + ')">' +
         "<b>" + r.t + "</b><div class='small mt'>" + r.d + "</div>" +
         '<div class="small mt"><b>Действие:</b> ' + r.a + '</div><div class="rowline mt">' +
-        '<button class="btn small primary" data-ok>Взять в работу</button> <button class="btn small" data-snooze>Отложить</button></div></div>').join("");
+        '<button class="btn small primary" data-ok>Взять в работу</button>' +
+        (r.sev === "err" ? ' <button class="btn small" data-esc="' + esc(r.t) + '">Эскалировать собственнику</button>' : "") +
+        ' <button class="btn small" data-snooze>Отложить</button></div></div>').join("");
     el.querySelectorAll("[data-ok]").forEach((b) =>
       b.addEventListener("click", () => {
         emit("ПЛАТФОРМА", "Рекомендация взята в работу, задача назначена ответственному", "ok");
@@ -348,6 +350,12 @@
       }));
     el.querySelectorAll("[data-snooze]").forEach((b) =>
       b.addEventListener("click", () => { toast("Отложено на 3 дня."); b.closest(".card").style.opacity = .45; }));
+    el.querySelectorAll("[data-esc]").forEach((b) =>
+      b.addEventListener("click", () => {
+        emit("РЕШЕНИЕ", "Эскалация собственнику: «" + b.dataset.esc + "» — добавлено в «Решения дня» в кабинете собственника", "warn");
+        toast("Эскалировано: собственник увидит в «Решениях дня».");
+        b.disabled = true; b.textContent = "✓ Эскалировано";
+      }));
   });
 
   // ---------- Шаблоны точек ----------

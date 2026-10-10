@@ -116,6 +116,7 @@ nav:
     - "Карта платформы: app, crm, erp — один комплекс": research/saas/00-platform-map.md
     - "Правила и схемы движения информации": research/saas/01-information-flow.md
     - "Демо-кабинет: роли, мок-данные, отчёты": research/saas/02-demo-cabinet.md
+    - "Сценарии ролей и боли: аудит кабинетов": research/saas/03-role-scenarios.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md

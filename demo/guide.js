@@ -172,15 +172,23 @@
     if (!el) return;
     const g = guideOf();
     const key = currentScreenKey();
-    const hint = (key && HINTS[key]) || g.steps[0].d;
+    const scen = window.LOVII.scen;
+    const adv = scen ? scen.advice() : null;
+    const hint = adv ? adv.text : ((key && HINTS[key]) || g.steps[0].d);
+    const forecast = adv ? adv.forecast : ((key && HINTS[key]) || "");
+    const goBtn = adv && adv.go && key !== adv.go[0] + "/" + adv.go[1]
+      ? '<button class="btn small primary" data-go-advice>Перейти →</button>' : "";
     const div = document.createElement("div");
     div.className = "role-banner";
     div.innerHTML =
       "<b class='rb-role'>" + g.emoji + " Вы — " + g.title + "</b>" +
-      "<span class='rb-next'><b>Что дальше:</b> " + hint + "</span>" +
-      "<button class='btn small' data-guide-open>🧭 Сценарий роли</button>";
+      "<span class='rb-next'><b>Что дальше:</b> " + hint +
+      (forecast ? '<br><span class="small muted">→ Прогноз итога: ' + forecast + "</span>" : "") + "</span>" +
+      goBtn + '<button class="btn small" data-guide-open>🧭 Сценарий роли</button>';
     el.insertBefore(div, el.firstChild);
     div.querySelector("[data-guide-open]").addEventListener("click", () => openGuide());
+    const go = div.querySelector("[data-go-advice]");
+    if (go) go.addEventListener("click", () => window.LOVII.nav(adv.go[0], adv.go[1]));
   }
 
   // Полноэкранный гид по роли
@@ -196,7 +204,9 @@
       "<h3 class='mt'>Сценарий осмотра (кликабельно)</h3>" +
       g.steps.map((s, i) =>
         '<div class="gstep" data-e="' + g.entrance + '" data-s="' + s.s + '">' +
-        '<div class="gnum">' + (i + 1) + '</div><div><div class="gt">' + s.t + '</div><div class="gd">' + s.d + "</div></div></div>").join("") +
+        '<div class="gnum">' + (i + 1) + '</div><div><div class="gt">' + s.t + '</div><div class="gd">' + s.d + "</div>" +
+        (s.f ? '<div class="gd"><b>→ Прогноз:</b> ' + s.f + "</div>" : "") +
+        "</div></div>").join("") +
       '<div class="behind"><b>⚡ Что происходит за кулисами:</b> ' + g.behind +
       ' Откройте журнал («⚡ События» в шапке), чтобы видеть все действия платформы.</div>' +
       "</div>";
@@ -215,5 +225,14 @@
     ov.innerHTML = "";
   }
 
-  window.LOVII.guide = { GUIDES, HINTS, guideOf, roleBanner, openGuide, closeGuide };
+  // Обновить баннер, когда состояние изменилось без перехода на другой экран
+  function refreshBanner() {
+    const el = document.getElementById("main");
+    if (!el) return;
+    const old = el.querySelector(".role-banner");
+    if (old) old.remove();
+    roleBanner(el);
+  }
+
+  window.LOVII.guide = { GUIDES, HINTS, guideOf, roleBanner, openGuide, closeGuide, refreshBanner };
 })();
