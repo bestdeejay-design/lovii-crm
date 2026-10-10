@@ -3919,6 +3919,22 @@
 <blockquote>
 <p>Атрибутный уровень референс-модели. Документ — вход для проектирования схемы БД и открытого API. Все идентификаторы глобально уникальны (по тенанту + сущность).</p>
 </blockquote>
+<p>Обзор связей между доменами (атрибутные схемы — в разделе ниже, полные контрактные спецификации — в <a href="../../specs/01-domain-model/">спецификациях</a>):</p>
+<pre class="mermaid"><code>flowchart LR
+    T["Tenant и договор франшизы"] --&gt; L["Точка и устройства"]
+    L --&gt; MN["Меню, цены, модификаторы"]
+    MN --&gt; RC["ТТК и полуфабрикаты"]
+    RC --&gt; ING["Ингредиенты и партии"]
+    CHN["Каналы заказов"] --&gt; ORD["Заказ"]
+    MN --&gt; ORD
+    ORD --&gt; KT["Кухонный тикет"]
+    KT --&gt; SM["Движение склада: списание по ТТК"]
+    ING --&gt; SM
+    ORD --&gt; PAY["Оплата и фискальный чек"]
+    ORD --&gt; DLV["Доставка: зона, курьер, назначение"]
+    ORD --&gt; GS["Гость: профиль, лояльность"]
+    GS --&gt; RV["Отзыв и NPS"]
+    T --&gt; TPL["Шаблон точки и роялти"]</code></pre>
 <h2 id="1">1. Иерархия организации<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <h3 id="tenant">Tenant (тенант)<a class="headerlink" href="#tenant" title="Permanent link">&para;</a></h3>
 <p><code>id, name, type (owner_brand | franchisee | independent), status, created_at</code></p>

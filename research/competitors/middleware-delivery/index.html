@@ -2891,6 +2891,18 @@
 
 <h1 id="middleware">Аудит класса систем: middleware доставки и курьерские сервисы<a class="headerlink" href="#middleware" title="Permanent link">&para;</a></h1>
 <p>Слой между каналами заказов (агрегаторы, сайт, приложение) и кухней/кассой. Класс доказал, что омниканальность и логистика — отдельные продукты, за которые платят.</p>
+<p>Модель работы класса:</p>
+<pre class="mermaid"><code>flowchart LR
+    A1["Яндекс Еда и Деливери"] --&gt; H["Middleware-хаб: одна очередь заказов"]
+    A2["Собственный сайт"] --&gt; H
+    A3["Приложение бренда"] --&gt; H
+    A4["Киоски и QR"] --&gt; H
+    H --&gt; POS["POS точки"]
+    POS --&gt; KDS["Кухонный экран"]
+    M["Единое меню, цены, стоп-листы"] -.-&gt;|"синк во все каналы"| A1
+    M -.-&gt; A2
+    M -.-&gt; A3
+    M -.-&gt; A4</code></pre>
 <h2 id="1">1. Мировые агрегаторы заказов<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <h3 id="deliverect">Deliverect<a class="headerlink" href="#deliverect" title="Permanent link">&para;</a></h3>
 <ul>

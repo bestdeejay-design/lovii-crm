@@ -2910,6 +2910,20 @@
 </tr>
 </tbody>
 </table>
+<p>Календарно фазы укладываются так (перехлёст фаз 3 и 4 — осознанный: франшизный контур начинается до закрытия доставки):</p>
+<pre class="mermaid"><code>gantt
+    title Дорожная карта платформы по фазам
+    dateFormat YYYY-MM-DD
+    axisFormat %Y-%m
+    section Ядро
+    Фаза 0 Скелет              : f0, 2026-01-05, 60d
+    Фаза 1 Деньги и кухня      : f1, after f0, 120d
+    section Учёт и гость
+    Фаза 2 Закупки и госсистемы : f2, after f1, 90d
+    Фаза 3 Доставка и гость    : f3, after f2, 150d
+    section Масштаб
+    Фаза 4 Франшиза            : f4, after f2, 180d
+    Фаза 5 Платформа           : f5, after f4, 180d</code></pre>
 <h2 id="3-90">3. Первые 90 дней — по неделям<a class="headerlink" href="#3-90" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

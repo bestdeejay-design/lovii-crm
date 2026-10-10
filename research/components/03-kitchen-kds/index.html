@@ -2933,6 +2933,22 @@
 </blockquote>
 <h2 id="1">1. Функциональные требования<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
 <h3 id="11">1.1. Маршрутизация заказов<a class="headerlink" href="#11" title="Permanent link">&para;</a></h3>
+<pre class="mermaid"><code>flowchart LR
+    O["Заказ из любого канала"] --&gt; R["Разложение позиций по станциям: правила точки"]
+    R --&gt; S1["Горячий цех"]
+    R --&gt; S2["Холодный цех"]
+    R --&gt; S3["Гриль и фритюр"]
+    R --&gt; S4["Бар"]
+    R --&gt; S5["Кондитерка"]
+    S1 --&gt; E["Экран экспо/шефа: курсы, синхронизация подач"]
+    S2 --&gt; E
+    S3 --&gt; E
+    S4 --&gt; E
+    S5 --&gt; E
+    E --&gt; X{"Зал или доставка?"}
+    X --&gt;|"зал"| V["Выдача гостю"]
+    X --&gt;|"доставка"| P["Упаковка и курьер"]
+    R -.-&gt;|"резервный канал"| PR["Цеховые принтеры"]</code></pre>
 <ul>
 <li>Позиции заказа автоматически раскладываются по станциям/цехам: горячий, холодный, гриль, фритюр, бар, кондитерка, упаковка.</li>
 <li>Правила маршрутизации настраиваются на точку; печать на цеховые принтеры как резервный канал и/или экраны.</li>
@@ -2960,8 +2976,17 @@
 <li>Бракераж и списание готового: просрочка на витрине — актом, а не «пропало».</li>
 </ul>
 <h3 id="15">1.5. Терминология статусов (единая для зала и доставки)<a class="headerlink" href="#15" title="Permanent link">&para;</a></h3>
-<div class="highlight"><pre><span></span><code>принят → на кухне → готовится → готов → [зал: подан] / [доставка: упакован → курьеру]
-</code></pre></div>
+<pre class="mermaid"><code>stateDiagram-v2
+    [*] --&gt; accepted
+    accepted --&gt; kitchen
+    kitchen --&gt; cooking
+    cooking --&gt; ready
+    ready --&gt; served: зал — подан гостю
+    ready --&gt; packed: доставка — упакован
+    packed --&gt; courier: передан курьеру</code></pre>
+<blockquote>
+<p>Статусы <code>accepted</code>, <code>kitchen</code>, <code>cooking</code>, <code>ready</code>, <code>served</code>, <code>packed</code>, <code>courier</code> — единый словарь для зала и доставки; просрочка по нормативу подсвечивается на каждом шаге.</p>
+</blockquote>
 <h2 id="2">2. Как это сделано у аналогов<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>iiko</strong>: выбор схемы — цеховые принтеры или терминал шефа с контролем времени приготовления, просмотром ТТК и оформлением актов списания/разбора/перемещения <a href="https://multi-bit.com/avt_iiko/iiko_chto_eto">1</a>; контроль свежести блюд на витрине — только в Enterprise-тарифе <a href="https://iikoservice.ru/">2</a>.</li>
