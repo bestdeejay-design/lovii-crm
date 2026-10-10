@@ -3301,6 +3301,7 @@
 
 <h1 id="Спецификация-01-Доменная-модель-схемы-сущностей">Спецификация 01. Доменная модель (схемы сущностей)<a class="headerlink" href="#Спецификация-01-Доменная-модель-схемы-сущностей" title="Permanent link">&para;</a></h1>
 <blockquote>
+<p><strong>Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.</strong> Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.</p>
 <p>Атрибутные схемы по доменам. Полное описание атрибутов — в <a href="../../components/12-data-model/"><code>../components/12-data-model.md</code></a>; здесь — визуальные связи. Имена сущностей на английском (код), подписи связей — по смыслу.</p>
 </blockquote>
 <h2 id="1-Ядро-заказы-оплаты-чеки">1. Ядро: заказы, оплаты, чеки<a class="headerlink" href="#1-Ядро-заказы-оплаты-чеки" title="Permanent link">&para;</a></h2>
@@ -3420,7 +3421,7 @@
         datetime expected_at
         string edo_doc_id
     }</code></pre>
-<p>Типы движений: <code>receive</code> (приёмка), <code>sale_writeoff</code> (продажа по ТТК), <code>production_in</code> / <code>production_out</code> (заготовки), <code>transfer</code> (перемещение), <code>writeoff_spoilage</code> (порча), <code>inventory_adjust</code> (инвентаризация), <code>return</code> (возврат).</p>
+<p>Типы движений (9, канонический словарь — в <a href="../../components/12-data-model/"><code>../components/12-data-model.md</code></a>, §0): <code>receive</code> (приёмка), <code>sale_writeoff</code> (продажа по ТТК), <code>production_in</code> / <code>production_out</code> (заготовки), <code>transfer</code> (перемещение), <code>writeoff_spoilage</code> (порча), <code>writeoff_staff</code> (списание на персонал — антифрод), <code>inventory_adjust</code> (инвентаризация), <code>return</code> (возврат).</p>
 <h2 id="4-Доставка">4. Доставка<a class="headerlink" href="#4-Доставка" title="Permanent link">&para;</a></h2>
 <pre class="mermaid"><code>erDiagram
     LOCATION ||--o{ DELIVERY_ZONE : "зоны"
@@ -3449,15 +3450,16 @@
         datetime assigned_at
         datetime delivered_at
         string proof_photo
+        string proof_code
     }</code></pre>
-<p>Статусы назначения:</p>
+<p>Статусы назначения (канонический словарь — в <a href="../../components/12-data-model/"><code>../components/12-data-model.md</code></a>, §0; токен <code>picked</code> заменён на <code>picked_up</code>, отказ — пара <code>DeliveryIncident</code> + <code>failed</code>):</p>
 <pre class="mermaid"><code>stateDiagram-v2
     [*] --&gt; assigned : "назначен"
-    assigned --&gt; picked : "забрал заказ"
-    picked --&gt; delivering : "в пути"
-    delivering --&gt; delivered : "вручён (фото)"
-    assigned --&gt; failed : "не удалось"
-    picked --&gt; failed : "не удалось"
+    assigned --&gt; picked_up : "забрал заказ"
+    picked_up --&gt; delivering : "в пути"
+    delivering --&gt; delivered : "вручён (фото или код)"
+    assigned --&gt; failed : "инцидент не устранён"
+    picked_up --&gt; failed : "инцидент не устранён"
     failed --&gt; [*]
     delivered --&gt; [*]</code></pre>
 <h2 id="5-Гости-лояльность-отзывы">5. Гости, лояльность, отзывы<a class="headerlink" href="#5-Гости-лояльность-отзывы" title="Permanent link">&para;</a></h2>
@@ -3526,6 +3528,7 @@
         string status
     }</code></pre>
 <h2 id="7-Жизненный-цикл-заказа-единый-для-всех-каналов">7. Жизненный цикл заказа (единый для всех каналов)<a class="headerlink" href="#7-Жизненный-цикл-заказа-единый-для-всех-каналов" title="Permanent link">&para;</a></h2>
+<p>Статусы заказа — канонический словарь <a href="../../components/12-data-model/"><code>../components/12-data-model.md</code></a>, §0; статусы кухонного тикета (<code>queued | cooking | ready | served</code>) и назначения доставки — там же.</p>
 <pre class="mermaid"><code>stateDiagram-v2
     [*] --&gt; new : "создан каналом"
     new --&gt; accepted : "зона/стоп/цена ок"

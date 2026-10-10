@@ -3257,6 +3257,7 @@
 
 <h1 id="Спецификация-03-Контракты-API-и-событий">Спецификация 03. Контракты API и событий<a class="headerlink" href="#Спецификация-03-Контракты-API-и-событий" title="Permanent link">&para;</a></h1>
 <blockquote>
+<p><strong>Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.</strong> Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.</p>
 <p>Наружная поверхность платформы: для витрин, агрегаторов, партнёров и внутренних фронтендов. Версия контрактов — <code>v1</code>. Формат — JSON; время — ISO 8601 (UTC); деньги — десятичные строки.</p>
 </blockquote>
 <h2 id="1-Поверхность-REST-ресурсы">1. Поверхность REST (ресурсы)<a class="headerlink" href="#1-Поверхность-REST-ресурсы" title="Permanent link">&para;</a></h2>
@@ -3359,7 +3360,7 @@
 <h2 id="2-Контракт-создания-заказа-единый-для-всех-каналов">2. Контракт создания заказа (единый для всех каналов)<a class="headerlink" href="#2-Контракт-создания-заказа-единый-для-всех-каналов" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><span class="p">{</span>
 <span class="w">  </span><span class="nt">"location_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"loc_01"</span><span class="p">,</span>
-<span class="w">  </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pos | site | app | miniapp | kiosk | aggregator:yandex"</span><span class="p">,</span>
+<span class="w">  </span><span class="nt">"channel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"pos | site | app | miniapp | kiosk | phone | aggregator:yandex"</span><span class="p">,</span>
 <span class="w">  </span><span class="nt">"items"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
 <span class="w">    </span><span class="p">{</span>
 <span class="w">      </span><span class="nt">"menu_item_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"mi_123"</span><span class="p">,</span>
@@ -3374,6 +3375,13 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>Ответ: <code>201</code> с <code>order_id</code>, <code>promise_time</code>, <code>status_url</code>. Ошибки: <code>409</code> стоп-лист, <code>422</code> вне зоны, <code>423</code> точка закрыта.</p>
+<p>Канонические словари статусов (источник — <a href="../../components/12-data-model/"><code>../components/12-data-model.md</code></a>, §0):</p>
+<ul>
+<li><code>Order.status</code>: <code>new | accepted | kitchen | ready | served | packed | delivered | cancelled</code> — используется в <code>POST /v1/orders/{id}/status</code> и событиях <code>order.status_changed</code>.</li>
+<li><code>KitchenTicket.status</code>: <code>queued | cooking | ready | served</code> — события <code>kitchen.ticket_status</code>.</li>
+<li><code>DeliveryAssignment.status</code>: <code>assigned | picked_up | delivering | delivered | failed</code> — <code>POST /v1/courier/assignments/{id}/status</code> принимает <code>picked_up | delivering | delivered | failed</code> с <code>proof_photo</code> и/или <code>proof_code</code>; события <code>delivery.status_changed</code> питают обещания времени и уведомления гостя.</li>
+<li><code>channel</code>: <code>pos | site | app | miniapp | kiosk | phone | aggregator:{name}</code> (канал колл-центра <code>phone</code> равноправен в аналитике).</li>
+</ul>
 <h2 id="3-Каталог-событий-шины-наружу--вебхуки">3. Каталог событий шины (наружу — вебхуки)<a class="headerlink" href="#3-Каталог-событий-шины-наружу--вебхуки" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

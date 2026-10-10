@@ -1784,6 +1784,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#0-Канонические-перечисления-единый-словарь-платформы" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Канонические перечисления (единый словарь платформы)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-Иерархия-организации" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3677,6 +3688,17 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#0-Канонические-перечисления-единый-словарь-платформы" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Канонические перечисления (единый словарь платформы)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#1-Иерархия-организации" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4345,8 +4367,55 @@
 
 <h1 id="Компонент-12-Модель-данных-и-контракты">Компонент 12. Модель данных и контракты<a class="headerlink" href="#Компонент-12-Модель-данных-и-контракты" title="Permanent link">&para;</a></h1>
 <blockquote>
+<p><strong>Статус: ревизия №2 по итогам аудита корпуса · 10.10.2026.</strong> Числовые факты сопровождаются ссылками; канонические перечисления — в «Модели данных», §0.</p>
 <p>Атрибутный уровень референс-модели. Документ — вход для проектирования схемы БД и открытого API. Все идентификаторы глобально уникальны (по тенанту + сущность).</p>
 </blockquote>
+<h2 id="0-Канонические-перечисления-единый-словарь-платформы">0. Канонические перечисления (единый словарь платформы)<a class="headerlink" href="#0-Канонические-перечисления-единый-словарь-платформы" title="Permanent link">&para;</a></h2>
+<p>Этот раздел — единственный источник правды для статусов и каналов. Все компоненты и спецификации ссылаются сюда; изменение словаря делается только здесь (ревизия №1 внешнего аудита, находки F-01…F-03, F-32).</p>
+<table>
+<thead>
+<tr>
+<th>Сущность</th>
+<th>Поле</th>
+<th>Канонические значения</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Order</td>
+<td><code>status</code></td>
+<td><code>new</code> → <code>accepted</code> → <code>kitchen</code> → <code>ready</code> → <code>served</code> (зал) | <code>packed</code> → <code>delivered</code> (доставка) | <code>cancelled</code></td>
+</tr>
+<tr>
+<td>KitchenTicket</td>
+<td><code>status</code></td>
+<td><code>queued</code> | <code>cooking</code> | <code>ready</code> | <code>served</code></td>
+</tr>
+<tr>
+<td>DeliveryAssignment</td>
+<td><code>status</code></td>
+<td><code>assigned</code> | <code>picked_up</code> | <code>delivering</code> | <code>delivered</code> | <code>failed</code></td>
+</tr>
+<tr>
+<td>Order</td>
+<td><code>channel</code></td>
+<td><code>pos \| site \| app \| miniapp \| kiosk \| phone \| aggregator:{name}</code></td>
+</tr>
+<tr>
+<td>StockMovement</td>
+<td><code>type</code></td>
+<td><code>receive \| sale_writeoff \| production_in \| production_out \| transfer \| writeoff_spoilage \| writeoff_staff \| inventory_adjust \| return</code></td>
+</tr>
+</tbody>
+</table>
+<p>Правила чтения и маппинг устаревших токенов:</p>
+<ol>
+<li><strong>Два уровня статусов не смешиваются.</strong> <code>Order.status</code> — жизненный цикл заказа (единый для всех каналов); <code>KitchenTicket.status</code> — жизненный цикл тикета станции. «Окно экспо» (готовое блюдо ждёт выдачи) — не отдельный статус, а время между <code>ready</code> и <code>served</code> заказа; если точке нужен отдельный экран экспо, он фильтрует заказы в состоянии <code>ready</code>.</li>
+<li><strong>Доставка — две сущности.</strong> <code>Order</code> доходит до <code>packed</code>, дальше работает <code>DeliveryAssignment</code> (<code>assigned → picked_up → delivering → delivered</code>); отказ моделируется парой: запись <code>DeliveryIncident</code> + статус <code>failed</code> у назначения. Токен <code>courier</code> из ранних ревизий не используется: «передан курьеру» = назначение в <code>picked_up</code>, заказ остаётся в <code>packed</code> до <code>delivered</code>.</li>
+<li><strong>Подтверждение вручения</strong> — <code>proof_photo</code> и/или <code>proof_code</code> (сценарий «фото или код» из компонента 05 поддерживается обоими полями).</li>
+<li><strong>Канал <code>phone</code></strong> — заказ через колл-центр (полноценный канал приёма, компонент 02); в аналитике каналов участвует наравне с остальными.</li>
+<li><strong>Списание по ТТК</strong> — движением <code>sale_writeoff</code> при переводе тикета в <code>ready</code> (а не в момент пробития чека); корректировки — движением <code>return</code>/<code>inventory_adjust</code>.</li>
+</ol>
 <p>Обзор связей между доменами (атрибутные схемы — в разделе ниже, полные контрактные спецификации — в <a href="../../specs/01-domain-model/">спецификациях</a>):</p>
 <pre class="mermaid"><code>flowchart LR
     T["Tenant и договор франшизы"] --&gt; L["Точка и устройства"]
@@ -4388,7 +4457,10 @@
 <p><code>id, name, unit, category, default_shelf_life, is_tracked_lots, barcode?</code></p>
 <h2 id="3-Заказы-и-платежи">3. Заказы и платежи<a class="headerlink" href="#3-Заказы-и-платежи" title="Permanent link">&para;</a></h2>
 <h3 id="Order">Order<a class="headerlink" href="#Order" title="Permanent link">&para;</a></h3>
-<p><code>id, location_id, channel (pos | site | app | miniapp | aggregator:{name} | kiosk | phone), guest_id?, table_id?, delivery?, status (new → accepted → kitchen → ready → served | packed → delivered | cancelled), created_at, promised_at, total, discount_total, source_meta (aggregator_order_id?, commission_pct?)</code></p>
+<p><code>id, location_id, channel (pos | site | app | miniapp | kiosk | phone | aggregator:{name}), guest_id?, table_id?, delivery? (address, zone_id, slot), status (new → accepted → kitchen → ready → served | packed → delivered | cancelled), created_at, promised_at, total, discount_total, source_meta (aggregator_order_id?, commission_pct?)</code></p>
+<blockquote>
+<p>Перечисления <code>channel</code> и <code>status</code> — канонические (§0); контракт создания заказа — в спецификации 03, источник гостя — объект <code>guest {phone, consent}</code>, согласие фиксируется по 152-ФЗ.</p>
+</blockquote>
 <h3 id="OrderItem">OrderItem<a class="headerlink" href="#OrderItem" title="Permanent link">&para;</a></h3>
 <p><code>id, order_id, menu_item_id, qty, modifiers[], price, comment_to_kitchen, station_routing, course_no, status</code></p>
 <h3 id="Payment">Payment<a class="headerlink" href="#Payment" title="Permanent link">&para;</a></h3>
@@ -4414,7 +4486,7 @@
 <h3 id="KitchenTicket-тикет-станции">KitchenTicket (тикет станции)<a class="headerlink" href="#KitchenTicket-тикет-станции" title="Permanent link">&para;</a></h3>
 <p><code>id, order_id, station_id, items[], status (queued | cooking | ready | served), created_at, started_at?, ready_at?</code></p>
 <blockquote>
-<p>Норматив времени берётся из Recipe; факт — из статусов.</p>
+<p>Норматив времени берётся из Recipe; факт — из статусов. Перевод в <code>ready</code> триггерит списание по ТТК (§0, правило 5).</p>
 </blockquote>
 <h3 id="ProductionBatch-акт-производства">ProductionBatch (акт производства)<a class="headerlink" href="#ProductionBatch-акт-производства" title="Permanent link">&para;</a></h3>
 <p><code>id, location_id, recipe_id, qty_out, consumed[] (ссылки на StockMovement), yield_pct, author_id, created_at, label_printed</code></p>
@@ -4424,7 +4496,10 @@
 <h3 id="Courier">Courier<a class="headerlink" href="#Courier" title="Permanent link">&para;</a></h3>
 <p><code>id, tenant_id, employment (staff | self_employed), transport (foot | bike | car), status, rating</code></p>
 <h3 id="DeliveryAssignment">DeliveryAssignment<a class="headerlink" href="#DeliveryAssignment" title="Permanent link">&para;</a></h3>
-<p><code>id, order_id, courier_id, status (assigned | picked | delivering | delivered | failed), assigned_at, picked_at, delivered_at, proof_photo?, failure_reason?</code></p>
+<p><code>id, order_id, courier_id, status (assigned | picked_up | delivering | delivered | failed), assigned_at, picked_up_at, delivered_at, proof_photo?, proof_code?, failure_reason?</code></p>
+<blockquote>
+<p>Статусы — канонический словарь §0 (токен <code>picked</code> ранних ревизий заменён на <code>picked_up</code>); отказ — пара <code>DeliveryIncident</code> + <code>failed</code>.</p>
+</blockquote>
 <h3 id="DeliveryIncident">DeliveryIncident<a class="headerlink" href="#DeliveryIncident" title="Permanent link">&para;</a></h3>
 <p><code>id, assignment_id, type (no_answer | wrong_address | accident | refusal), resolution, resolved_by</code></p>
 <h2 id="7-Гости-и-лояльность">7. Гости и лояльность<a class="headerlink" href="#7-Гости-и-лояльность" title="Permanent link">&para;</a></h2>
@@ -4467,8 +4542,8 @@
 }
 </code></pre></div>
 <h3 id="Контракт-заказа-внутрь-для-всех-каналов">Контракт заказа внутрь (для всех каналов)<a class="headerlink" href="#Контракт-заказа-внутрь-для-всех-каналов" title="Permanent link">&para;</a></h3>
-<p><code>POST /v1/orders</code>: <code>location_id, channel, items[{menu_item_id, qty, modifiers[]}], guest_phone?, delivery{address, zone_id}?, payment_intent</code>
-Ответ: <code>order_id, promise_time, status_url</code>.</p>
+<p><code>POST /v1/orders</code>: <code>location_id, channel, items[{menu_item_id, qty, modifiers[]}], guest?{phone, consent}, delivery?{address, zone_id, slot}, payment_intent?, idempotency_key</code>
+Ответ: <code>order_id, promise_time, status_url</code>. Полная контрактная форма с примером — в <a href="../../specs/03-api-contracts/"><code>../specs/03-api-contracts.md</code></a> (источник контракта — спецификация 03; источник модели — этот документ).</p>
 <h3 id="Контракт-меню-наружу-витриныагрегаторы">Контракт меню наружу (витрины/агрегаторы)<a class="headerlink" href="#Контракт-меню-наружу-витриныагрегаторы" title="Permanent link">&para;</a></h3>
 <p><code>GET /v1/menu?location=</code> → категории, позиции с модификаторами, цены по каналам, стоп-лист, доступность.</p>
 <h2 id="11-Принципы-целостности">11. Принципы целостности<a class="headerlink" href="#11-Принципы-целостности" title="Permanent link">&para;</a></h2>
