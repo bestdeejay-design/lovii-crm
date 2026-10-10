@@ -1,0 +1,140 @@
+/* lovii pilot — стили среза (токены дизайн-системы платформы) */
+:root {
+  --bg: #f4f5fa; --card: #ffffff; --line: #e3e6ef; --text: #171a26; --muted: #6b7280;
+  --brand: #5b21b6; --brand-2: #7c3aed; --accent: #f59e0b;
+  --ok: #16a34a; --warn: #d97706; --err: #dc2626; --info: #2563eb;
+  --chip: #eef0f7; --shadow: 0 1px 3px rgba(23, 26, 38, .08);
+}
+/* темы кабинетов */
+body.cab-app { --brand: #e0357a; --brand-2: #f64a8a; }
+body.cab-crm { --brand: #5b21b6; --brand-2: #7c3aed; }
+body.cab-erp { --brand: #089e9a; --brand-2: #0abab5; }
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; min-height: 100%; }
+body { font: 14px/1.45 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: var(--bg); color: var(--text); }
+a { color: var(--brand-2); text-decoration: none; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+h3 { font-size: 14px; margin: 14px 0 8px; }
+.muted { color: var(--muted); } .small { font-size: 12px; } .mt { margin-top: 14px; } .mt2 { margin-top: 24px; } .mb { margin-bottom: 14px; }
+
+#topbar {
+  position: sticky; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 14px;
+  background: var(--card); border-bottom: 1px solid var(--line);
+  padding: 8px 16px; box-shadow: var(--shadow);
+}
+#topbar .logo { font-weight: 800; font-size: 16px; color: var(--brand); letter-spacing: .5px; white-space: nowrap; }
+#topbar .logo span { color: var(--accent); }
+.addr { display: inline-flex; align-items: center; gap: 6px; background: var(--chip); border: 1px solid var(--line); border-radius: 20px; padding: 4px 12px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+.addr b { color: var(--text); font-weight: 600; }
+#entrance-tabs { display: flex; gap: 4px; }
+#entrance-tabs button {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+  padding: 6px 12px; border-radius: 8px; cursor: pointer; font-size: 13px;
+}
+#entrance-tabs button.active { background: var(--brand); border-color: var(--brand); color: #fff; }
+#entrance-tabs .cab-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dot-guest { background: #f64a8a; } .dot-pos { background: #7c3aed; } .dot-biz { background: #0abab5; }
+#entrance-tabs button.active .cab-dot { background: #fff; }
+.grow { flex: 1; }
+
+#main { max-width: 1280px; margin: 0 auto; padding: 20px 24px 60px; }
+#main.screen-in { animation: screenIn .18s ease-out; }
+@keyframes screenIn { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+
+.grid { display: grid; gap: 14px; }
+.grid.cols-2 { grid-template-columns: 1fr 1fr; }
+.grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 1000px) { .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 700px) { .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; } }
+
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 16px; box-shadow: var(--shadow); }
+.card.pad0 { padding: 0; overflow: hidden; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+
+.kpi { display: flex; flex-direction: column; gap: 4px; }
+.kpi .v { font-size: 22px; font-weight: 800; }
+.kpi .d { font-size: 12px; color: var(--muted); }
+
+button.btn, select, input[type="text"], input[type="number"] {
+  background: var(--card); color: var(--text); border: 1px solid var(--line);
+  border-radius: 8px; padding: 7px 14px; cursor: pointer; font: inherit;
+}
+button.btn { font-weight: 600; }
+button.btn.primary { background: var(--brand); border-color: var(--brand); color: #fff; }
+button.btn.ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+button.btn.warn { background: var(--warn); border-color: var(--warn); color: #fff; }
+button.btn.small { padding: 3px 10px; font-size: 12px; }
+button.btn.wide { width: 100%; margin-top: 10px; }
+button.btn:disabled { opacity: .5; cursor: default; }
+.field { display: block; margin: 10px 0 4px; font-size: 13px; }
+.field input { width: 100%; margin-top: 4px; }
+.chk { display: block; font-size: 12px; margin: 8px 0; }
+.price-in { width: 90px; padding: 4px 8px; }
+
+table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+table.tbl th { text-align: left; color: var(--muted); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: .5px; padding: 8px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+table.tbl td { padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
+table.tbl tr:last-child td { border-bottom: none; }
+
+.badge { display: inline-block; padding: 2px 9px; border-radius: 12px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+.badge.ok { background: #dcfce7; color: #166534; }
+.badge.warn { background: #fef3c7; color: #92400e; }
+.badge.err { background: #fee2e2; color: #991b1b; }
+.badge.info { background: #dbeafe; color: #1e40af; }
+.badge.brand { background: #ede9fe; color: #5b21b6; }
+.badge.gray { background: var(--chip); color: var(--muted); }
+
+/* Гость: меню + корзина */
+.guest-wrap { display: grid; grid-template-columns: 1fr 320px; gap: 16px; align-items: start; }
+@media (max-width: 900px) { .guest-wrap { grid-template-columns: 1fr; } }
+.cat { text-transform: uppercase; letter-spacing: .8px; font-size: 11px; color: var(--muted); margin: 18px 0 8px; }
+.menu-card .menu-foot { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; }
+.qty-ctl { display: inline-flex; align-items: center; gap: 8px; }
+.guest-cart { position: sticky; top: 60px; }
+.cart-line { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0; font-size: 13px; border-bottom: 1px dashed var(--line); }
+.cart-line.total { border-bottom: none; font-size: 15px; margin-top: 6px; }
+.err-t { color: var(--err); font-weight: 600; }
+
+.tl { list-style: none; margin: 0; padding: 0; }
+.tl li { position: relative; padding: 0 0 16px 26px; }
+.tl li:before { content: ""; position: absolute; left: 7px; top: 6px; width: 9px; height: 9px; border-radius: 50%; background: var(--line); }
+.tl li:after { content: ""; position: absolute; left: 11px; top: 16px; bottom: 2px; width: 1px; background: var(--line); }
+.tl li:last-child:after { display: none; }
+.tl li.done:before { background: var(--ok); }
+.tl li.now:before { background: var(--accent); box-shadow: 0 0 0 4px rgba(245, 158, 11, .2); }
+
+/* Касса: очереди */
+.queue { min-height: 200px; }
+.q-title { margin: 12px 14px 8px; }
+.q-empty { margin: 0 14px 14px; }
+.ticket { background: var(--card); border: 1px solid var(--line); border-top: 4px solid var(--info); border-radius: 12px; padding: 12px; margin: 10px 12px; box-shadow: var(--shadow); }
+.ticket.ready { border-top-color: var(--ok); }
+.ticket .t-head { display: flex; justify-content: space-between; align-items: center; font-weight: 700; margin-bottom: 6px; }
+.ticket ul { margin: 6px 0; padding-left: 18px; }
+.ticket li { margin: 2px 0; }
+.ticket .t-foot { display: flex; justify-content: space-between; align-items: center; margin: 8px 0; }
+.ticket .t-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.shift-bar .card-head { margin-bottom: 0; }
+
+/* Бизнес: бары каналов */
+.bar-line { display: grid; grid-template-columns: 120px 1fr 30px; align-items: center; gap: 10px; padding: 5px 0; }
+.bar { background: var(--chip); border-radius: 6px; height: 14px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: var(--brand-2); border-radius: 6px; }
+.evlist { max-height: 220px; overflow-y: auto; }
+.ev { padding: 5px 0; border-bottom: 1px dashed var(--line); font-size: 13px; }
+.ev:last-child { border-bottom: none; }
+
+/* Чек (модалка) */
+#receipt-modal { position: fixed; inset: 0; background: rgba(15, 17, 26, .55); display: none; align-items: center; justify-content: center; z-index: 80; }
+#receipt-modal.show { display: flex; }
+.rm-body { background: var(--card); border-radius: 14px; padding: 18px; max-width: 420px; width: 92%; box-shadow: var(--shadow); }
+.receipt { font-family: "Courier New", monospace; font-size: 12px; background: var(--chip); border-radius: 8px; padding: 14px; white-space: pre-wrap; }
+
+/* Тосты */
+#toasts { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; z-index: 90; }
+.toast { background: var(--text); color: var(--bg); padding: 10px 14px; border-radius: 10px; font-size: 13px; box-shadow: var(--shadow); animation: screenIn .18s ease-out; max-width: 360px; }
+.toast.err { background: var(--err); color: #fff; }

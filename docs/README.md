@@ -119,6 +119,12 @@
 | [`research/legal/05-franchise-contract-outline.md`](research/legal/05-franchise-contract-outline.md) | Драфт структуры договора коммерческой концессии (глава 54 ГК РФ) |
 | [`research/franchise/franchise-book-v0.md`](research/franchise/franchise-book-v0.md) | Франч-бук (v0): сделка в цифрах, путь франчайзи, стандарты и контроль |
 
+### 2.10. Пилот
+
+| Файл | Содержание |
+|---|---|
+| [`research/pilot/01-pilot-runbook.md`](research/pilot/01-pilot-runbook.md) | Пилотный срез «приложение + касса + чеки + мини-кабинет»: что настоящее и что эмулируется, порядок запуска, критерии успеха. **Работает** → [открыть пилот](https://bestdeejay-design.github.io/lovii-crm/pilot/) |
+
 ### 3. Аудиты аналогов
 
 **Россия**

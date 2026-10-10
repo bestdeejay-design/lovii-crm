@@ -49,7 +49,7 @@ jobs:
           base = m.group(1) if m else "https://bestdeejay-design.github.io/lovii-crm/"
           today = datetime.date.today().isoformat()
           extra = ""
-          for rel in ["demo/"]:
+          for rel in ["demo/", "pilot/"]:
               loc = base + rel
               if f"<loc>{loc}</loc>" not in xml:
                   extra += f"<url><loc>{loc}</loc><lastmod>{today}</lastmod></url>"

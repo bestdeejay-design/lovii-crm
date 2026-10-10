@@ -135,6 +135,8 @@ nav:
     - "Драфт: структура договора концессии": research/legal/05-franchise-contract-outline.md
   - "Франч-бук":
     - "Франч-бук lovii (v0)": research/franchise/franchise-book-v0.md
+  - "Пилот":
+    - "Ранбук пилотного среза (приложение + касса + чеки + мини-кабинет)": research/pilot/01-pilot-runbook.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md
