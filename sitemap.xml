@@ -228,4 +228,24 @@
          <loc>https://bestdeejay-design.github.io/lovii-crm/research/plan/03-backbone-stack/</loc>
          <lastmod>2026-10-10</lastmod>
     </url>
+    <url>
+         <loc>https://bestdeejay-design.github.io/lovii-crm/research/specs/00-overview/</loc>
+         <lastmod>2026-10-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bestdeejay-design.github.io/lovii-crm/research/specs/01-domain-model/</loc>
+         <lastmod>2026-10-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bestdeejay-design.github.io/lovii-crm/research/specs/02-processes/</loc>
+         <lastmod>2026-10-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bestdeejay-design.github.io/lovii-crm/research/specs/03-api-contracts/</loc>
+         <lastmod>2026-10-10</lastmod>
+    </url>
+    <url>
+         <loc>https://bestdeejay-design.github.io/lovii-crm/research/specs/04-deployment-offline/</loc>
+         <lastmod>2026-10-10</lastmod>
+    </url>
 </urlset>
