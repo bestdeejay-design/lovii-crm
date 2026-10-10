@@ -87,6 +87,6 @@ nav:
     - Разрывы рынка: research/gap-analysis.md
     - Продуктовый blueprint: research/product-blueprint.md
   - План реализации:
-    - План: фазы, вехи, первые 90 дней: research/plan/01-implementation-plan.md
+    - "План: фазы, вехи, первые 90 дней": research/plan/01-implementation-plan.md
     - Карта систем (строить/покупать/интегрировать): research/plan/02-systems-roadmap.md
     - Опорный стек до целевых показателей: research/plan/03-backbone-stack.md
