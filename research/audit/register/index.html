@@ -1,0 +1,5238 @@
+
+<!doctype html>
+<html lang="ru" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Исследование, аудит аналогов и продуктовые спецификации ресторанной CRM/ERP платформы полного цикла">
+      
+      
+      
+        <link rel="canonical" href="https://bestdeejay-design.github.io/lovii-crm/research/audit/register/">
+      
+      
+        <link rel="prev" href="../report/">
+      
+      
+        <link rel="next" href="../../crm-vs-erp/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Внешний аудит: реестр находок - lovii — платформа ресторанного бизнеса</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/mermaid-dark.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#Аудит-документации-платформы-lovii--реестр-находок" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href="../../.." title="lovii — платформа ресторанного бизнеса" class="md-header__button md-logo" aria-label="lovii — платформа ресторанного бизнеса" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lovii — платформа ресторанного бизнеса
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Внешний аудит: реестр находок
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Тёмная тема"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Тёмная тема" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Светлая тема"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Светлая тема" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bestdeejay-design/lovii-crm" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bestdeejay-design/lovii-crm
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="lovii — платформа ресторанного бизнеса" class="md-nav__button md-logo" aria-label="lovii — платформа ресторанного бизнеса" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lovii — платформа ресторанного бизнеса
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bestdeejay-design/lovii-crm" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bestdeejay-design/lovii-crm
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../diagram-catalog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Каталог схем
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Резюме и аудит
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Резюме и аудит
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../executive-summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Резюме исследования
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../audit-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Аудит корпуса документации
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Внешний аудит документации
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Внешний аудит документации
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Внешний аудит: отчёт
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Внешний аудит: реестр находок
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Внешний аудит: реестр находок
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#Сводка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сводка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Реестр-находок" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Реестр находок
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Реестр находок">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#Обзор-находок" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обзор находок
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Критичные-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Критичные (4)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Критичные (4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-01--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-01 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-02--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-02 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-03--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-03 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-04--КРИТИЧНО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-04 — КРИТИЧНО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Средние-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Средние (23)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Средние (23)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-05--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-05 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-06--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-06 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-07--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-07 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-08--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-08 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-09--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-09 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-10--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-10 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-11--СРЕДНЕ--Пробелустаревание" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-11 — СРЕДНЕ · Пробел/устаревание
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-12--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-12 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-13--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-13 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-14--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-14 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-15--СРЕДНЕ--Внутреннее-противоречие" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-15 — СРЕДНЕ · Внутреннее противоречие
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-16--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-16 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-17--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-17 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-18--СРЕДНЕ--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-18 — СРЕДНЕ · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-19--СРЕДНЕ--Внутреннее-противоречие" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-19 — СРЕДНЕ · Внутреннее противоречие
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-20--СРЕДНЕ--Арифметическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-20 — СРЕДНЕ · Арифметическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-21--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-21 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-22--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-22 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-23--СРЕДНЕ--Терминология" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-23 — СРЕДНЕ · Терминология
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-24--СРЕДНЕ--Пробелустаревание" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-24 — СРЕДНЕ · Пробел/устаревание
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-25--СРЕДНЕ--Счётность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-25 — СРЕДНЕ · Счётность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-26--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-26 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-27--СРЕДНЕ--Сбита-база-процента" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-27 — СРЕДНЕ · Сбита база процента
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Низкие-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Низкие (16)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Низкие (16)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-28--НИЗКО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-28 — НИЗКО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-29--НИЗКО--Терминология" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-29 — НИЗКО · Терминология
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-30--НИЗКО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-30 — НИЗКО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-31--НИЗКО--Коллизия-акронима" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-31 — НИЗКО · Коллизия акронима
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-32--НИЗКО--Расхождение" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-32 — НИЗКО · Расхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-33--НИЗКО--Дрейф-имён" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-33 — НИЗКО · Дрейф имён
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-34--НИЗКО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-34 — НИЗКО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-35--НИЗКО--Неточность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-35 — НИЗКО · Неточность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-36--НИЗКО--Расхождение" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-36 — НИЗКО · Расхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-37--НИЗКО--Пробел" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-37 — НИЗКО · Пробел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-38--НИЗКО--Структура" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-38 — НИЗКО · Структура
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-39--НИЗКО--Пробел" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-39 — НИЗКО · Пробел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-40--НИЗКО--Стильопечатки" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-40 — НИЗКО · Стиль/опечатки
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-41--НИЗКО--Источники" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-41 — НИЗКО · Источники
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-42--НИЗКО--Неточность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-42 — НИЗКО · Неточность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-43--НИЗКО--Формулировка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-43 — НИЗКО · Формулировка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Позитивные-проверки" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Позитивные проверки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Методика" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Методика
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Файлы-аудита" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Файлы аудита
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Академические разборы
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Академические разборы
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../crm-vs-erp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сравнение: CRM против ERP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminology-crm-erp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Терминология: CRM и ERP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../terminology-franchise/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Терминология: франшиза и франчайзинг
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic-research-agenda/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Программа разборов (статус)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/01-management-accounting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 1: управленческий учёт общепита
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/02-unit-economics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 2: юнит-экономика точки
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/03-service-quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 3: качество сервиса, SERVQUAL и DINESERV
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/04-personal-data-loyalty/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 4: лояльность и персональные данные
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/05-franchising-economics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 5: экономика франчайзинга
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/06-food-safety-terminology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 6: пищевая безопасность и ХАССП
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/07-operations-terminology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 7: операционный менеджмент, ограничения и очереди
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/08-clv-models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 8: модели ценности гостя (RFM, BG/NBD, CLV)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/09-menu-engineering/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 9: инженерия меню
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/10-waiting-psychology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 10: психология ожидания
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/11-technology-adoption/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 11: принятие технологий персоналом (TAM/UTAUT)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/12-event-architecture-cqrs/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 12: событийная архитектура и CQRS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/13-mdm-data-quality/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 13: качество данных и MDM
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/14-lean-kitchen/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 14: бережливая кухня (5S, потери)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/15-staff-turnover/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 15: текучесть линейного персонала
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/16-innovation-diffusion/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 16: диффузия инноваций в сетях
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../academic/17-franchise-law-comparative/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разбор 17: сравнительное право франчайзинга
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Рынок и архитектура
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Рынок и архитектура
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-market-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обзор рынка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-reference-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Референс-архитектура
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-personas-cjm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Персоны и сценарии (CJM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Глоссарий
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Компоненты
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Компоненты
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/01-pos-fiscal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01. Касса и фискализация
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/02-order-channels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. Каналы приёма заказов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/03-kitchen-kds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. Кухня и KDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/04-inventory-procurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. Склад, ТТК, закупки
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/05-delivery-couriers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05. Доставка и курьеры
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/06-crm-loyalty-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06. CRM, лояльность, отзывы
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/07-hr-staff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07. Персонал
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/08-finance-analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    08. Финансы и аналитика
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/09-franchise-network/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    09. Франшиза и УК
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/10-compliance-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Комплаенс и безопасность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/11-integration-platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Платформа и интеграции
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../components/12-data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Модель данных
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Технические спецификации (схемы)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Технические спецификации (схемы)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/00-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    00. Обзор: контекст и контейнеры
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/01-domain-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01. Доменная модель (схемы сущностей)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/02-processes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. Ключевые процессы (последовательности)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/03-api-contracts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. Контракты API и событий
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../specs/04-deployment-offline/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. Деплой, офлайн и безопасность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Платёжная инфраструктура
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Платёжная инфраструктура
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../infrastructure/banks-kassa-ofd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Банки, онлайн-кассы и ОФД: роли, экономика, лучшие примеры
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    SaaS-платформа
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    SaaS-платформа
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../saas/00-platform-map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта платформы: app, crm, erp — один комплекс
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../saas/01-information-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Правила и схемы движения информации
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../saas/02-demo-cabinet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Демо-кабинет: роли, мок-данные, отчёты
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../saas/03-role-scenarios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Сценарии ролей и боли: аудит кабинетов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Аудиты аналогов
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Аудиты аналогов
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_1" id="__nav_10_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Россия
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Россия
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/iiko/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iiko
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/rkeeper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    r_keeper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/poster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Poster POS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/quick-resto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Resto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/saby-presto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Saby Presto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/1c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1С Общепит/Ресторан
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/ru-smaller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tillypad, Fusion POS, Yuma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_10_2" id="__nav_10_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мир
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_10_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мир
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/toast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Toast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/lightspeed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightspeed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/square-touchbistro-revel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Square, TouchBistro, Revel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/middleware-delivery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware доставки
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/loyalty-crm-vendors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Гостевые CRM и лояльность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../competitors/audit-standards-vendors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Контроль стандартов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Выводы и план
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Выводы и план
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../gap-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разрывы рынка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../product-blueprint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Продуктовый blueprint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    План реализации
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    План реализации
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan/01-implementation-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    План: фазы, вехи, первые 90 дней
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan/02-systems-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта систем (строить/покупать/интегрировать)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../plan/03-backbone-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Опорный стек до целевых показателей
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#Сводка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Сводка
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Реестр-находок" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Реестр находок
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Реестр находок">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#Обзор-находок" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Обзор находок
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Критичные-4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Критичные (4)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Критичные (4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-01--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-01 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-02--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-02 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-03--КРИТИЧНО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-03 — КРИТИЧНО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-04--КРИТИЧНО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-04 — КРИТИЧНО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Средние-23" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Средние (23)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Средние (23)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-05--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-05 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-06--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-06 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-07--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-07 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-08--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-08 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-09--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-09 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-10--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-10 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-11--СРЕДНЕ--Пробелустаревание" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-11 — СРЕДНЕ · Пробел/устаревание
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-12--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-12 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-13--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-13 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-14--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-14 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-15--СРЕДНЕ--Внутреннее-противоречие" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-15 — СРЕДНЕ · Внутреннее противоречие
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-16--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-16 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-17--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-17 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-18--СРЕДНЕ--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-18 — СРЕДНЕ · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-19--СРЕДНЕ--Внутреннее-противоречие" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-19 — СРЕДНЕ · Внутреннее противоречие
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-20--СРЕДНЕ--Арифметическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-20 — СРЕДНЕ · Арифметическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-21--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-21 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-22--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-22 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-23--СРЕДНЕ--Терминология" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-23 — СРЕДНЕ · Терминология
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-24--СРЕДНЕ--Пробелустаревание" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-24 — СРЕДНЕ · Пробел/устаревание
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-25--СРЕДНЕ--Счётность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-25 — СРЕДНЕ · Счётность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-26--СРЕДНЕ--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-26 — СРЕДНЕ · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-27--СРЕДНЕ--Сбита-база-процента" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-27 — СРЕДНЕ · Сбита база процента
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#Низкие-16" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Низкие (16)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Низкие (16)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#F-28--НИЗКО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-28 — НИЗКО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-29--НИЗКО--Терминология" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-29 — НИЗКО · Терминология
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-30--НИЗКО--Фактическая-ошибка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-30 — НИЗКО · Фактическая ошибка
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-31--НИЗКО--Коллизия-акронима" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-31 — НИЗКО · Коллизия акронима
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-32--НИЗКО--Расхождение" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-32 — НИЗКО · Расхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-33--НИЗКО--Дрейф-имён" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-33 — НИЗКО · Дрейф имён
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-34--НИЗКО--Противоречие-между-документами" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-34 — НИЗКО · Противоречие между документами
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-35--НИЗКО--Неточность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-35 — НИЗКО · Неточность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-36--НИЗКО--Расхождение" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-36 — НИЗКО · Расхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-37--НИЗКО--Пробел" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-37 — НИЗКО · Пробел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-38--НИЗКО--Структура" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-38 — НИЗКО · Структура
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-39--НИЗКО--Пробел" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-39 — НИЗКО · Пробел
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-40--НИЗКО--Стильопечатки" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-40 — НИЗКО · Стиль/опечатки
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-41--НИЗКО--Источники" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-41 — НИЗКО · Источники
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-42--НИЗКО--Неточность" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-42 — НИЗКО · Неточность
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#F-43--НИЗКО--Формулировка" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        F-43 — НИЗКО · Формулировка
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Позитивные-проверки" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Позитивные проверки
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Методика" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Методика
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#Файлы-аудита" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Файлы аудита
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Навигация" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Главная
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../../executive-summary/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Резюме и аудит
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="../report/" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Внешний аудит документации
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="Аудит-документации-платформы-lovii--реестр-находок">Аудит документации платформы lovii — реестр находок<a class="headerlink" href="#Аудит-документации-платформы-lovii--реестр-находок" title="Permanent link">&para;</a></h1>
+<p>Аудит корпуса документации lovii-crm: «Super Z Audit», ревизия №1, 10 октября 2026 года. 70 страниц.</p>
+<h2 id="Сводка">Сводка<a class="headerlink" href="#Сводка" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Показатель</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Объект аудита</td>
+<td>bestdeejay-design.github.io/lovii-crm (MkDocs Material, GitHub Pages)</td>
+</tr>
+<tr>
+<td>Дата аудита</td>
+<td>2026-10-10</td>
+</tr>
+<tr>
+<td>Проверено страниц</td>
+<td>70</td>
+</tr>
+<tr>
+<td>Объём корпуса</td>
+<td>~550 тыс. знаков</td>
+</tr>
+<tr>
+<td>Всего находок</td>
+<td>43</td>
+</tr>
+<tr>
+<td>Критичных</td>
+<td>4</td>
+</tr>
+<tr>
+<td>Средних</td>
+<td>23</td>
+</tr>
+<tr>
+<td>Низких</td>
+<td>16</td>
+</tr>
+<tr>
+<td>Битые внутренние ссылки</td>
+<td>0 (все относительные ссылки разрешаются)</td>
+</tr>
+<tr>
+<td>Страниц вне sitemap.xml</td>
+<td>2: /demo/ и /research/saas/03-role-scenarios/</td>
+</tr>
+<tr>
+<td>Страниц со статусом/датой ревизии</td>
+<td>0 из 70</td>
+</tr>
+<tr>
+<td>Файл подробного отчёта</td>
+<td>lovii_crm_audit_report.docx (18 стр.)</td>
+</tr>
+</tbody>
+</table>
+<p><em>Счётчики находок считаются формулами от листа «Реестр находок» и обновляются автоматически.</em></p>
+<h2 id="Реестр-находок">Реестр находок<a class="headerlink" href="#Реестр-находок" title="Permanent link">&para;</a></h2>
+<h3 id="Обзор-находок">Обзор находок<a class="headerlink" href="#Обзор-находок" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Серьёзность</th>
+<th>Тип</th>
+<th>Файлы</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>F-01</td>
+<td>КРИТИЧНО</td>
+<td>Противоречие между документами</td>
+<td>components/03-kitchen-kds · components/05-delivery-couriers …</td>
+</tr>
+<tr>
+<td>F-02</td>
+<td>КРИТИЧНО</td>
+<td>Противоречие между документами</td>
+<td>specs/01-domain-model · components/12-data-model …</td>
+</tr>
+<tr>
+<td>F-03</td>
+<td>КРИТИЧНО</td>
+<td>Противоречие между документами</td>
+<td>components/02-order-channels · 01-reference-architecture …</td>
+</tr>
+<tr>
+<td>F-04</td>
+<td>КРИТИЧНО</td>
+<td>Фактическая ошибка</td>
+<td>academic/04-personal-data-loyalty</td>
+</tr>
+<tr>
+<td>F-05</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>executive-summary · 00-market-landscape …</td>
+</tr>
+<tr>
+<td>F-06</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>gap-analysis · components/09 …</td>
+</tr>
+<tr>
+<td>F-07</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>01-reference-architecture · components/11-integration-platform …</td>
+</tr>
+<tr>
+<td>F-08</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>00-market-landscape · components/01-pos-fiscal …</td>
+</tr>
+<tr>
+<td>F-09</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>components/12-data-model · specs/03-api-contracts</td>
+</tr>
+<tr>
+<td>F-10</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>executive-summary · gap-analysis …</td>
+</tr>
+<tr>
+<td>F-11</td>
+<td>СРЕДНЕ</td>
+<td>Пробел/устаревание</td>
+<td>research/audit-report</td>
+</tr>
+<tr>
+<td>F-12</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>index · saas/02-demo-cabinet …</td>
+</tr>
+<tr>
+<td>F-13</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>saas/02-demo-cabinet · saas/00-platform-map …</td>
+</tr>
+<tr>
+<td>F-14</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>specs/02-processes · components/03-kitchen-kds …</td>
+</tr>
+<tr>
+<td>F-15</td>
+<td>СРЕДНЕ</td>
+<td>Внутреннее противоречие</td>
+<td>infrastructure/banks-kassa-ofd · plan/02-systems-roadmap</td>
+</tr>
+<tr>
+<td>F-16</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>competitors/saby-presto · competitors/ru-smaller …</td>
+</tr>
+<tr>
+<td>F-17</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>research/audit-report · competitors/square-touchbistro-revel</td>
+</tr>
+<tr>
+<td>F-18</td>
+<td>СРЕДНЕ</td>
+<td>Фактическая ошибка</td>
+<td>academic/08-clv-models</td>
+</tr>
+<tr>
+<td>F-19</td>
+<td>СРЕДНЕ</td>
+<td>Внутреннее противоречие</td>
+<td>academic/01-management-accounting · academic/02-unit-economics</td>
+</tr>
+<tr>
+<td>F-20</td>
+<td>СРЕДНЕ</td>
+<td>Арифметическая ошибка</td>
+<td>academic/02-unit-economics</td>
+</tr>
+<tr>
+<td>F-21</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>terminology-crm-erp · components/09-franchise-network</td>
+</tr>
+<tr>
+<td>F-22</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>02-personas-cjm · terminology-franchise</td>
+</tr>
+<tr>
+<td>F-23</td>
+<td>СРЕДНЕ</td>
+<td>Терминология</td>
+<td>saas/00-platform-map · terminology-crm-erp …</td>
+</tr>
+<tr>
+<td>F-24</td>
+<td>СРЕДНЕ</td>
+<td>Пробел/устаревание</td>
+<td>01-reference-architecture · components/12-data-model …</td>
+</tr>
+<tr>
+<td>F-25</td>
+<td>СРЕДНЕ</td>
+<td>Счётность</td>
+<td>executive-summary · index …</td>
+</tr>
+<tr>
+<td>F-26</td>
+<td>СРЕДНЕ</td>
+<td>Противоречие между документами</td>
+<td>components/02-order-channels · competitors/middleware-delivery</td>
+</tr>
+<tr>
+<td>F-27</td>
+<td>СРЕДНЕ</td>
+<td>Сбита база процента</td>
+<td>components/03-kitchen-kds · components/07-hr-staff …</td>
+</tr>
+<tr>
+<td>F-28</td>
+<td>НИЗКО</td>
+<td>Фактическая ошибка</td>
+<td>academic/03-service-quality</td>
+</tr>
+<tr>
+<td>F-29</td>
+<td>НИЗКО</td>
+<td>Терминология</td>
+<td>academic/17-franchise-law-comparative</td>
+</tr>
+<tr>
+<td>F-30</td>
+<td>НИЗКО</td>
+<td>Фактическая ошибка</td>
+<td>academic/17-franchise-law-comparative</td>
+</tr>
+<tr>
+<td>F-31</td>
+<td>НИЗКО</td>
+<td>Коллизия акронима</td>
+<td>academic/06-food-safety-terminology · glossary</td>
+</tr>
+<tr>
+<td>F-32</td>
+<td>НИЗКО</td>
+<td>Расхождение</td>
+<td>specs/01-domain-model · components/12-data-model …</td>
+</tr>
+<tr>
+<td>F-33</td>
+<td>НИЗКО</td>
+<td>Дрейф имён</td>
+<td>01-reference-architecture · components/07 …</td>
+</tr>
+<tr>
+<td>F-34</td>
+<td>НИЗКО</td>
+<td>Противоречие между документами</td>
+<td>specs/04-deployment-offline · product-blueprint</td>
+</tr>
+<tr>
+<td>F-35</td>
+<td>НИЗКО</td>
+<td>Неточность</td>
+<td>competitors/poster · gap-analysis</td>
+</tr>
+<tr>
+<td>F-36</td>
+<td>НИЗКО</td>
+<td>Расхождение</td>
+<td>saas/00-platform-map · saas/03-role-scenarios</td>
+</tr>
+<tr>
+<td>F-37</td>
+<td>НИЗКО</td>
+<td>Пробел</td>
+<td>saas/03-role-scenarios · infrastructure/banks-kassa-ofd</td>
+</tr>
+<tr>
+<td>F-38</td>
+<td>НИЗКО</td>
+<td>Структура</td>
+<td>sitemap.xml · /demo/ …</td>
+</tr>
+<tr>
+<td>F-39</td>
+<td>НИЗКО</td>
+<td>Пробел</td>
+<td>68 страниц корпуса · 13 файлов конкурентов</td>
+</tr>
+<tr>
+<td>F-40</td>
+<td>НИЗКО</td>
+<td>Стиль/опечатки</td>
+<td>crm-vs-erp · academic/08 …</td>
+</tr>
+<tr>
+<td>F-41</td>
+<td>НИЗКО</td>
+<td>Источники</td>
+<td>academic/04-personal-data-loyalty</td>
+</tr>
+<tr>
+<td>F-42</td>
+<td>НИЗКО</td>
+<td>Неточность</td>
+<td>terminology-franchise · academic/17</td>
+</tr>
+<tr>
+<td>F-43</td>
+<td>НИЗКО</td>
+<td>Формулировка</td>
+<td>glossary · components/01 …</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Критичные-4">Критичные (4)<a class="headerlink" href="#Критичные-4" title="Permanent link">&para;</a></h3>
+<h4 id="F-01--КРИТИЧНО--Противоречие-между-документами">F-01 — КРИТИЧНО · Противоречие между документами<a class="headerlink" href="#F-01--КРИТИЧНО--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты, спецификации, архитектура</li>
+<li><strong>Файлы:</strong> components/03-kitchen-kds · components/05-delivery-couriers · components/12-data-model · specs/01-domain-model · 01-reference-architecture</li>
+<li><strong>Суть находки:</strong> Три несовместимых словаря статусов заказа и кухни при заявленном «едином словаре». Компонент 03 объявляет «единый словарь» accepted → kitchen → cooking → ready → served → packed → courier. Спецификация 01 описывает другую машину состояний: new → accepted → kitchen → ready → served/packed → delivered|cancelled (статусы cooking нет, зато есть new, delivered, cancelled). Компонент 12 — контракт данных для разработки — фиксирует третий вариант: KitchenTicket = queued|cooking|ready|served (без accepted, kitchen, packed), а референс-архитектура четвёртый: queued → cooking → ready → expo/served, packed (статус expo отсутствует даже в модели данных).</li>
+<li><strong>Цитата / доказательство:</strong> «Статусы accepted, kitchen, cooking, ready, served, packed, courier — единый словарь для зала и доставки» (components/03, §1.5)</li>
+<li><strong>С чем расходится:</strong> specs/01: «new → accepted → kitchen → ready → served/packed → delivered | cancelled»; components/12: «status (queued | cooking | ready | served)»; ref-arch: «KDS: queued → cooking → ready → expo/served, packed»</li>
+<li><strong>Рекомендация:</strong> Зафиксировать один канонический enum в components/12 и specs/01 (включая expo, packed, delivered, cancelled), остальные документы перевести на ссылки к нему. Это блокер для разработки: разные команды прочитают по-разному.</li>
+</ul>
+<h4 id="F-02--КРИТИЧНО--Противоречие-между-документами">F-02 — КРИТИЧНО · Противоречие между документами<a class="headerlink" href="#F-02--КРИТИЧНО--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты, спецификации</li>
+<li><strong>Файлы:</strong> specs/01-domain-model · components/12-data-model · components/05-delivery-couriers</li>
+<li><strong>Суть находки:</strong> Доставка: два токена забора заказа и две модели отказа. В спецификации 01 и компоненте 12 статус забора — picked, отказ — failed. В компоненте 05 — picked_up, а инциденты моделируются отдельной сущностью с переходом incident → cancelled. Контракт API specs/03 не определяет ни один из вариантов, хотя именно через статусы курьера строятся обещания времени и уведомления гостя.</li>
+<li><strong>Цитата / доказательство:</strong> components/12: «status (assigned | picked | delivering | delivered | failed)… proof_photo?»</li>
+<li><strong>С чем расходится:</strong> components/05: «assigned --&gt; picked_up: курьер забрал; picked_up --&gt; delivering: в пути» + инцидент/cancelled</li>
+<li><strong>Рекомендация:</strong> Выбрать один токен (picked_up читаемее) и одну модель отказа (отдельная сущность инцидента или статус failed), синхронизировать specs/01, components/12, specs/03.</li>
+</ul>
+<h4 id="F-03--КРИТИЧНО--Противоречие-между-документами">F-03 — КРИТИЧНО · Противоречие между документами<a class="headerlink" href="#F-03--КРИТИЧНО--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты, спецификации, архитектура</li>
+<li><strong>Файлы:</strong> components/02-order-channels · 01-reference-architecture · components/12-data-model · specs/01 · specs/03</li>
+<li><strong>Суть находки:</strong> Поле источника заказа: source в одних документах, channel в других. Компонент 02 («каналы приёма заказов») и референс-архитектура описывают заказ с полем source (Order(source, items, guest_id)), тогда как контракт данных (components/12), доменная модель (specs/01) и контракт API (specs/03) используют channel с перечислением pos | site | app | miniapp | kiosk | aggregator:yandex. Для «единой модели данных на все каналы» — главного архитектурного принципа корпуса — имя ключевого поля не согласовано.</li>
+<li><strong>Цитата / доказательство:</strong> 01-reference-architecture: «Канал создаёт заказ: Order(source, items, guest_id)»</li>
+<li><strong>С чем расходится:</strong> specs/03: «"channel": "pos | site | app | miniapp | kiosk | aggregator:yandex"»</li>
+<li><strong>Рекомендация:</strong> Закрепить channel (как в контракте API), добавить в перечисление канал «телефон/колл-центр», упомянутый в components/02.</li>
+</ul>
+<h4 id="F-04--КРИТИЧНО--Фактическая-ошибка">F-04 — КРИТИЧНО · Фактическая ошибка<a class="headerlink" href="#F-04--КРИТИЧНО--Фактическая-ошибка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/04-personal-data-loyalty</li>
+<li><strong>Суть находки:</strong> Инверсия смысла требования 152-ФЗ об уведомлении об утечке. В разборе 4 утверждается, что «обязателен сам факт неуведомления об утечке в Роскомнадзор» — то есть документ фактически требует НЕ уведомлять. По ст. 21 152-ФЗ оператор обязан уведомить Роскомнадзор об инциденте в течение 24 часов (с 01.09.2022), а с 30.05.2025 действуют штрафы за неуведомление до 1 млн ₽ (КоАП 13.11). Требование прочитано наоборот — в документе, который позиционируется как чек-лист соответствия платформы.</li>
+<li><strong>Цитата / доказательство:</strong> «обязателен сам факт неуведомления об утечке в Роскомнадзор» (academic/04, §3)</li>
+<li><strong>С чем расходится:</strong> Ст. 21 152-ФЗ: уведомление об утечке — обязанность оператора в течение 24 ч; штрафы КоАП ст. 13.11 — именно за неуведомление</li>
+<li><strong>Рекомендация:</strong> Исправить на «обязательно уведомление Роскомнадзора об утечке в течение 24 часов»; заодно перепроверить соседнюю цифру «обработка без законного основания — до 300 тыс ₽» (источник в тексте не указан).</li>
+</ul>
+<h3 id="Средние-23">Средние (23)<a class="headerlink" href="#Средние-23" title="Permanent link">&para;</a></h3>
+<h4 id="F-05--СРЕДНЕ--Противоречие-между-документами">F-05 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-05--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Резюме, рынок, компоненты, планы, академия</li>
+<li><strong>Файлы:</strong> executive-summary · 00-market-landscape · components/05 · plan/02 · plan/03 · components/02 · academic/02</li>
+<li><strong>Суть находки:</strong> Комиссии агрегаторов: одна величина в четырёх представлениях без оговорки об эквивалентности. Корпус оперирует четырьмя вариантами: 17–30% (executive-summary, market-landscape, components/05), 16,67–29,17% без НДС (plan/02, plan/03, components/02, academic/02 §4), 20–30% (academic/02 §3) и 20–35% — как «экономия на прямых заказах» (plan/03, competitors/middleware-delivery). Арифметически 16,67–29,17% × 1,2 (НДС) = ровно 20–35%, и «17–30%» — округление, но эквивалентность нигде не оговорена, а в middleware-delivery и infrastructure базовая ставка вообще не названа.</li>
+<li><strong>Цитата / доказательство:</strong> executive-summary: «комиссия агрегаторов 17–30%» ↔ plan/02: «комиссии 16,67–29,17% без НДС»</li>
+<li><strong>С чем расходится:</strong> academic/02 §3: «Комиссия агрегатора 20–30%» внутри того же файла, где §4 даёт 16,67–29,17%</li>
+<li><strong>Рекомендация:</strong> Зафиксировать одну каноническую вилку с указанием базы (с НДС/без НДС) в market-landscape, остальные документы — на ссылку; добавить сноску «16,67–29,17% без НДС ≡ 20–35% с НДС».</li>
+</ul>
+<h4 id="F-06--СРЕДНЕ--Противоречие-между-документами">F-06 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-06--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Gap-анализ, компоненты, академия, персоны, blueprint, планы</li>
+<li><strong>Файлы:</strong> gap-analysis · components/09 · academic/11 · 02-personas-cjm · product-blueprint · plan/01</li>
+<li><strong>Суть находки:</strong> Срок онбординга точки: четыре формулировки одного обещания. Одно и то же обещание варьируется: «онбординг точки за день» (gap-анализ, разрыв G7), «точка готова к запуску за часы, а не недели» (components/09), «Новый франчайзи за часы» (personas U6) и «запуск ≤ 3 дней» / «≤ 3 рабочих дней» (метрика blueprint и гейт фазы 4 плана). Разница между «за часы» и «≤3 рабочих дней» — в разы, при этом эти цифры попадают в инвест-материалы.</li>
+<li><strong>Цитата / доказательство:</strong> gap-analysis G7: «Онбординг точки „за день“» ↔ plan/01: «Новая партнёрская точка за ≤3 дня»</li>
+<li><strong>С чем расходится:</strong> components/09: «за часы, а не недели»; academic/11: «онбординг точки „за часы“» как требование</li>
+<li><strong>Рекомендация:</strong> Развести два показателя: «шаблон точки клонируется за часы» (технический факт, гейт Ф0) и «полный запуск точки ≤ 3 рабочих дней» (продуктовая метрика) — и использовать только их.</li>
+</ul>
+<h4 id="F-07--СРЕДНЕ--Противоречие-между-документами">F-07 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-07--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Референс-архитектура, компоненты, blueprint, планы</li>
+<li><strong>Файлы:</strong> 01-reference-architecture · components/11-integration-platform · product-blueprint · plan/01</li>
+<li><strong>Суть находки:</strong> Открытый API: «с первого дня» и в DoD MVP против P2/фазы 5 в плане. Референс-архитектура заявляет принцип «Открытый API и вебхуки с первого дня», компонент 11 включает чекбокс «Открытый API: токен, вебхук на событие заказа, документация опубликована» в DoD MVP, но blueprint относит «Открытый API и маркетплейс» к P2/фазе 5, а план первых 90 дней и состав MVP фазы 1 API не содержат вовсе.</li>
+<li><strong>Цитата / доказательство:</strong> components/11, DoD MVP: «□ Открытый API: токен, вебхук на событие заказа…»</li>
+<li><strong>С чем расходится:</strong> product-blueprint: «Открытый API и маркетплейс интеграций — D11, P2»; plan/01 Ф1 без API</li>
+<li><strong>Рекомендация:</strong> Переформулировать: «внутренний API контрактов — с фазы 1, публичный маркетплейс партнёров — фаза 5»; убрать API из DoD MVP либо добавить в план фазы 1.</li>
+</ul>
+<h4 id="F-08--СРЕДНЕ--Противоречие-между-документами">F-08 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-08--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Рынок, компоненты, инфраструктура, глоссарий</li>
+<li><strong>Файлы:</strong> 00-market-landscape · components/01-pos-fiscal · infrastructure/banks-kassa-ofd · glossary</li>
+<li><strong>Суть находки:</strong> Сроки обязательности ФФД 1.2 сформулированы тремя разными способами. Market-landscape: «ФФД 1.2 обязателен с 01.02–01.03.2025/2026» — двусмысленная запись, не читаемая однозначно. Компонент 01: «с 01.02.2025 ФФД 1.05 не принимается для новых регистраций; с 01.03.2026 — единственный формат». Инфраструктура: «формат 1.05 выведен с 01.03.2026». Глоссарий сужает требование до «обязательная версия для маркировки», хотя речь о всеобщей обязательности для новых ККТ. Регуляторные даты — ядро продажи «касса из коробки», и их разнобой в маркетинговых материалах недопустим.</li>
+<li><strong>Цитата / доказательство:</strong> 00-market-landscape: «ФФД 1.2 обязателен с 01.02–01.03.2025/2026»</li>
+<li><strong>С чем расходится:</strong> components/01: «с 01.02.2025… с 01.03.2026 — единственный формат»; glossary: «1.2 — обязательная версия для маркировки»</li>
+<li><strong>Рекомендация:</strong> Одна каноническая формулировка с двумя датами (новые регистрации / все кассы) в глоссарии и market-landscape; компонент 01 — источник истины.</li>
+</ul>
+<h4 id="F-09--СРЕДНЕ--Противоречие-между-документами">F-09 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-09--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты, спецификации</li>
+<li><strong>Файлы:</strong> components/12-data-model · specs/03-api-contracts</li>
+<li><strong>Суть находки:</strong> Контракт создания заказа: guest_phone против guest{phone, consent}, разные enum каналов. Компонент 12 описывает заказ с полями guest_phone?, payment_intent и перечислением каналов, включающим phone. Спецификация 03 — вложенный объект guest {phone, consent: true}, idempotency_key и delivery.slot, которого в модели 12 нет, а канала phone в enum нет. Компонент 02 при этом описывает «заказ по телефону» через колл-центр как полноценный канал. Контракт API и модель данных — два документа, по которым будут писать код, и они уже разные.</li>
+<li><strong>Цитата / доказательство:</strong> components/12: «guest_phone?, … payment_intent» ↔ specs/03: «"guest": { "phone": …, "consent": true }»</li>
+<li><strong>С чем расходится:</strong> channel enum: components/12 содержит phone, specs/03 — нет</li>
+<li><strong>Рекомендация:</strong> Синхронизировать: specs/03 — источник контракта, components/12 — модель; добавить slot и канал phone в модель, зафиксировать consent-поле в модели данных (требование 152-ФЗ).</li>
+</ul>
+<h4 id="F-10--СРЕДНЕ--Противоречие-между-документами">F-10 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-10--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Резюме, gap-анализ, рынок, конкуренты</li>
+<li><strong>Файлы:</strong> executive-summary · gap-analysis · 00-market-landscape · competitors/rkeeper · competitors/1c</li>
+<li><strong>Суть находки:</strong> Тарифы «тяжёлых» систем 8–10+ тыс ₽/мес против собственных данных аудита. Резюме и gap-анализ утверждают, что корпоративная глубина стоит «8–10+ тыс ₽/мес за кассу», а market-landscape — что МСБ-касс «дешевле в 3–5 раз». Но собственные файлы конкурентов дают r_keeper Cloud «от 4 085 ₽/мес» и 1С:Фреш «от 32 200 ₽/год (~2 684 ₽/мес)». Вилка «в 3–5 раз дешевле» ломается: Quick Resto 4 990 ₽ против r_keeper Cloud 4 085 ₽ — разница 1,2×, то есть конкурент дешевле части МСБ-решений.</li>
+<li><strong>Цитата / доказательство:</strong> executive-summary: «корпоративные тарифы (8–10+ тыс ₽/мес за кассу)»</li>
+<li><strong>С чем расходится:</strong> competitors/rkeeper: «r_keeper Cloud — от 4 085 ₽/мес»; competitors/1c: «1С:Фреш от 32 200 ₽/год»</li>
+<li><strong>Рекомендация:</strong> Уточнить формулировки: «флагманские тарифы iiko Pro 8 600–10 600 ₽/мес» вместо обобщения про все «тяжёлые»; для вилки «дешевле в 3–5 раз» указать сравнение с конкретными тарифами.</li>
+</ul>
+<h4 id="F-11--СРЕДНЕ--Пробелустаревание">F-11 — СРЕДНЕ · Пробел/устаревание<a class="headerlink" href="#F-11--СРЕДНЕ--Пробелустаревание" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Аудит-отчёт</li>
+<li><strong>Файлы:</strong> research/audit-report</li>
+<li><strong>Суть находки:</strong> Ревизия №1 описывает корпус из 30 документов — в корпусе их 70. Аудит-отчёт заявляет «30 документов на момент ревизии», 352 внешних и 41 внутреннюю ссылку, оценку «полнота покрытия доменов 10/10, готовность к публикации 9/10» — но половина текущего корпуса (17 академических разборов, 3 плана, 4 SaaS-страницы, инфраструктура, терминология, схема-каталог) появилась после ревизии и в ней не учтена. Вердикт «корпус полон и готов к публикации» не пересматривался. Также отчёт утверждает «часть вендоров цены не раскрывает (Revel, TouchBistro)», тогда как в файле TouchBistro указана цена «от $69/мес за терминал».</li>
+<li><strong>Цитата / доказательство:</strong> audit-report: «30 документов на момент ревизии»</li>
+<li><strong>С чем расходится:</strong> Фактически в корпусе 70 страниц (68 в sitemap + /demo/ + saas/03-role-scenarios)</li>
+<li><strong>Рекомендация:</strong> Провести ревизию №2 с новым подсчётом документов и ссылок; обновить раздел ограничений (TouchBistro); перенести оценки «до/после» в архивную секцию.</li>
+</ul>
+<h4 id="F-12--СРЕДНЕ--Противоречие-между-документами">F-12 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-12--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Индекс, SaaS</li>
+<li><strong>Файлы:</strong> index · saas/02-demo-cabinet · saas/03-role-scenarios</li>
+<li><strong>Суть находки:</strong> Числа демо: заявлено 30 экранов и 66 сценариев — в таблице покрытия 34 и 77. Индекс и спецификация демо-кабинета повторяют «30 экранов, 10 ролей, 66 интерактивных сценариев», но собственная сводная таблица раздела 13 страницы role-scenarios суммируется в 34 экрана (3+2+8+3+2+5+1+2+6+2) и 77 интерактивных действий (8+7+11+6+5+9+5+7+10+9). Либо таблица включает что-то сверх «30 экранов полного периметра», либо цифры устарели после итерации аудита.</li>
+<li><strong>Цитата / доказательство:</strong> saas/03 §13: сумма по ролям = 34 экрана, 77 действий</li>
+<li><strong>С чем расходится:</strong> index: «30 экранов полного периметра»; saas/02: «30 экранов, 10 ролей… 66 интерактивных сценариев»</li>
+<li><strong>Рекомендация:</strong> Пересчитать фактические маршруты демо и привести три документа к одним числам; в таблице §13 добавить строку «Итого».</li>
+</ul>
+<h4 id="F-13--СРЕДНЕ--Противоречие-между-документами">F-13 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-13--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> SaaS</li>
+<li><strong>Файлы:</strong> saas/02-demo-cabinet · saas/00-platform-map · saas/03-role-scenarios</li>
+<li><strong>Суть находки:</strong> «Итого 10 ролей» при девяти строках в таблице ролей — потерян Закупщик. Таблица ролей в демо-кабинете содержит 9 строк (Гость, Кассир, Управляющий, Повар, Курьер, Поставщик, Франчайзи, Менеджер УК, Собственник) при выводе «Итого 10 ролей» — десятая роль, Закупщик, в таблице отсутствует, хотя есть в role-scenarios (раздел 7) и в аудитории ERP («Повара, курьеры, закупщики, поставщики») той же страницы карты платформы. В диаграмме PEOPLE (saas/00) Закупщика тоже нет.</li>
+<li><strong>Цитата / доказательство:</strong> saas/02 §2: таблица из 9 строк + «Итого 10 ролей»</li>
+<li><strong>С чем расходится:</strong> saas/03 §7: полноценный раздел «Закупщик (erp.lovii.ru)»</li>
+<li><strong>Рекомендация:</strong> Добавить строку Закупщика в таблицу ролей saas/02 и в диаграмму PEOPLE saas/00.</li>
+</ul>
+<h4 id="F-14--СРЕДНЕ--Противоречие-между-документами">F-14 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-14--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Спецификации, компоненты, SaaS</li>
+<li><strong>Файлы:</strong> specs/02-processes · components/03-kitchen-kds · components/12 · saas/01-information-flow</li>
+<li><strong>Суть находки:</strong> Момент списания по ТТК: при пробитии чека против при статусе «готов». Последовательность в specs/02 отправляет «списание ингредиентов по ТТК» сразу от кассы (при пробитии), а компонент 03 прямо требует противоположного: «статус „готов“ триггерит списание по ТТК, а не момент пробития». Компонент 12, saas/01 и демо (сценарий CH2) поддерживают списание по готовности. Это влияет на фудкост при отменах и возвратах — по specs/02 продукты спишутся на незакупленное блюдо.</li>
+<li><strong>Цитата / доказательство:</strong> specs/02 §1: «Касса-&gt;&gt;Склад: списание ингредиентов по ТТК»</li>
+<li><strong>С чем расходится:</strong> components/03 §4: «статус „готов“ триггерит списание по ТТК, а не момент пробития»</li>
+<li><strong>Рекомендация:</strong> Принять списание по готовности (большинство документов и демо уже так работают), поправить схему specs/02.</li>
+</ul>
+<h4 id="F-15--СРЕДНЕ--Внутреннее-противоречие">F-15 — СРЕДНЕ · Внутреннее противоречие<a class="headerlink" href="#F-15--СРЕДНЕ--Внутреннее-противоречие" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Платёжная инфраструктура</li>
+<li><strong>Файлы:</strong> infrastructure/banks-kassa-ofd · plan/02-systems-roadmap</li>
+<li><strong>Суть находки:</strong> Вилки цен на эквайринг, кассы, ФН и облачные кассы расходятся с планом систем. Внутри самого файла инфраструктуры: текст «СБП у всех крупных банков 0,4–0,7%» против таблицы «Сбер 0,3–0,7%»; «Касса (оборудование) 12 000–60 000 ₽» против «ККТ 20–60 тыс ₽/шт» в плане систем (при этом собственная строка таблицы MSPOS-K «от 15 000 ₽» не попадает ни в одну вилку); ФН «~8 500–15 000 ₽» против «~10–15 тыс ₽»; облачная касса «1 500–3 900 ₽/мес» против «~1,5–3 тыс ₽/мес».</li>
+<li><strong>Цитата / доказательство:</strong> infrastructure: «СБП у всех крупных банков 0,4–0,7%» ↔ таблица: «Сбер… 0,3–0,7%»</li>
+<li><strong>С чем расходится:</strong> plan/02: «ККТ 20–60 тыс ₽/шт; ФН ~10–15 тыс ₽; облачная касса ~1,5–3 тыс ₽/мес»</li>
+<li><strong>Рекомендация:</strong> Вынести эталонные вилки в инфраструктуру, план систем — на ссылку; согласовать нижние границы с реальными моделями из собственной таблицы.</li>
+</ul>
+<h4 id="F-16--СРЕДНЕ--Противоречие-между-документами">F-16 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-16--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Конкуренты</li>
+<li><strong>Файлы:</strong> competitors/saby-presto · competitors/ru-smaller · competitors/toast · competitors/square-touchbistro-revel</li>
+<li><strong>Суть находки:</strong> «Ценовой пол рынка ~2 000 ₽/мес» против моделей с нулевой ценой входа. Аудит Saby Presto формулирует «ценовой пол рынка — ~2 000 ₽/мес», но собственные файлы корпуса фиксируют модели «0 ₽/мес за ПО» (Fusion POS), Toast «$0 старт» и Square Free (бесплатный тариф). Ценовая модель lovii («бесплатный вход») опирается как раз на нулевой пол — формулировка Saby подрывает собственный вывод.</li>
+<li><strong>Цитата / доказательство:</strong> saby-presto: «Ценовой пол рынка — ~2 000 ₽/мес»</li>
+<li><strong>С чем расходится:</strong> ru-smaller: Fusion POS «0 ₽/мес за ПО»; toast: «$0/мес старт»</li>
+<li><strong>Рекомендация:</strong> Переформулировать: «пол платных тарифов ~2 000 ₽/мес; мировой стандарт — бесплатный вход с монетизацией платежей».</li>
+</ul>
+<h4 id="F-17--СРЕДНЕ--Противоречие-между-документами">F-17 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-17--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Аудит-отчёт, конкуренты</li>
+<li><strong>Файлы:</strong> research/audit-report · competitors/square-touchbistro-revel</li>
+<li><strong>Суть находки:</strong> «TouchBistro цену не раскрывает» против цены в собственном файле. Аудит-отчёт в разделе ограничений пишет, что «часть вендоров цены не раскрывает (Revel, TouchBistro-сеть)», но файл конкурентов приводит цену TouchBistro: «от $69/мес за терминал + аддоны». Расхождение дискредитирует раздел «ограничения аудита» — а именно на него ссылается методология.</li>
+<li><strong>Цитата / доказательство:</strong> audit-report §5: «часть вендоров цены не раскрывает (Revel, TouchBistro-сеть)»</li>
+<li><strong>С чем расходится:</strong> square-touchbistro-revel: «TouchBistro: от $69/мес за терминал + аддоны»</li>
+<li><strong>Рекомендация:</strong> Обновить список нераскрытых цен (оставить Revel, если цены действительно нет) после ревизии №2.</li>
+</ul>
+<h4 id="F-18--СРЕДНЕ--Фактическая-ошибка">F-18 — СРЕДНЕ · Фактическая ошибка<a class="headerlink" href="#F-18--СРЕДНЕ--Фактическая-ошибка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/08-clv-models</li>
+<li><strong>Суть находки:</strong> Неверная атрибуция модели BG/BB: авторы, год и класс отношений. Таблица моделей в разборе 8 приписывает BG/BB «Fader, Хардти, Ли (2007)» и классифицирует её для «договорных (контрактных) отношений». Модель BG/BB (Beta-Geometric/Beta-Bernoulli) предложена Fader, Hardie и Shang (2010) именно для неконтрактных отношений с дискретными транзакциями; контрактный аналог — sBG (Fader &amp; Hardie, 2007). Ошибка в академическом документе, на который опирается раздел лояльности.</li>
+<li><strong>Цитата / доказательство:</strong> academic/08: «Fader, Хардти, Ли (2007) | Договорные (контрактные) отношения»</li>
+<li><strong>С чем расходится:</strong> Fader P., Hardie B., Shang K. (2010), Marketing Science — BG/BB для неконтрактных дискретных транзакций</li>
+<li><strong>Рекомендация:</strong> Исправить строку таблицы: «BG/BB — Fader, Hardie, Shang (2010), неконтрактные дискретные»; контрактные модели — sBG (Fader &amp; Hardie 2007).</li>
+</ul>
+<h4 id="F-19--СРЕДНЕ--Внутреннее-противоречие">F-19 — СРЕДНЕ · Внутреннее противоречие<a class="headerlink" href="#F-19--СРЕДНЕ--Внутреннее-противоречие" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/01-management-accounting · academic/02-unit-economics</li>
+<li><strong>Суть находки:</strong> Правило «30/30/30/10» противоречит собственным бенчмаркам корпусов. Оба разбора цитируют «классическое правило 30/30/30/10» (аренда+ЖКХ / ФОТ / фудкост / прибыль), но таблица бенчмарков того же разбора 1 даёт аренду 10–15%, а фудкост-ориентир — 25%. Если следовать правилу, аренда должна занимать 30% выручки — вдвое больше собственного бенчмарка. Правило в такой расшифровке не выдерживает даже соседней таблицы.</li>
+<li><strong>Цитата / доказательство:</strong> academic/02: «Правило „30/30/30/10“ (аренда+ЖКХ / ФОТ / фудкост / прибыль) — классический целевой баланс»</li>
+<li><strong>С чем расходится:</strong> academic/01, таблица: «Аренда и коммунальные 10–15%»; ориентир фудкоста 25%</li>
+<li><strong>Рекомендация:</strong> Привести каноническую расшифровку (например, ФОТ 30% / продукты ~30% / прочие операционные ~30% / прибыль 10%) или заменить правило собственным целевым балансом.</li>
+</ul>
+<h4 id="F-20--СРЕДНЕ--Арифметическая-ошибка">F-20 — СРЕДНЕ · Арифметическая ошибка<a class="headerlink" href="#F-20--СРЕДНЕ--Арифметическая-ошибка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/02-unit-economics</li>
+<li><strong>Суть находки:</strong> «1 п.п. фудкоста = ±10% прибыли» — при заданной рентабельности 8% это 12,5%. Разбор 2 утверждает: 1 п.п. фудкоста при выручке 5 млн ₽/мес = 50 тыс ₽/мес чистой прибыли, «при рентабельности 8% это ±10% прибыли точки». Прибыль при 8% от 5 млн = 400 тыс ₽/мес; 50/400 = 12,5%. Цифра ±10% соответствовала бы рентабельности 10%, а не 8%. Пример — один из главных аргументов продажи платформы, и его арифметика должна сходиться.</li>
+<li><strong>Цитата / доказательство:</strong> «при рентабельности 8% это ±10% прибыли точки» (academic/02 §2)</li>
+<li><strong>С чем расходится:</strong> 50 000 / (5 000 000 × 0,08) = 12,5%</li>
+<li><strong>Рекомендация:</strong> Исправить на «±12,5% прибыли» либо изменить базовую рентабельность примера на 10%.</li>
+</ul>
+<h4 id="F-21--СРЕДНЕ--Противоречие-между-документами">F-21 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-21--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Терминология, компоненты</li>
+<li><strong>Файлы:</strong> terminology-crm-erp · components/09-franchise-network</li>
+<li><strong>Суть находки:</strong> Франшиза: «надстройка над обоими классами» против «не надстройка, а способ существования». Терминологический разбор относит франшизу к «контуру управления сетью (надстройка над обоими классами)», тогда как компонент 09 декларирует противоположное: «Франшиза — не „надстройка“, а способ существования продукта». Для архитектуры это не словесность: надстройка встраивается поверх готовой системы, «способ существования» требует иерархии тенантов с первого дня (что и заявлено в фазе 0).</li>
+<li><strong>Цитата / доказательство:</strong> terminology-crm-erp §6.2: «Контур управления сетью/франшизой» (надстройка над обеими классами)</li>
+<li><strong>С чем расходится:</strong> components/09 §6: «Франшиза — не „надстройка“, а способ существования продукта»</li>
+<li><strong>Рекомендация:</strong> Синхронизировать: франшизная иерархия — часть ядра с Ф0 (как в blueprint), термин «надстройка» убрать из терминологии.</li>
+</ul>
+<h4 id="F-22--СРЕДНЕ--Противоречие-между-документами">F-22 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-22--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Персоны, терминология</li>
+<li><strong>Файлы:</strong> 02-personas-cjm · terminology-franchise</li>
+<li><strong>Суть находки:</strong> Периодичность роялти: еженедельно у одной персоны, ежемесячно у другой и в терминологии. Персона 4 («Продавец-франчайзи») «еженедельно видит роялти-счёт», персона 5 «в конце месяца закрывает роялти», терминологический разбор франшизы описывает роялти как ежемесячный платёж. Компонент 09 и specs/02 периодичность вообще не фиксируют, хотя от неё зависит дизайн биллинга и актов сверки.</li>
+<li><strong>Цитата / доказательство:</strong> 02-personas-cjm П4: «Еженедельно видит роялти-счёт»</li>
+<li><strong>С чем расходится:</strong> 02-personas-cjm П5: «В конце месяца закрывает роялти»; terminology-franchise: ежемесячные роялти</li>
+<li><strong>Рекомендация:</strong> Зафиксировать расчётный период роялти (например, расчёт — понедельный по фискальной выручке, закрытие и счёт — месячный) в компоненте 09 и синхронизировать персоны.</li>
+</ul>
+<h4 id="F-23--СРЕДНЕ--Терминология">F-23 — СРЕДНЕ · Терминология<a class="headerlink" href="#F-23--СРЕДНЕ--Терминология" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> SaaS, терминология</li>
+<li><strong>Файлы:</strong> saas/00-platform-map · terminology-crm-erp · components/06</li>
+<li><strong>Суть находки:</strong> Границы «операционного» и «гостевого» контуров не сведены между картой и терминологией. Карта платформы называет «операционным контуром» erp.lovii.ru (кухня, склад, поставщики), терминологический разбор использует «операционный CRM» для фронтовых клиентских процессов, а компонент 06 называет контуром «CRM, лояльность, отзывы». «Гостевой контур» — это app.lovii.ru в карте, но в терминологии гостевой разбор описывает гостевой CRM иначе. Читатель корпуса не может однозначно сопоставить контуры между документами.</li>
+<li><strong>Цитата / доказательство:</strong> saas/00: «erp.lovii.ru — операционный контур»</li>
+<li><strong>С чем расходится:</strong> terminology-crm-erp §3.4: «операционный CRM»; components/06: «CRM гостя, лояльность…»</li>
+<li><strong>Рекомендация:</strong> Добавить в глоссарий три официальных названия контуров (гостевой/app, клиентский/crm, операционный/erp) и пройтись по документам с заменой синонимов.</li>
+</ul>
+<h4 id="F-24--СРЕДНЕ--Пробелустаревание">F-24 — СРЕДНЕ · Пробел/устаревание<a class="headerlink" href="#F-24--СРЕДНЕ--Пробелустаревание" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Референс-архитектура, модель данных</li>
+<li><strong>Файлы:</strong> 01-reference-architecture · components/12-data-model · specs/01-domain-model</li>
+<li><strong>Суть находки:</strong> FranchiseAccount — «ключевая сущность» референс-модели — отсутствует в модели данных. Референс-архитектура в списке ключевых сущностей называет FranchiseAccount («УК видит агрегированные данные точек договора, роялти считается от выручки»), но в модели данных (components/12) и ER-схемах (specs/01) этой сущности нет — там Tenant, FranchiseAgreement, RoyaltyInvoice. Часть атрибутов покрывается договором, но часть (агрегаты по точкам договора) — реализация не имеет.</li>
+<li><strong>Цитата / доказательство:</strong> 01-reference-architecture §3: «FranchiseAccount — УК видит агрегированные данные точек договора…»</li>
+<li><strong>С чем расходится:</strong> components/12/specs/01: Tenant, FranchiseAgreement, RoyaltyInvoice — FranchiseAccount отсутствует</li>
+<li><strong>Рекомендация:</strong> Либо добавить FranchiseAccount в модель, либо пометить в ref-arch, что роль сущности исполняет FranchiseAgreement + проекции витрин.</li>
+</ul>
+<h4 id="F-25--СРЕДНЕ--Счётность">F-25 — СРЕДНЕ · Счётность<a class="headerlink" href="#F-25--СРЕДНЕ--Счётность" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Резюме, индекс</li>
+<li><strong>Файлы:</strong> executive-summary · index · research/audit-report</li>
+<li><strong>Суть находки:</strong> «Аудит аналогов: 14 классов систем» против 13 файлов и 11 карточек навигации. Резюме говорит «аудит аналогов (14 классов систем)», в навигации корпуса 11 карточек раздела «Аудиты аналогов», на диске 13 файлов конкурентов (при этом ru-smaller покрывает 4 системы, square-touchbistro-revel — 3). Ни одно из чисел не сходится с остальными, и «класс системы» нигде не определён.</li>
+<li><strong>Цитата / доказательство:</strong> executive-summary: «Что показал аудит аналогов (14 классов систем)»</li>
+<li><strong>С чем расходится:</strong> index: 11 карточек конкурентов; файлов: 13</li>
+<li><strong>Рекомендация:</strong> Ввести определение «класса» и посчитать одинаково во всех трёх местах, либо перейти к формулировке «13 аудитов, 30+ вендоров».</li>
+</ul>
+<h4 id="F-26--СРЕДНЕ--Противоречие-между-документами">F-26 — СРЕДНЕ · Противоречие между документами<a class="headerlink" href="#F-26--СРЕДНЕ--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты, конкуренты</li>
+<li><strong>Файлы:</strong> components/02-order-channels · competitors/middleware-delivery</li>
+<li><strong>Суть находки:</strong> Otter: «100+ интеграций» против «POS-интеграции с 20+ кассовыми системами». Компонент 02 приводит Otter со «100+ интеграциями», файл middleware — «POS-интеграции с 20+ кассовыми системами». Возможно, первый — все интеграции (включая агрегаторы), второй — только POS, но корпус не разграничивает метрики, и читатель видит противоречие в 5 раз.</li>
+<li><strong>Цитата / доказательство:</strong> components/02: «Otter — … 100+ интеграций»</li>
+<li><strong>С чем расходится:</strong> middleware-delivery: «Otter: POS-интеграции с 20+ кассовыми системами»</li>
+<li><strong>Рекомендация:</strong> Разграничить метрики: «20+ POS-интеграций, 100+ агрегаторов/каналов (по данным вендора)» — или привести к одному знаменателю.</li>
+</ul>
+<h4 id="F-27--СРЕДНЕ--Сбита-база-процента">F-27 — СРЕДНЕ · Сбита база процента<a class="headerlink" href="#F-27--СРЕДНЕ--Сбита-база-процента" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Компоненты</li>
+<li><strong>Файлы:</strong> components/03-kitchen-kds · components/07-hr-staff · academic/01</li>
+<li><strong>Суть находки:</strong> «25–35% себестоимости» на кухне против 25–35% выручки ФОТ в соседних документах. Введение компонента 03: «место, где теряются или зарабатываются 25–35% себестоимости». В остальных документах корпуса 25–35% — это диапазон ФОТ от выручки (components/07, academic/01), а фудкост измеряется от выручки (12–40%, ориентир 25%). «Проценты себестоимости» — другая база, и фраза в текущем виде либо ошибочна, либо нечитаема.</li>
+<li><strong>Цитата / доказательство:</strong> components/03, вводный абзац: «теряются или зарабатываются 25–35% себестоимости»</li>
+<li><strong>С чем расходится:</strong> components/07: «(25–35% выручки)» о ФОТ; glossary: фудкост = себестоимость продуктов в % от выручки</li>
+<li><strong>Рекомендация:</strong> Переформулировать: «где теряются или зарабатываются 5–10 п.п. фудкоста» или указать корректную базу.</li>
+</ul>
+<h3 id="Низкие-16">Низкие (16)<a class="headerlink" href="#Низкие-16" title="Permanent link">&para;</a></h3>
+<h4 id="F-28--НИЗКО--Фактическая-ошибка">F-28 — НИЗКО · Фактическая ошибка<a class="headerlink" href="#F-28--НИЗКО--Фактическая-ошибка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/03-service-quality</li>
+<li><strong>Суть находки:</strong> DINESERV: 28 утверждений против 29 в первоисточнике. Разбор 3 описывает DINESERV как «инструмент — 28 утверждений». В первоисточнике (Stevens, Knutson &amp; Patton, 1995, Cornell HRA Quarterly) анкета содержит 29 пунктов (проверено по публикациям первоисточника). Для документа, претендующего на академическую точность, число пунктов инструмента — проверяемая деталь.</li>
+<li><strong>Цитата / доказательство:</strong> academic/03: «инструмент DINESERV — 28 утверждений»</li>
+<li><strong>С чем расходится:</strong> Stevens, Knutson &amp; Patton (1995): «The 29-item DINESERV questionnaire»</li>
+<li><strong>Рекомендация:</strong> Исправить на 29; при желании добавить сноску о сокращённых адаптациях.</li>
+</ul>
+<h4 id="F-29--НИЗКО--Терминология">F-29 — НИЗКО · Терминология<a class="headerlink" href="#F-29--НИЗКО--Терминология" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/17-franchise-law-comparative</li>
+<li><strong>Суть находки:</strong> «Конкурсное право ЕС» вместо конкурентного (антимонопольного). Разбор 17 пишет «Конкурсное право ЕС касается вертикальных соглашений франшизы». Вертикальные соглашения регулирует конкурентное (антимонопольное) право (ст. 101 TFEU, регламент о вертикальных соглашениях); конкурсное право — это процедура банкротства. Смысловая ошибка в правовом разборе.</li>
+<li><strong>Цитата / доказательство:</strong> academic/17: «Конкурсное право ЕС касается вертикальных соглашений»</li>
+<li><strong>С чем расходится:</strong> Регламент (ЕС) 2022/720 о вертикальных соглашениях — акт конкурентного права</li>
+<li><strong>Рекомендация:</strong> Заменить на «конкурентное (антимонопольное) право».</li>
+</ul>
+<h4 id="F-30--НИЗКО--Фактическая-ошибка">F-30 — НИЗКО · Фактическая ошибка<a class="headerlink" href="#F-30--НИЗКО--Фактическая-ошибка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/17-franchise-law-comparative</li>
+<li><strong>Суть находки:</strong> «Правило ФТК (1979, обновлено 2010)» — поправки приняты в 2007. Разбор 17 указывает обновление Правила о франшизе ФТК США в 2010 году. Поправки приняты в 2007 (16 CFR Part 436) с обязательным применением к франшизам с 1 июля 2008. Год в квадратных скобках — типичная проверяемая деталь для юридических читателей.</li>
+<li><strong>Цитата / доказательство:</strong> academic/17: «Правило ФТК о франшизе (1979, обновлено 2010)»</li>
+<li><strong>С чем расходится:</strong> Amended Franchise Rule, 16 CFR Part 436 (2007), обязательна с 01.07.2008</li>
+<li><strong>Рекомендация:</strong> Исправить на «1979, в действующей редакции 2007 (применение с 2008)».</li>
+</ul>
+<h4 id="F-31--НИЗКО--Коллизия-акронима">F-31 — НИЗКО · Коллизия акронима<a class="headerlink" href="#F-31--НИЗКО--Коллизия-акронима" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы, глоссарий</li>
+<li><strong>Файлы:</strong> academic/06-food-safety-terminology · glossary</li>
+<li><strong>Суть находки:</strong> ККТ в разборе 6 — «критическая контрольная точка», в глоссарии — кассовая техника. Разбор 6 вводит «Критическая контрольная точка (ККТ/CCP)» — русский акроним для CCP (Critical Control Point) из ХАССП, совпадающий с устоявшимся в корпусе ККТ = контрольно-кассовая техника. Коллизия тиражируется в карте документов и программе разборов. В русскоязычной практике ХАССП используется КТК (критическая точка контроля) или ККТ расшифровывают как «критическая контрольная точка» только с пометкой.</li>
+<li><strong>Цитата / доказательство:</strong> academic/06: «Критическая контрольная точка (ККТ/CCp)»</li>
+<li><strong>С чем расходится:</strong> glossary: «ККТ — Контрольно-кассовая техника (касса) из реестра ФНС»</li>
+<li><strong>Рекомендация:</strong> Переименовать в КТК/CCP или «критическая точка контроля (КТП)» по всему корпусу.</li>
+</ul>
+<h4 id="F-32--НИЗКО--Расхождение">F-32 — НИЗКО · Расхождение<a class="headerlink" href="#F-32--НИЗКО--Расхождение" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Спецификации, компоненты</li>
+<li><strong>Файлы:</strong> specs/01-domain-model · components/12-data-model · components/05</li>
+<li><strong>Суть находки:</strong> StockMovement: 8 типов в спецификации против 9 в модели (writeoff_staff); вручение — только фото, без кода. В specs/01 перечислено 8 типов складских движений, в components/12 — 9 (добавлен writeoff_staff — списание на персонал, критичное для антифрода). Компонент 05 обещает подтверждение доставки «фото или код», но в модели DeliveryAssignment есть только proof_photo — код вручения не предусмотрен.</li>
+<li><strong>Цитата / доказательство:</strong> specs/01: 8 типов движений; components/12: «receive | sale_writeoff | production_in | production_out | transfer | writeoff_spoilage | writeoff_staff | inventory_adjust | return»</li>
+<li><strong>С чем расходится:</strong> components/05: «доставлен — фото или код» ↔ components/12: только proof_photo</li>
+<li><strong>Рекомендация:</strong> Добавить writeoff_staff в specs/01 и proof_code в модель; синхронизировать перечисления.</li>
+</ul>
+<h4 id="F-33--НИЗКО--Дрейф-имён">F-33 — НИЗКО · Дрейф имён<a class="headerlink" href="#F-33--НИЗКО--Дрейф-имён" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Архитектура, компоненты, SaaS, спецификации</li>
+<li><strong>Файлы:</strong> 01-reference-architecture · components/07 · saas/02 · specs/00</li>
+<li><strong>Суть находки:</strong> Четыре несовпадающих ролевых набора и дрейф названий ролей. Референс-архитектура описывает 11 ролей (включая Бармена, Маркетолога УК, Бухгалтера), компонент 07 — 8, демо — 10, контекст спецификации 00 — 7. Названия плавают: «Владелец»/«Собственник», «Менеджер УК»/«Операционный директор УК», «Франчайзи»/«Продавец-франчайзи», «Кассир/официант»/«Кассир». В сводной таблице персон есть колонка «Кассир», хотя персоны с таким именем в документе нет.</li>
+<li><strong>Цитата / доказательство:</strong> ref-arch §4: 11 ролей; specs/00 §1: 7 ролей; demo: 10 ролей; comp_07: 8 ролей</li>
+<li><strong>С чем расходится:</strong> personas: сводная таблица содержит колонку «Кассир» без одноимённой персоны</li>
+<li><strong>Рекомендация:</strong> Завести единый реестр ролей (id + каноническое имя) в глоссарии и ссылаться на него; в демо указывать, какие роли референса пока не покрыты.</li>
+</ul>
+<h4 id="F-34--НИЗКО--Противоречие-между-документами">F-34 — НИЗКО · Противоречие между документами<a class="headerlink" href="#F-34--НИЗКО--Противоречие-между-документами" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Спецификации</li>
+<li><strong>Файлы:</strong> specs/04-deployment-offline · product-blueprint</li>
+<li><strong>Суть находки:</strong> «Торговать без интернета неограниченно долго» против норматива офлайн-смены 8 часов. Спецификация 04 обещает «торговать без интернета неограниченно долго», тогда как blueprint задаёт измеримую метрику «офлайн-автономность кассы — 8 часов продаж без облака». Обещание «неограниченно» не проверяемо и противоречит собственному NFR.</li>
+<li><strong>Цитата / доказательство:</strong> specs/04: «торговать без интернета неограниченно долго»</li>
+<li><strong>С чем расходится:</strong> product-blueprint §5: «офлайн-автономность кассы — 8 часов продаж без облака»</li>
+<li><strong>Рекомендация:</strong> Заменить на норматив 8 часов + деградация функциональности после (как в планах).</li>
+</ul>
+<h4 id="F-35--НИЗКО--Неточность">F-35 — НИЗКО · Неточность<a class="headerlink" href="#F-35--НИЗКО--Неточность" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Конкуренты, gap-анализ</li>
+<li><strong>Файлы:</strong> competitors/poster · gap-analysis</li>
+<li><strong>Суть находки:</strong> Poster: «100 товаров» превращается в «100 техкарт», три валюты в одной сетке, вывод не сходится с тарифами. У Poster в файле конкурентов лимит «100 товаров/ТТК», gap-анализ уже приводит его как «100 техкарт на €29». Тарифная сетка перемешивает валюты (Mini €29, Network «от $99/мес», отдельные рублёвые/гривневые тарифы «от ~$14»), а итоговый вывод «€30–70/мес» не покрывает нижнюю границу €29.</li>
+<li><strong>Цитата / доказательство:</strong> gap-analysis G3: «урезают лимитами (100 техкарт на €29 у Poster)»</li>
+<li><strong>С чем расходится:</strong> competitors/poster: «100 товаров/ТТК»; сетка €29/$99/₽/₴; вывод «€30–70»</li>
+<li><strong>Рекомендация:</strong> Унифицировать валюту сетки (или дать параллельные рублёвые тарифы), поправить вывод на «€29–69», сохранить «товары/ТТК» без подмены термина.</li>
+</ul>
+<h4 id="F-36--НИЗКО--Расхождение">F-36 — НИЗКО · Расхождение<a class="headerlink" href="#F-36--НИЗКО--Расхождение" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> SaaS</li>
+<li><strong>Файлы:</strong> saas/00-platform-map · saas/03-role-scenarios</li>
+<li><strong>Суть находки:</strong> Франчайзи: только crm в сценариях против crm+erp в демо; заказы/отзывы в интро ERP против таблицы CRM. В saas/03 раздел «Франчайзи (crm.lovii.ru)» ограничивает роль клиентским контуром, тогда как демо и карта дают франчайзи «crm + erp». Интро saas/00 относит «отзывы» к операционному контуру, таблица §2 той же страницы — к CRM. Кабинет УК в таблице «внутри erp/crm», в демо это отдельный #/uk.</li>
+<li><strong>Цитата / доказательство:</strong> saas/03 §9: «Франчайзи (crm.lovii.ru)»</li>
+<li><strong>С чем расходится:</strong> saas/00 §3: «Продавец-франчайзи | crm + erp»</li>
+<li><strong>Рекомендация:</strong> Провести ревизию контуров по всем ролям в saas/00–03 и привести к одному распределению.</li>
+</ul>
+<h4 id="F-37--НИЗКО--Пробел">F-37 — НИЗКО · Пробел<a class="headerlink" href="#F-37--НИЗКО--Пробел" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> SaaS, инфраструктура</li>
+<li><strong>Файлы:</strong> saas/03-role-scenarios · infrastructure/banks-kassa-ofd</li>
+<li><strong>Суть находки:</strong> Правило мок-банка «сумма кратна 997 → код 51» не описано в контракте моков. Сценарий отказа оплаты в демо ссылается на «контракты из платёжной инфраструктуры», но контракт мок-сервисов (§7 infrastructure) правило отказа с кодом 51 и кратностью 997 не описывает. Спецификация демо заявляет поведение, которого нет в спецификации контракта.</li>
+<li><strong>Цитата / доказательство:</strong> saas/03 S2: «сумма кратна 997 → отказ, код 51»</li>
+<li><strong>С чем расходится:</strong> infrastructure §7: контракт мок-банка без правила 997/51</li>
+<li><strong>Рекомендация:</strong> Дописать правило в контракт мок-банка (или удалить из сценария).</li>
+</ul>
+<h4 id="F-38--НИЗКО--Структура">F-38 — НИЗКО · Структура<a class="headerlink" href="#F-38--НИЗКО--Структура" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Структура сайта</li>
+<li><strong>Файлы:</strong> sitemap.xml · /demo/ · saas/03-role-scenarios</li>
+<li><strong>Суть находки:</strong> sitemap.xml не содержит двух страниц, включая полноценную страницу сценариев. В sitemap.xml 68 URL, но /research/saas/03-role-scenarios/ (13 тыс. знаков контента, связана из каталога схем и навигации) и /demo/ в нём отсутствуют. /demo/ — интерактивное JS-приложение, пустое для поисковых систем (текст извлекается только скриптами). Индекс же ссылается на обе страницы.</li>
+<li><strong>Цитата / доказательство:</strong> sitemap.xml: 68 URL; HTTP 200 для /demo/ и /research/saas/03-role-scenarios/</li>
+<li><strong>С чем расходится:</strong> index: ссылки на research/saas/03-role-scenarios/ и /demo/</li>
+<li><strong>Рекомендация:</strong> Перегенерировать sitemap; для /demo/ добавить SSR-заглушку с описанием и ссылками (SEO и доступность).</li>
+</ul>
+<h4 id="F-39--НИЗКО--Пробел">F-39 — НИЗКО · Пробел<a class="headerlink" href="#F-39--НИЗКО--Пробел" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Весь корпус</li>
+<li><strong>Файлы:</strong> 68 страниц корпуса · 13 файлов конкурентов</li>
+<li><strong>Суть находки:</strong> Нет сквозных метаданных статуса/даты страниц; факт-маркеры без списка источников. Ни одна страница не имеет шапки со статусом/датой ревизии (даты встречаются только в 3 файлах) — при живом корпусе читатель не может отличить актуальный документ от устаревшего (пример F-11). Во всех 13 файлах конкурентов числовые факт-маркеры 1, 2, 3… не сопровождаются секцией «Источники» (список есть только у инфраструктуры); в разборах 1, 2, 4 — висячие сноски и источники-заглушки без ссылок.</li>
+<li><strong>Цитата / доказательство:</strong> Проверка корпуса: строка «Статус:» в начале страницы — 0 из 70</li>
+<li><strong>С чем расходится:</strong> audit-report заявляет «все ключевые факты с цитатами»</li>
+<li><strong>Рекомендация:</strong> Ввести метаданные (статус, дата ревизии, владелец) в шапку каждой страницы; добавить секцию «Источники» в файлы конкурентов.</li>
+</ul>
+<h4 id="F-40--НИЗКО--Стильопечатки">F-40 — НИЗКО · Стиль/опечатки<a class="headerlink" href="#F-40--НИЗКО--Стильопечатки" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Несколько разделов</li>
+<li><strong>Файлы:</strong> crm-vs-erp · academic/08 · components/05 · components/04 · academic-research-agenda · gap-analysis · saas/02</li>
+<li><strong>Суть находки:</strong> Опечатки и непоследовательная транслитерация бренда. «Отзыв госта» (crm-vs-erp), «количества покуток» (academic/08), «правилно-ориентированное» (components/05), «горяней» (components/04), «Кодекс Алиментариус (ФАТ/ВОЗ)» вместо ФАО (программа разборов). Бренд пишется по-разному: lovii / «ловии» (quadrant-диаграмма gap-анализа) / «Тенант УК „Ловии“» (демо-данные).</li>
+<li><strong>Цитата / доказательство:</strong> gap-analysis quadrantChart: «quadrant-2 Цель ловии»</li>
+<li><strong>С чем расходится:</strong> Остальной корпус: «lovii»</li>
+<li><strong>Рекомендация:</strong> Массовая вычитка; закрепить написание бренда «lovii» (кириллические варианты — только в кавычках при первом упоминании).</li>
+</ul>
+<h4 id="F-41--НИЗКО--Источники">F-41 — НИЗКО · Источники<a class="headerlink" href="#F-41--НИЗКО--Источники" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Академические разборы</li>
+<li><strong>Файлы:</strong> academic/04-personal-data-loyalty</li>
+<li><strong>Суть находки:</strong> Источники-заглушки без ссылок и штраф, требующий юрверификации. Список источников разбора 4 содержит названия без ссылок («Изменения 152-ФЗ в 2025…», «Документы по 152-ФЗ в 2026…»), а штраф «обработка без законного основания — до 300 тыс ₽» не подтверждён источником и может смешиваться со штрафом за неуведомление. Для регуляторного чек-листа платформы это риск прямых финансовых последствий.</li>
+<li><strong>Цитата / доказательство:</strong> academic/04, источники: «Изменения 152-ФЗ в 2025 году: …» (без ссылки)</li>
+<li><strong>С чем расходится:</strong> Стандарт корпуса: «352 ссылки на первоисточники» (audit-report)</li>
+<li><strong>Рекомендация:</strong> Заменить заглушки ссылками на первоисточники (152-ФЗ, КоАП 13.11); верифицировать штрафные суммы.</li>
+</ul>
+<h4 id="F-42--НИЗКО--Неточность">F-42 — НИЗКО · Неточность<a class="headerlink" href="#F-42--НИЗКО--Неточность" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Терминология, академия</li>
+<li><strong>Файлы:</strong> terminology-franchise · academic/17</li>
+<li><strong>Суть находки:</strong> Обязательность товарного знака связана с «частью четвёртой ГК» — глава 54 в части второй. Терминологический разбор связывает требование регистрировать товарный знак в договоре коммерческой концессии с «введением части четвёртой ГК» (о ней как об части о результатах интеллектуальной деятельности). Глава 54 «Коммерческая концессия» находится в части второй ГК (ст. 1027–1040); изменение режима товарных знаков — ФЗ-160 от 18.07.2008. Ссылка на часть кодекса неточна.</li>
+<li><strong>Цитата / доказательство:</strong> terminology-franchise: обязательность товарного знака — «с введением части четвёртой ГК»</li>
+<li><strong>С чем расходится:</strong> ГК РФ, глава 54 — часть вторая (ст. 1027); ФЗ-160 от 18.07.2008</li>
+<li><strong>Рекомендация:</strong> Исправить ссылку на часть вторую ГК РФ и указать ФЗ-160.</li>
+</ul>
+<h4 id="F-43--НИЗКО--Формулировка">F-43 — НИЗКО · Формулировка<a class="headerlink" href="#F-43--НИЗКО--Формулировка" title="Permanent link">&para;</a></h4>
+<ul>
+<li><strong>Раздел корпуса:</strong> Глоссарий, компоненты</li>
+<li><strong>Файлы:</strong> glossary · components/01 · components/10</li>
+<li><strong>Суть находки:</strong> Глоссарий сужает обязательность ФФД 1.2 до «маркировки». Глоссарий определяет ФФД 1.2 как «обязательная версия для маркировки», тогда как компоненты 01 и 10 описывают всеобщую обязательность для новых ККТ (независимо от товара) с 2025–2026 гг. Формулировка глоссария может привести к решению «у нас нет маркировки — ФФД 1.2 не нужен».</li>
+<li><strong>Цитата / доказательство:</strong> glossary: «ФФД — Формат фискальных документов; 1.2 — обязательная версия для маркировки»</li>
+<li><strong>С чем расходится:</strong> components/01: «с 01.03.2026 — единственный формат»</li>
+<li><strong>Рекомендация:</strong> Дополнить определение глоссария: «обязательная версия для ККТ, торгующих маркированными товарами; с 01.03.2026 — единственная для новых регистраций».</li>
+</ul>
+<h2 id="Позитивные-проверки">Позитивные проверки<a class="headerlink" href="#Позитивные-проверки" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Область сверки</th>
+<th>Что подтверждено</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Глоссарий и терминология</td>
+<td>Определения фудкоста, ТТК, роялти, паушального взноса, франчайзера/УК согласованы между глоссарием и терминологическими разборами; термин «House Display System» не встречается, «КТТ» не встречается — везде ТТК.</td>
+</tr>
+<tr>
+<td>Экономика франчайзинга</td>
+<td>Роялти 2–6% сходится в разборах 2, 5 и terminology-franchise; роялти «от фискальной выручки» согласовано по всему корпусу (ref-arch, specs, blueprint, демо).</td>
+</tr>
+<tr>
+<td>Трассируемость разрывов</td>
+<td>Все 7 разрывов G1–G7 из gap-analysis подтверждаются цитатами из файлов конкурентов; «экономия 20–35%» подтверждена текстом middleware-delivery.</td>
+</tr>
+<tr>
+<td>Каталог схем</td>
+<td>58 диаграмм = 35+11+6+4+1+1 подтверждены полной инвентаризацией корпуса; «32 страницы» сходится; ~20 проверенных якорей существуют.</td>
+</tr>
+<tr>
+<td>Контракты API</td>
+<td>specs/03 каноничен: 12 REST-ресурсов, ошибки 409/422/423, идемпотентность, каталог событий — без внутренних противоречий.</td>
+</tr>
+<tr>
+<td>Информационные потоки</td>
+<td>saas/01: «семь правил движения информации» — ровно семь; схема «источники → журнал → контуры» согласована с картой app/crm/erp.</td>
+</tr>
+<tr>
+<td>Ссылки</td>
+<td>Битых внутренних ссылок нет: все относительные ссылки корпуса разрешаются на существующие страницы (проверено обходом 70 страниц).</td>
+</tr>
+<tr>
+<td>Арифметика примеров</td>
+<td>Расчёт инфраструктуры (18 000+1 400+500 ≈ 21 000 ₽ = 1,4% выручки) и пересчёт 1С:Фреш (32 200/12 ≈ 2 684 ₽/мес) сходятся.</td>
+</tr>
+<tr>
+<td>Согласованность демо</td>
+<td>10 ролей, дата сборки 10.10.2026, бонусы до 30% чека, авторизация мок-банка 0,7 с, индекс стандарта ≥85% — согласованы между saas/02, saas/03 и демо-данными.</td>
+</tr>
+<tr>
+<td>Право франчайзинга</td>
+<td>64% франчайзеров, ~7,8 тыс. договоров концессии, 14 дней + 23 пункта FDD — согласованы между academic/17 и terminology-franchise.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Методика">Методика<a class="headerlink" href="#Методика" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Этап</th>
+<th>Содержание</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Обход корпуса</td>
+<td>Загрузка 68 страниц по sitemap.xml + 2 страницы сверх карты (демо и saas/03), извлечение чистого текста (~550 тыс. знаков).</td>
+</tr>
+<tr>
+<td>2. Автоматические проверки</td>
+<td>Разрешение 1 200+ внутренних ссылок (относительные пути), якоря, статус-метки и даты, сравнение sitemap с фактическими страницами.</td>
+</tr>
+<tr>
+<td>3. Каноническая база</td>
+<td>Ручное чтение ядра корпуса (сводки, рынок, blueprint, планы, спецификации, глоссарий) с фиксацией эталонных фактов и цифр.</td>
+</tr>
+<tr>
+<td>4. Факт-листы разделов</td>
+<td>Параллельная обработка компонентов (12), академических разборов (17), конкурентов и инфраструктуры (14), терминологии и схем (8+): каждое число, определение и ссылка — в реестр.</td>
+</tr>
+<tr>
+<td>5. Сквозная сверка</td>
+<td>Сопоставление факт-листов между собой и с канонической базой; верификация каждой гипотезы противоречия по исходному тексту; выборочная проверка внешних первоисточников (DINESERV, ФТК, 152-ФЗ).</td>
+</tr>
+<tr>
+<td>Границы аудита</td>
+<td>Проверялась внутренняя согласованность корпуса; внешние первоисточники сверялись выборочно. Живое тестирование демо и конкурентов не входило в объём. Рыночные цифры (оборот, число заведений) на корректность источников не перепроверялись.</td>
+</tr>
+<tr>
+<td>Оценка серьёзности</td>
+<td>КРИТИЧНО — блокирует разработку или искажает юридический смысл; СРЕДНЕ — дезориентирует читателя/инвестора/команду; НИЗКО — формальные дефекты и гигиена.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Файлы-аудита">Файлы аудита<a class="headerlink" href="#Файлы-аудита" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../lovii_crm_audit_register.xlsx">Реестр находок (XLSX)</a></li>
+<li><a href="../lovii_crm_audit_report.docx">Отчёт (DOCX)</a></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  К началу
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.sections", "navigation.top", "navigation.path", "toc.follow", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+        <script src="../../../javascripts/mermaid-theme.js"></script>
+      
+    
+  </body>
+</html>
