@@ -87,7 +87,7 @@
 |---|---|
 | [`research/saas/00-platform-map.md`](research/saas/00-platform-map.md) | Карта-цель: `app.lovii.ru`, `crm.lovii.ru`, `erp.lovii.ru` — три входа одной платформы, роли и принципы единства |
 | [`research/saas/01-information-flow.md`](research/saas/01-information-flow.md) | Семь правил движения информации; схемы «источники → журнал → контуры», путь заказа и путь поставки |
-| [`research/saas/02-demo-cabinet.md`](research/saas/02-demo-cabinet.md) | Спецификация демо-кабинета: 10 ролей (включая собственника бизнеса), 30 экранов полного периметра, отчёты и рекомендации, аудиты, онбординг. **Демо собрано** → [открыть демо-кабинет](https://bestdeejay-design.github.io/lovii-crm/demo/) · живой прототип гостевого контура: [lovii.mobiap.com](http://lovii.mobiap.com) |
+| [`research/saas/02-demo-cabinet.md`](research/saas/02-demo-cabinet.md) | Спецификация демо-кабинета: три кабинета (Витрина / CRM / ERP), 10 ролей по контурам, 30 экранов полного периметра, отчёты и рекомендации, аудиты, онбординг. **Демо собрано** → [открыть демо-кабинет](https://bestdeejay-design.github.io/lovii-crm/demo/) · живой прототип витрины: [lovii.mobiap.com](http://lovii.mobiap.com) |
 | [`research/saas/03-role-scenarios.md`](research/saas/03-role-scenarios.md) | Аудит кабинетов: боли каждой из 10 ролей, полная матрица сценариев с действиями, подсказки «что делать дальше» и прогноз итога, сквозные сценарии через все роли |
 
 ### 3. Аудиты аналогов

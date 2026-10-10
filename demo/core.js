@@ -24,24 +24,26 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
   // ---------- Состояние ----------
+  // Роль принадлежит кабинету и не может выйти за его пределы
   const ROLES = [
-    { id: "guest", title: "Гость", entrance: "app", home: "shop" },
-    { id: "cashier", title: "Кассир", entrance: "crm", home: "queue" },
-    { id: "manager", title: "Управляющий точкой", entrance: "crm", home: "dashboard" },
-    { id: "chef", title: "Повар", entrance: "erp", home: "kds" },
-    { id: "courier", title: "Курьер", entrance: "erp", home: "courier" },
-    { id: "buyer", title: "Закупщик", entrance: "erp", home: "purchasing" },
-    { id: "supplier", title: "Поставщик (Рыбный Дом)", entrance: "erp", home: "supplier" },
-    { id: "franchisee", title: "Франчайзи (Фуд Восток)", entrance: "crm", home: "franchisee" },
-    { id: "uk", title: "Менеджер УК", entrance: "uk", home: "pulse" },
-    { id: "owner", title: "Собственник бизнеса", entrance: "uk", home: "owner" }
+    { id: "guest", title: "Гость", cabinet: "app", home: "shop" },
+    { id: "cashier", title: "Кассир", cabinet: "crm", home: "queue" },
+    { id: "manager", title: "Управляющий точкой", cabinet: "crm", home: "dashboard" },
+    { id: "franchisee", title: "Франчайзи (Фуд Восток)", cabinet: "crm", home: "franchisee" },
+    { id: "chef", title: "Повар", cabinet: "erp", home: "kds" },
+    { id: "buyer", title: "Закупщик", cabinet: "erp", home: "purchasing" },
+    { id: "courier", title: "Курьер", cabinet: "erp", home: "courier" },
+    { id: "supplier", title: "Поставщик (Рыбный Дом)", cabinet: "erp", home: "supplier" },
+    { id: "uk", title: "Менеджер УК", cabinet: "erp", home: "pulse" },
+    { id: "owner", title: "Собственник бизнеса", cabinet: "erp", home: "owner" }
   ];
   const ENTRANCES = [
-    { id: "app", url: "app.lovii.ru", title: "Гость", home: "shop" },
-    { id: "crm", url: "crm.lovii.ru", title: "CRM", home: "queue" },
-    { id: "erp", url: "erp.lovii.ru", title: "ERP", home: "kds" },
-    { id: "uk", url: "erp.lovii.ru/uk", title: "Кабинет УК", home: "pulse" }
+    { id: "app", url: "app.lovii.ru", title: "Витрина", desc: "Гостевой контур", home: "shop", defaultRole: "guest" },
+    { id: "crm", url: "crm.lovii.ru", title: "CRM", desc: "Клиентский контур", home: "queue", defaultRole: "cashier" },
+    { id: "erp", url: "erp.lovii.ru", title: "ERP", desc: "Операционный контур + УК", home: "kds", defaultRole: "chef" }
   ];
+  const cabinetOf = (id) => ENTRANCES.find((e) => e.id === id);
+  const rolesOf = (cab) => ROLES.filter((r) => r.cabinet === cab);
   const state = {
     role: "guest",
     entrance: "app",
@@ -131,24 +133,34 @@
     return { entrance: m[0] || null, screen: m[1] || null };
   }
   function render() {
-    const h = parseHash();
+    let h = parseHash();
     const el = document.getElementById("main");
+    // совместимость со старыми ссылками кабинета УК
+    if (h.entrance === "uk") { nav("erp", h.screen || "pulse"); return; }
     document.querySelectorAll("#entrance-tabs button").forEach((b) =>
       b.classList.toggle("active", b.dataset.e === h.entrance));
     if (!h.entrance) {
+      document.body.className = document.body.classList.contains("dark") ? "dark" : "";
       document.getElementById("addr-label").innerHTML = '<span class="lock">🔒</span> https://<b>lovii.ru</b>/demo';
-      document.querySelectorAll("#sidebar .nav-item").forEach((n) => n.classList.remove("active"));
       drawLanding(el);
       window.scrollTo(0, 0);
       return;
     }
+    if (!cabinetOf(h.entrance)) { nav("app", "shop"); return; }
+    const ent = cabinetOf(h.entrance);
+    // роль живёт в своём кабинете: при входе в чужой — переключаем на роль кабинета
+    if (!roleOf() || roleOf().cabinet !== h.entrance) {
+      state.role = ent.defaultRole;
+      const sel = document.getElementById("role-select");
+      if (sel) { rebuildRoleSelect(); sel.value = state.role; }
+      emit("ПЛАТФОРМА", "Вход в кабинет «" + ent.title + "» под ролью: " + roleOf().title, "info");
+    }
     state.entrance = h.entrance;
-    const key = h.entrance + "/" + h.screen;
-    const ent = ENTRANCES.find((e) => e.id === h.entrance);
+    document.body.className = (document.body.classList.contains("dark") ? "dark " : "") + "cab-" + h.entrance;
+    const key = h.entrance + "/" + (h.screen || ent.home);
     document.getElementById("addr-label").innerHTML =
       '<span class="lock">🔒</span> https://<b>' + ent.url + '</b>/' + (h.screen || "");
-    document.querySelectorAll("#sidebar .nav-item").forEach((n) =>
-      n.classList.toggle("active", n.dataset.s === h.screen));
+    renderSidebar(h.screen);
     el.innerHTML = "";
     if (screens[key]) screens[key](el);
     else el.innerHTML = '<div class="card"><h2>Экран «' + esc(h.screen || "") + '» в очереди сборки</h2><p class="muted">Демо собирается поэтапно — этот экран появится в следующей итерации.</p></div>';
@@ -158,49 +170,52 @@
 
   function drawLanding(el) {
     renderSidebarLanding();
-    const intro = {
+    const roleIntro = {
       guest: "Закажите и оплатите: банк → касса → ОФД → кухня → курьер → отзыв.",
       cashier: "Откройте смену, пробейте чек, оформите возврат, закройте смену.",
       manager: "Дашборд, отзывы, задачи и смены, стоп-лист и кампании точки.",
-      chef: "Тикеты с таймерами: закройте тикет — спишутся ингредиенты по ТТК.",
-      courier: "Заберите заказ и доставьте с фото — гость получит статус.",
-      buyer: "Автозаказ, слепая инвентаризация, взаиморасчёты и контроль фудкоста.",
-      supplier: "Ваш прайс, его конкурентность и заявки от точек сети.",
       franchisee: "Свои точки по договору: выручка, роялти, заявки в УК, стандарты.",
+      chef: "Тикеты с таймерами: закройте тикет — спишутся ингредиенты по ТТК.",
+      buyer: "Автозаказ, слепая инвентаризация, взаиморасчёты и контроль фудкоста.",
+      courier: "Заберите заказ и доставьте с фото — гость получит статус.",
+      supplier: "Ваш прайс, его конкурентность и заявки от точек сети.",
       uk: "Пульс сети, заявки точек с SLA, аудиты, рекомендации, роялти.",
       owner: "Живые показатели, причины, песочница решений и шаги дня."
     };
-    const roleCards = ROLES.map((r) => {
-      const g = window.LOVII.guide ? window.LOVII.guide.GUIDES[r.id] : null;
-      return '<div class="card role-card"><div class="rowline"><span class="rc-emoji">' + (g ? g.emoji : "▸") +
-        "</span><span class='spacer'></span><span class='badge brand'>" + ENTRANCES.find((e) => e.id === r.entrance).url + "</span></div>" +
-        "<h3 style='margin-top:6px'>" + r.title + "</h3>" +
-        '<div class="rc-sub">' + intro[r.id] + "</div>" +
-        '<div class="rowline"><button class="btn small primary" data-role="' + r.id + '">Войти в роль</button>' +
-        '<button class="btn small" data-guide-role="' + r.id + '">Сценарий</button></div></div>';
+    const cabCards = ENTRANCES.map((e) => {
+      const rs = rolesOf(e.id);
+      return '<div class="card entr-card cab-card cab-card-' + e.id + '"><h3>' + e.title + "</h3>" +
+        '<div class="url">' + e.url + "</div>" +
+        '<p class="small muted">' + e.desc + " · ролей: " + rs.length + "</p>" +
+        rs.map((r) =>
+          '<div class="rowline" style="border-top:1px dashed var(--line);padding-top:8px;margin-top:8px;gap:8px">' +
+          '<div style="flex:1"><b>' + r.title + '</b><div class="small muted">' + roleIntro[r.id] + "</div></div>" +
+          '<button class="btn small primary" data-role="' + r.id + '">Войти</button>' +
+          '<button class="btn small" data-guide-role="' + r.id + '">Сценарий</button></div>').join("") +
+        "</div>";
     }).join("");
     el.innerHTML =
       '<div class="landing-hero"><div class="big">lovii<span>·</span>demo</div>' +
-      '<p class="muted" style="max-width:700px;margin:10px auto">Это <b>полный интерактив</b>, а не макеты: все данные — вымышленный, но согласованный периметр сети (УК, 2 франчайзи, 4 точки, 5 поставщиков, 2 000 гостей), и каждое ваше действие меняет состояние платформы и пишется в общий журнал событий. Выберите роль — и пройдите свой рабочий день.</p></div>' +
+      '<p class="muted" style="max-width:720px;margin:10px auto">Одна платформа — <b>три кабинета</b>: витрина, CRM и ERP. Это полный интерактив: согласованный периметр сети (УК, 2 франчайзи, 4 точки, 5 поставщиков, 2 000 гостей), каждое действие меняет состояние и пишется в общий журнал. Выберите кабинет и роль — роли ограничены своим кабинетом, а весь периметр виден через переключение.</p></div>' +
       '<div class="card"><h3>Как пользоваться демо</h3><div class="steps-how">' +
-      "<div><b>Выберите роль</b> — внизу или переключателем в шапке. Баннер сверху каждого экрана напомнит, кто вы и что делать дальше.</div>" +
-      "<div><b>Идите по сценарию</b> — кнопка «🧭 Сценарий роли» ведёт по шагам; каждый шаг кликабелен и открывает нужный экран.</div>" +
-      "<div><b>Смотрите журнал</b> — «⚡ События» в шапке показывает, как ваше действие разлетается по системе: кухня, склад, ОФД, УК.</div>" +
+      "<div><b>Выберите кабинет и роль</b> — карточки ниже или переключатели в шапке. Роли каждого кабинета — свои; баннер на экране напомнит, кто вы и что дальше.</div>" +
+      "<div><b>Идите по сценарию</b> — кнопка «🧭 Сценарий роли» ведёт по шагам с прогнозом итога; каждый шаг кликабелен.</div>" +
+      "<div><b>Смотрите журнал</b> — «⚡ События» в шапке показывает, как действие разлетается по системе: кухня, склад, ОФД, УК.</div>" +
       "</div>" +
       '<div class="rowline"><button class="btn" id="land-events">⚡ Журнал событий</button>' +
-      '<a class="btn" href="http://lovii.mobiap.com" target="_blank" rel="noopener">🍣 Живой прототип гостевого контура — lovii.mobiap.com</a>' +
+      '<a class="btn" href="http://lovii.mobiap.com" target="_blank" rel="noopener">🍣 Живой прототип витрины — lovii.mobiap.com</a>' +
       '<a class="btn" href="../research/saas/00-platform-map/">📚 Схема-цель платформы</a>' +
-      '<a class="btn" href="../research/saas/02-demo-cabinet/">🎭 Спецификация демо</a></div></div>' +
-      "<h2 class='mt2'>10 ролей — 10 рабочих мест одной платформы</h2>" +
-      '<div class="grid cols-3">' + roleCards + "</div>";
+      '<a class="btn" href="../research/saas/03-role-scenarios/">🎯 Сценарии ролей и боли</a></div></div>' +
+      "<h2 class='mt2'>Три кабинета — свои роли в каждом</h2>" +
+      '<div class="grid cols-3">' + cabCards + "</div>";
     el.querySelectorAll("[data-role]").forEach((b) =>
       b.addEventListener("click", () => {
         const r = ROLES.find((x) => x.id === b.dataset.role);
         state.role = r.id;
-        const sel = document.getElementById("role-select");
-        if (sel) sel.value = r.id;
+        rebuildRoleSelect();
+        document.getElementById("role-select").value = r.id;
         emit("ПЛАТФОРМА", "Вход в демо под ролью: " + r.title, "info");
-        nav(r.entrance, r.home);
+        nav(r.cabinet, r.home);
         if (window.LOVII.guide) window.LOVII.guide.openGuide(r.id);
       }));
     el.querySelectorAll("[data-guide-role]").forEach((b) =>
@@ -216,13 +231,10 @@
 
   function renderSidebarLanding() {
     document.getElementById("sidebar").innerHTML =
-      '<div class="nav-section">Входы платформы</div>' +
-      ENTRANCES.map((e) => '<a class="nav-item" href="#/' + e.id + "/" + e.home + '"><span>▸</span><span>' + e.title + "</span></a>").join("") +
-      '<div class="nav-section">Документация</div>' +
-      '<a class="nav-item" href="../research/saas/00-platform-map/"><span>🗺</span><span>Карта платформы</span></a>' +
-      '<a class="nav-item" href="../research/saas/01-information-flow/"><span>🔀</span><span>Движение информации</span></a>' +
-      '<a class="nav-item" href="../research/saas/02-demo-cabinet/"><span>🎭</span><span>Спецификация демо</span></a>' +
-      '<a class="nav-item" href="../research/diagram-catalog/"><span>📐</span><span>Каталог схем</span></a>';
+      '<div class="nav-section">Кабинеты платформы</div>' +
+      ENTRANCES.map((e) => '<a class="nav-item" href="#/' + e.id + "/" + e.home + '"><span>▸</span><span>' + e.title + " · " + e.url + "</span></a>").join("") +
+      '<div class="nav-section">О демо</div>' +
+      '<div class="small muted" style="padding:6px 12px">Роли ограничены своим кабинетом. Все взаимодействия видны через переключение кабинетов и ролей в шапке.</div>';
   }
   window.addEventListener("hashchange", render);
 
@@ -306,63 +318,89 @@
       "</span>" + esc(e.text) + "</div>").join("");
   }
 
-  // ---------- Сайдбары входов ----------
+  // ---------- Меню кабинетов (группы экранов внутри каждого кабинета) ----------
   const NAV = {
     app: [
-      { s: "shop", i: "🍣", t: "Витрина и заказ" },
-      { s: "myorders", i: "📦", t: "Мои заказы" },
-      { s: "profile", i: "👤", t: "Профиль и бонусы" }
+      { sec: "Гостевой контур", items: [
+        { s: "shop", i: "🍣", t: "Витрина и заказ" },
+        { s: "myorders", i: "📦", t: "Мои заказы" },
+        { s: "profile", i: "👤", t: "Профиль и бонусы" }
+      ] }
     ],
     crm: [
-      { s: "queue", i: "🧾", t: "Очередь заказов" },
-      { s: "dashboard", i: "📊", t: "Дашборд точки" },
-      { s: "guests", i: "👥", t: "Гости и сегменты" },
-      { s: "campaigns", i: "🎯", t: "Кампании" },
-      { s: "reviews", i: "⭐", t: "Отзывы" },
-      { s: "tasks", i: "✅", t: "Задачи точки" },
-      { s: "schedule", i: "🗓", t: "Планирование смен" },
-      { s: "stoplist", i: "🚫", t: "Стоп-лист" },
-      { s: "shift", i: "💰", t: "Смена и чеки" },
-      { s: "franchisee", i: "🤝", t: "Кабинет франчайзи" }
+      { sec: "Заказы и гости", items: [
+        { s: "queue", i: "🧾", t: "Очередь заказов" },
+        { s: "guests", i: "👥", t: "Гости и сегменты" },
+        { s: "campaigns", i: "🎯", t: "Кампании" },
+        { s: "reviews", i: "⭐", t: "Отзывы" }
+      ] },
+      { sec: "Управление точкой", items: [
+        { s: "dashboard", i: "📊", t: "Дашборд точки" },
+        { s: "tasks", i: "✅", t: "Задачи точки" },
+        { s: "schedule", i: "🗓", t: "Планирование смен" },
+        { s: "stoplist", i: "🚫", t: "Стоп-лист" },
+        { s: "shift", i: "💰", t: "Смена и чеки" }
+      ] },
+      { sec: "Франчайзи", items: [
+        { s: "franchisee", i: "🤝", t: "Кабинет франчайзи" }
+      ] }
     ],
     erp: [
-      { s: "kds", i: "🍳", t: "Кухня (KDS)" },
-      { s: "warehouse", i: "📦", t: "Склад и партии" },
-      { s: "inventory", i: "🔍", t: "Инвентаризация" },
-      { s: "production", i: "🏗", t: "Производство" },
-      { s: "purchasing", i: "🛒", t: "Закупки" },
-      { s: "foodcost", i: "🧮", t: "Фудкост" },
-      { s: "settlements", i: "💼", t: "Взаиморасчёты" },
-      { s: "delivery", i: "🛵", t: "Доставка" },
-      { s: "courier", i: "🏃", t: "Мои доставки" },
-      { s: "supplier", i: "🏭", t: "Портал поставщика" }
-    ],
-    uk: [
-      { s: "owner", i: "👑", t: "Собственник" },
-      { s: "pulse", i: "🌐", t: "Пульс сети" },
-      { s: "royalty", i: "💳", t: "Роялти" },
-      { s: "requests", i: "📨", t: "Заявки точек" },
-      { s: "audits", i: "📋", t: "Аудиты и стандарты" },
-      { s: "recs", i: "💡", t: "Рекомендации" },
-      { s: "templates", i: "🧩", t: "Шаблоны точек" }
+      { sec: "Кухня и склад", items: [
+        { s: "kds", i: "🍳", t: "Кухня (KDS)" },
+        { s: "production", i: "🏗", t: "Производство" },
+        { s: "warehouse", i: "📦", t: "Склад и партии" },
+        { s: "inventory", i: "🔍", t: "Инвентаризация" }
+      ] },
+      { sec: "Закупки и экономика", items: [
+        { s: "purchasing", i: "🛒", t: "Закупки" },
+        { s: "foodcost", i: "🧮", t: "Фудкост" },
+        { s: "settlements", i: "💼", t: "Взаиморасчёты" }
+      ] },
+      { sec: "Доставка", items: [
+        { s: "delivery", i: "🛵", t: "Диспетчеризация" },
+        { s: "courier", i: "🏃", t: "Мои доставки" }
+      ] },
+      { sec: "Партнёры", items: [
+        { s: "supplier", i: "🏭", t: "Портал поставщика" }
+      ] },
+      { sec: "Управляющая компания", items: [
+        { s: "owner", i: "👑", t: "Собственник" },
+        { s: "pulse", i: "🌐", t: "Пульс сети" },
+        { s: "royalty", i: "💳", t: "Роялти" },
+        { s: "requests", i: "📨", t: "Заявки точек" },
+        { s: "audits", i: "📋", t: "Аудиты и стандарты" },
+        { s: "recs", i: "💡", t: "Рекомендации" },
+        { s: "templates", i: "🧩", t: "Шаблоны точек" }
+      ] }
     ]
   };
 
   // ---------- Каркас ----------
+  // Пересобрать селектор ролей под текущий кабинет (роли ограничены кабинетом)
+  function rebuildRoleSelect() {
+    const sel = document.getElementById("role-select");
+    if (!sel) return;
+    const cab = roleOf().cabinet;
+    const ent = cabinetOf(cab);
+    sel.innerHTML = '<optgroup label="' + ent.title + " · " + ent.url + '">' +
+      rolesOf(cab).map((r) => '<option value="' + r.id + '">' + r.title + "</option>").join("") + "</optgroup>";
+  }
+
   function boot() {
     const top = document.getElementById("topbar");
     top.innerHTML =
       '<div class="logo">lovii<span>·</span>demo</div>' +
       '<div id="entrance-tabs">' + ENTRANCES.map((e) =>
-        '<button data-e="' + e.id + '">' + e.title + "</button>").join("") + "</div>" +
+        '<button data-e="' + e.id + '" class="tab-' + e.id + '" title="' + e.url + ' — ' + e.desc + '"><span class="cab-dot"></span>' + e.title + "</button>").join("") + "</div>" +
       '<div class="addr" id="addr-label"></div>' +
       '<div class="grow"></div>' +
-      '<select id="role-select" title="Роль">' +
-      ROLES.map((r) => '<option value="' + r.id + '">' + r.title + "</option>").join("") + "</select>" +
+      '<select id="role-select" title="Роль в кабинете"></select>' +
       '<button class="btn small" id="guide-btn" title="Сценарий текущей роли">🧭 Гид</button>' +
       '<button class="btn small" id="ev-btn" title="Журнал событий платформы">⚡ События</button>' +
       '<button class="btn small" id="theme-btn" title="Тема">🌓</button>' +
       '<a class="btn small" href="../index.html" title="Документация">📚 Документы</a>';
+    rebuildRoleSelect();
 
     document.getElementById("layout").innerHTML =
       '<nav id="sidebar"></nav><main id="main"></main>';
@@ -373,10 +411,12 @@
     const sel = document.getElementById("role-select");
     sel.value = state.role;
     sel.addEventListener("change", () => {
-      state.role = sel.value;
+      const id = sel.value;
+      if (!ROLES.find((r) => r.id === id)) { sel.value = state.role; return; } // защита от пустых/чужих значений
+      state.role = id;
       const r = roleOf();
-      emit("ПЛАТФОРМА", "Вход в демо под ролью: " + r.title, "info");
-      nav(r.entrance, r.home);
+      emit("ПЛАТФОРМА", "Вход в демо под ролью: " + r.title + " (кабинет " + cabinetOf(r.cabinet).title + ")", "info");
+      nav(r.cabinet, r.home); // роль ведёт в свой кабинет
     });
 
     document.getElementById("ev-btn").addEventListener("click", () => {
@@ -428,24 +468,38 @@
     }, 25000);
   }
 
-  function renderSidebar() {
-    const items = NAV[state.entrance] || [];
-    document.getElementById("sidebar").innerHTML =
-      '<div class="nav-section">' + (ENTRANCES.find((e) => e.id === state.entrance).title) + " · " +
-      DS.locations.find((l) => l.id === state.loc).name + "</div>" +
-      items.map((n) => '<a class="nav-item" data-s="' + n.s + '" href="#/' + state.entrance + "/" + n.s + '">' +
-        '<span>' + n.i + "</span><span>" + n.t + "</span></a>").join("") +
-      '<div class="nav-section">Контекст</div>' +
-      '<select id="loc-select" style="width:100%;margin:0 2px">' +
-      DS.locations.map((l) => '<option value="' + l.id + '"' + (l.id === state.loc ? " selected" : "") + ">" + l.name + "</option>").join("") +
-      "</select>";
+  function renderSidebar(activeScreen) {
+    const groups = NAV[state.entrance] || [];
+    const ent = cabinetOf(state.entrance);
+    if (!activeScreen) activeScreen = parseHash().screen;
+    let html = '<div class="cab-head">' + ent.title + '<div class="small muted">' + ent.url + "</div></div>";
+    groups.forEach((g) => {
+      if (g.sec) html += '<div class="nav-section">' + g.sec + "</div>";
+      html += g.items.map((n) => '<a class="nav-item' + (n.s === activeScreen ? " active" : "") + '" data-s="' + n.s + '" href="#/' + state.entrance + "/" + n.s + '">' +
+        '<span>' + n.i + "</span><span>" + n.t + "</span></a>").join("");
+    });
+    // контекст: у витрины его нет; поставщик видит свою компанию; остальные — точку
+    if (state.entrance !== "app") {
+      html += '<div class="nav-section">Контекст</div>';
+      if (state.role === "supplier") {
+        const s = DS.suppliers.find((x) => x.id === state.supplier);
+        html += '<div class="small muted" style="padding:6px 12px">🏭 ' + s.name + " · " + s.cat + "</div>";
+      } else if (state.role === "uk" || state.role === "owner") {
+        html += '<div class="small muted" style="padding:6px 12px">🏢 УК «Ловии» · сеть из ' + (DS.locations.length - 1) + " точек</div>";
+      } else {
+        html += '<select id="loc-select" style="width:100%;margin:0 2px">' +
+          DS.locations.map((l) => '<option value="' + l.id + '"' + (l.id === state.loc ? " selected" : "") + ">" + l.name + "</option>").join("") +
+          "</select>";
+      }
+    }
+    document.getElementById("sidebar").innerHTML = html;
     const ls = document.getElementById("loc-select");
     if (ls) ls.addEventListener("change", () => { state.loc = ls.value; render(); });
   }
 
   window.LOVII = {
     state, fmt, esc, route, nav, render, renderSidebar, UI, toast, emit,
-    MockBank, MockKKT, MockOFD, ROLES, ENTRANCES, roleOf
+    MockBank, MockKKT, MockOFD, ROLES, ENTRANCES, roleOf, rolesOf, cabinetOf
   };
   document.addEventListener("DOMContentLoaded", boot);
 })();

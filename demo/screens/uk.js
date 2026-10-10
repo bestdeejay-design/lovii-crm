@@ -15,7 +15,7 @@
 
   // ---------- Собственник ----------
   let ownerTimer = null;
-  route("uk/owner", (el) => {
+  route("erp/owner", (el) => {
     const shops = DS.locations.filter((l) => l.type !== "Производство");
     const rev28 = shops.reduce((s, l) => s + DS.dailyByLoc[l.id].slice(-28).reduce((a, d) => a + d.revenue, 0), 0);
     const revM = Math.round(rev28 / 28 * 30); // месячная проекция
@@ -49,7 +49,7 @@
       "</div>" +
       '<div class="card mt2"><h3>✅ Ваши решения на сегодня</h3><p class="small muted">Одобренное решение мгновенно становится задачей исполнителю (УК, точка, поставщик) и фиксируется в журнале.</p><div id="owner-decisions"></div></div>' +
       '<div class="card mt2"><h3>Куда смотреть дальше</h3><div class="rowline">' +
-      '<a class="btn" href="#/uk/recs">💡 Все рекомендации по сети</a><a class="btn" href="#/uk/pulse">🌐 Пульс сети</a><a class="btn" href="#/uk/audits">📋 Аудиты</a></div></div>';
+      '<a class="btn" href="#/erp/recs">💡 Все рекомендации по сети</a><a class="btn" href="#/erp/pulse">🌐 Пульс сети</a><a class="btn" href="#/erp/audits">📋 Аудиты</a></div></div>';
 
     function drawKpis() {
       document.getElementById("owner-kpis").innerHTML =
@@ -161,7 +161,7 @@
   });
 
   // ---------- Пульс сети ----------
-  route("uk/pulse", (el) => {
+  route("erp/pulse", (el) => {
     const rev = DS.locations.filter((l) => l.type !== "Производство")
       .map((l) => ({ l, rev: DS.dailyByLoc[l.id].slice(-28).reduce((s, d) => s + d.revenue, 0) }));
     const totalRev = rev.reduce((s, x) => s + x.rev, 0);
@@ -196,7 +196,7 @@
   });
 
   // ---------- Роялти ----------
-  route("uk/royalty", (el) => {
+  route("erp/royalty", (el) => {
     el.innerHTML =
       "<h1>💳 Роялти — автоматический расчёт</h1>" +
       '<p class="muted">База расчёта — фискальная выручка из ОФД: юридически достоверный источник, без участия бухгалтера.</p>' +
@@ -224,7 +224,7 @@
   });
 
   // ---------- Заявки точек и франчайзи ----------
-  route("uk/requests", (el) => {
+  route("erp/requests", (el) => {
     el.innerHTML =
       "<h1>📨 Заявки точек и франчайзи</h1>" +
       '<p class="muted">Оборудование, маркетинг, обучение, ИТ. У каждой заявки — таймер SLA; просрочки видны собственнику в пульсе.</p>' +
@@ -275,7 +275,7 @@
   });
 
   // ---------- Аудиты ----------
-  route("uk/audits", (el) => {
+  route("erp/audits", (el) => {
     el.innerHTML =
       "<h1>📋 Аудиты и стандарты</h1>" +
       '<p class="muted">Чек-листы с фотофиксацией; нарушение → автозадача с дедлайном; индекс стандарта — в пульс сети.</p>' +
@@ -312,7 +312,7 @@
           (r.photo ? ' <span class="tag">📷 фото</span>' : "") +
           (!r.ok ? ' <button class="btn small warn" data-task="' + esc(r.item) + '">Задача на устранение</button>' : "") +
           "</div>").join("") + "</div>";
-      document.getElementById("aud-close").addEventListener("click", () => nav("uk", "audits"));
+      document.getElementById("aud-close").addEventListener("click", () => nav("erp", "audits"));
       box.querySelectorAll("[data-task]").forEach((tb) =>
         tb.addEventListener("click", () => {
           emit("ПЛАТФОРМА", "Аудит: задача на устранение «" + tb.dataset.task + "» назначена управляющему, дедлайн 48 ч", "warn");
@@ -324,7 +324,7 @@
   });
 
   // ---------- Рекомендации ----------
-  route("uk/recs", (el) => {
+  route("erp/recs", (el) => {
     const recs = [
       { sev: "err", t: "«Кировский»: фудкост 31,8% (+3,8 п.п. к цели)", d: "Рост цен «Рыбный Дом» на 12% + недостача 2,4 кг сыра по последней инвентаризации.", a: "Назначить слепую инвентаризацию; тендер по лососю среди 2 альтернативных поставщиков" },
       { sev: "err", t: "ККТ 00004881: чеки не уходят в ОФД", d: "34 минуты без передачи фискальных документов — риск штрафов по 54-ФЗ.", a: "Проверить связь на точке; при недоступности — выезд техника сегодня" },
@@ -359,7 +359,7 @@
   });
 
   // ---------- Шаблоны точек ----------
-  route("uk/templates", (el) => {
+  route("erp/templates", (el) => {
     el.innerHTML =
       "<h1>🧩 Шаблоны точек</h1>" +
       '<p class="muted">Версионируемый шаблон: меню, ТТК, цены, права, чек-листы, оборудование. Клонирование новой точки — часы, а не недели.</p>' +
