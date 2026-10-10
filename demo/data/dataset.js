@@ -573,7 +573,105 @@
     avgDays: +(1.2 + R3() * 1.6).toFixed(1)
   }));
 
-  // 8) Фудкост сети по неделям (8 недель, тренд вверх из-за роста цен)
+  // =====================================================================
+  // Обогащение кабинета УК: бенчмарки, роялти, SLA, аудиты (PRNG R4).
+  // =====================================================================
+  const R4 = rng(271828);
+  const ri4 = (a, b) => a + Math.floor(R4() * (b - a + 1));
+
+  const shopIds4 = locations.filter((l) => l.type !== "Производство").map((l) => l.id);
+
+  // 1) Бенчмарки точек: выручка/час, ФОТ, доля доставки, средний чек
+  const locBench = {};
+  shopIds4.forEach((id) => {
+    const rev28 = dailyByLoc[id].slice(-28).reduce((s, d) => s + d.revenue, 0);
+    const bad = id === "l3";
+    locBench[id] = {
+      revPerHour: Math.round(rev28 / (28 * 14)), // торговое окно ~14 ч
+      labor: +(27 + R4() * 6 + (bad ? 2.5 : 0)).toFixed(1),
+      deliveryShare: ri4(38, 56),
+      avgCheck: ri4(1250, 1680)
+    };
+  });
+
+  // 2) Динамика индекса стандарта: 8 недель, сеть + каждая точка
+  const stdWeeks = Array.from({ length: 8 }, (_, i) => {
+    const ts = NOW.getTime() - (7 - i) * 7 * DAY;
+    const base = 82 + i * 0.9 + (R4() * 2 - 1); // сеть растёт после работы УК
+    const per = {};
+    shopIds4.forEach((id) => { per[id] = Math.round(Math.min(99, base + (id === "l3" ? -7 : id === "l1" ? 3 : R4() * 4 - 2))); });
+    return { ts, net: Math.round(base), per };
+  });
+
+  // 3) Категории нарушений по последним аудитам (для разбора причин)
+  const violCats = [
+    { cat: "Кухня и ТТК", n: ri4(6, 10) },
+    { cat: "Касса и чеки", n: ri4(3, 6) },
+    { cat: "Санитария", n: ri4(4, 8) },
+    { cat: "Маркировка и сроки", n: ri4(5, 9) },
+    { cat: "Стандарты зала", n: ri4(2, 5) }
+  ].sort((a, b) => b.n - a.n);
+
+  // 4) Роялти: 8 недель начисления/собираемости + старение долга
+  const royaltyWeeks = Array.from({ length: 8 }, (_, i) => {
+    const accrued = ri4(240, 320) * 1000;
+    return {
+      ts: NOW.getTime() - (7 - i) * 7 * DAY, accrued,
+      paid: Math.round(accrued * (0.82 + i * 0.015 + R4() * 0.04)),
+      share: 0
+    };
+  });
+  royaltyWeeks.forEach((w) => { w.share = Math.round(w.paid / w.accrued * 100); });
+  const debtAging = [
+    { tenant: "fr2", cur: 0, d14: ri4(40, 70) * 1000, d30: ri4(20, 40) * 1000, d60: ri4(10, 25) * 1000 },
+    { tenant: "fr1", cur: ri4(20, 38) * 1000, d14: 0, d30: 0, d60: 0 }
+  ];
+
+  // 5) Заявки: статистика по темам и недели решения (для SLA-аналитики)
+  const reqTopics = ["Оборудование", "Маркетинг", "Обучение", "ИТ", "Снабжение"].map((t) => ({
+    t, n: ri4(4, 14), avgH: ri4(6, 30), slaOk: ri4(72, 98)
+  }));
+  const reqWeeks = Array.from({ length: 8 }, (_, i) => ({
+    ts: NOW.getTime() - (7 - i) * 7 * DAY,
+    closed: ri4(5, 13),
+    avgH: +(10 + R4() * 9 - i * 0.5).toFixed(1)
+  }));
+
+  // 6) Сравнение франчайзи (агрегаты для бенчмаркинга УК)
+  const franchBench = [
+    { tenant: "fr1", name: "ООО «Фуд Восток»", locs: ["l1", "l2"] },
+    { tenant: "fr2", name: "ИП Смирнова А.В.", locs: ["l3", "l4"] }
+  ].map((f) => {
+    const rev = f.locs.reduce((s, id) => s + dailyByLoc[id].slice(-28).reduce((a, d) => a + d.revenue, 0), 0);
+    return {
+      tenant: f.tenant, name: f.name, locs: f.locs.length, rev,
+      std: Math.round(f.locs.reduce((s, id) => s + stdWeeks[7].per[id], 0) / f.locs.length),
+      nps: Math.round(f.locs.reduce((s, id) => {
+        const r = reviews.filter((x) => x.loc === id);
+        return s + Math.round((r.filter((x) => x.rating >= 4).length - r.filter((x) => x.rating <= 2).length) / (r.length || 1) * 100);
+      }, 0) / f.locs.length),
+      debt: f.tenant === "fr2" ? ri4(60, 110) * 1000 : 0
+    };
+  });
+
+  // 7) Журнал решений собственника (история недели)
+  const ownerDecisions = [
+    { ts: NOW.getTime() - 0.2 * DAY, text: "Тендер по лососю: запрос цен у двух альтернативных поставщиков", st: "В работе", who: "Закупщик", eff: "экономия ~86 тыс ₽/мес" },
+    { ts: NOW.getTime() - 0.8 * DAY, text: "Усиление вечернего слота вторым поваром («Северный»)", st: "Выполнено", who: "Управляющий", eff: "просрочка тикетов 11% → цель ≤ 6%" },
+    { ts: NOW.getTime() - 1.4 * DAY, text: "Выезд техника к ККТ 00004881 («Кировский»)", st: "Выполнено", who: "Сервис", eff: "передача в ОФД восстановлена" },
+    { ts: NOW.getTime() - 2.1 * DAY, text: "Кампания реактивации «Спящих» (312 гостей)", st: "В работе", who: "Маркетинг", eff: "прогноз +7% заказов" },
+    { ts: NOW.getTime() - 3.3 * DAY, text: "Переговоры по задолженности роялти: график платежей", st: "В работе", who: "Менеджер УК", eff: "цель: погашение за 2 недели" },
+    { ts: NOW.getTime() - 4.6 * DAY, text: "Стоп-позиция «недельное меню» из партий с истекающим сроком", st: "Выполнено", who: "Точки сети", eff: "списания −38% за неделю" }
+  ];
+
+  // 8) История запусков точек из шаблона
+  const launchHistory = [
+    { name: "Ловии Суши · Аэропорт", fr: "ИП Смирнова А.В.", days: 2, h: "онбординг 12 мин", ts: NOW.getTime() - 2 * DAY },
+    { name: "Ловии Суши · Кировский", fr: "ИП Смирнова А.В.", days: 3, h: "онбординг 18 мин", ts: NOW.getTime() - 41 * DAY },
+    { name: "Ловии Суши · Северный", fr: "ООО «Фуд Восток»", days: 2, h: "онбординг 15 мин", ts: NOW.getTime() - 96 * DAY }
+  ];
+
+  // 9) Фудкост сети по неделям (8 недель, тренд вверх из-за роста цен)
   const foodcostWeeks = Array.from({ length: 8 }, (_, i) => ({
     ts: NOW.getTime() - (7 - i) * 7 * DAY,
     pct: +(27.2 + i * 0.22 + (R2() * 0.8 - 0.4)).toFixed(1)
@@ -589,6 +687,8 @@
     supplierKpi, deliveryZones, dishAnalytics, foodcostWeeks,
     guestExtras, ratingWeekly, campaignHistory, channelKpi,
     retentionWeeks, bonusWeeks, taskWeeks,
+    locBench, stdWeeks, violCats, royaltyWeeks, debtAging,
+    reqTopics, reqWeeks, franchBench, ownerDecisions, launchHistory,
     helpers: { pick, ri, chance }
   };
 })();

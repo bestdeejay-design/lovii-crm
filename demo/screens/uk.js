@@ -48,6 +48,17 @@
       '<div id="owner-sandbox"></div><div class="mt" id="sandbox-out"></div></div>' +
       "</div>" +
       '<div class="card mt2"><h3>✅ Ваши решения на сегодня</h3><p class="small muted">Одобренное решение мгновенно становится задачей исполнителю (УК, точка, поставщик) и фиксируется в журнале.</p><div id="owner-decisions"></div></div>' +
+      '<div class="card mt2"><h3>🗂 Журнал решений — последние 5 дней</h3>' +
+      UI.table(
+        [{ k: "d", t: "Когда" }, { k: "t", t: "Решение" }, { k: "w", t: "Исполнитель" }, { k: "e", t: "Эффект" }, { k: "s", t: "Статус" }],
+        DS.ownerDecisions.map((d) => ({
+          cells: {
+            d: fmt.ago(d.ts), t: "<b>" + d.text + "</b>", w: d.who,
+            e: '<span class="small muted">' + d.eff + "</span>",
+            s: UI.badge(d.st, d.st === "Выполнено" ? "ok" : "info")
+          }
+        }))) +
+      '<div class="small muted mt">Каждое одобренное решение становится задачей с исполнителем и попадает в этот журнал — история решений собственника является юридически значимой для сети.</div></div>' +
       '<div class="card mt2"><h3>Куда смотреть дальше</h3><div class="rowline">' +
       '<a class="btn" href="#/erp/recs">💡 Все рекомендации по сети</a><a class="btn" href="#/erp/pulse">🌐 Пульс сети</a><a class="btn" href="#/erp/audits">📋 Аудиты</a></div></div>';
 
@@ -61,8 +72,9 @@
     drawKpis();
 
     // Рычаги влияния
+    const fcL3 = DS.foodcostPct("l3").toFixed(1);
     const levers = [
-      { m: "Фудкост «Кировский»: 33,6%", bad: true, why: "Лосось +12% у «Рыбного Дома» и недостача 2,4 кг сыра по инвентаризации.", act: "Одобрить тендер по лососю + слепая инвентаризация", ev: "Собственник одобрил: тендер по лососю и внеплановая инвентаризация «Кировский» — задачи ушли закупщику и управляющему" },
+      { m: "Фудкост «Кировский»: " + fcL3 + "%", bad: true, why: "Лосось +12% у «Рыбного Дома» и недостача 2,4 кг сыра по инвентаризации.", act: "Одобрить тендер по лососю + слепая инвентаризация", ev: "Собственник одобрил: тендер по лососю и внеплановая инвентаризация «Кировский» — задачи ушли закупщику и управляющему" },
       { m: "Доставка в окно: " + winPct + "%", bad: winPct < 90, why: "Просрочка кухонных тикетов 11% на вечерних пиках 19:00–21:00.", act: "Одобрить второго повара 18:30–21:30 (Северный)", ev: "Собственник одобрил усиление вечернего слота — график передан управляющему" },
       { m: "ККТ 00004881 не передаёт чеки", bad: true, why: "Риск штрафов по 54-ФЗ: 34 минуты без передачи в ОФД.", act: "Вызвать техника сегодня", ev: "Собственник вызвал техника на «Кировский» — заявка в сервис, контроль через 2 часа" },
       { m: "NPS: " + nps, bad: nps < 50, why: "Негатив по скорости доставки и одному сорванному заказу.", act: "Одобрить сервис-рекавери: бонус 300 ₽ за негативный отзыв", ev: "Программа сервис-рекавери одобрена собственником — кампании запущены" },
@@ -176,18 +188,42 @@
       "</div>" +
       '<div class="card mt2"><h3>Выручка точек за 28 дней</h3>' +
       UI.barsH(rev.map((x) => ({ label: x.l.name, v: x.rev, text: fmt.money(x.rev), cls: x.l.id === "l3" ? "warn" : "ok" })), null) + "</div>" +
+      '<div class="grid cols-2 mt2">' +
+      '<div class="card"><h3>Индекс стандарта сети — 8 недель</h3>' +
+      UI.svgBars(DS.stdWeeks.map((w) => ({
+        label: DS.fmtDay(w.ts), v: w.net,
+        title: "Неделя от " + DS.fmtDay(w.ts) + ": сеть " + w.net + "% («Кировский» " + w.per.l3 + "%, «Центральный» " + w.per.l1 + "%)",
+        color: w.net >= 85 ? "#16a34a" : "#d97706"
+      })), { h: 150 }) +
+      '<div class="small muted">Цель ≥ 85%. Рост последних недель — эффект автозадач по нарушениям. Наведите столбец — разбивка по точкам.</div></div>' +
+      '<div class="card"><h3>Бенчмаркинг франчайзи</h3>' +
+      UI.table(
+        [{ k: "n", t: "Партнёр" }, { k: "l", t: "Точек", right: 1 }, { k: "r", t: "Выручка 28 дн", right: 1 }, { k: "s", t: "Стандарт", right: 1 }, { k: "p", t: "NPS", right: 1 }, { k: "d", t: "Долг роялти", right: 1 }],
+        DS.franchBench.map((f) => ({
+          cells: {
+            n: "<b>" + f.name + "</b>", l: f.locs, r: fmt.money(f.rev),
+            s: UI.badge(f.std + "%", f.std >= 85 ? "ok" : "err"),
+            p: f.nps,
+            d: f.debt ? '<b style="color:var(--err)">' + fmt.money(f.debt) + "</b>" : UI.badge("нет", "ok")
+          }
+        }))) +
+      '<div class="small muted mt">Сравнение партнёров на одних данных — основа тарифной политики и планов развития сети.</div></div>' +
+      "</div>" +
       '<div class="card mt2"><h3>Сравнение точек</h3>' +
       UI.table(
-        [{ k: "l", t: "Точка" }, { k: "t", t: "Франчайзи" }, { k: "fc", t: "Фудкост", right: 1 }, { k: "n", t: "NPS", right: 1 }, { k: "s", t: "Стандарт", right: 1 }, { k: "w", t: "Доставка в окно", right: 1 }, { k: "z", t: "Зона" }],
+        [{ k: "l", t: "Точка" }, { k: "t", t: "Франчайзи" }, { k: "rh", t: "Выр./час", right: 1 }, { k: "lb", t: "ФОТ", right: 1 }, { k: "fc", t: "Фудкост", right: 1 }, { k: "n", t: "NPS", right: 1 }, { k: "s", t: "Стандарт", right: 1 }, { k: "w", t: "Доставка в окно", right: 1 }, { k: "z", t: "Зона" }],
         DS.locations.filter((l) => l.type !== "Производство").map((l) => {
           const fc = DS.foodcostPct(l.id);
           const std = stdIndex(l.id);
+          const b = DS.locBench[l.id];
           const win = Math.round(DS.orders.filter((o) => o.loc === l.id && o.delivery && o.inWindow).length / (DS.orders.filter((o) => o.loc === l.id && o.delivery).length || 1) * 100);
           const red = fc > 30 || std < 85;
           return {
             cells: {
-              l: "<b>" + l.name + "</b>",
+              l: "<b>" + l.name + "</b><div class='small muted'>доставка " + b.deliveryShare + "% заказов</div>",
               t: DS.tenants[l.tenant].name,
+              rh: fmt.money(b.revPerHour),
+              lb: b.labor + "%",
               fc: fc + "%", n: nps(l.id), s: std + "%", w: win + "%",
               z: red ? UI.badge("красная", "err") : UI.badge("зелёная", "ok")
             }
@@ -197,13 +233,38 @@
 
   // ---------- Роялти ----------
   route("erp/royalty", (el) => {
+    const lastW = DS.royaltyWeeks[DS.royaltyWeeks.length - 1];
+    const totalDebtAging = DS.debtAging.reduce((s, d) => s + d.cur + d.d14 + d.d30 + d.d60, 0);
     el.innerHTML =
       "<h1>💳 Роялти — автоматический расчёт</h1>" +
-      '<p class="muted">База расчёта — фискальная выручка из ОФД: юридически достоверный источник, без участия бухгалтера.</p>' +
-      '<div class="grid cols-3 mb">' +
+      '<p class="muted">База расчёта — фискальная выручка из ОФД: юридически достоверный источник, без участия бухгалтера. Расчётный период — <b>понедельный</b>, закрытие месяца — до 5-го числа.</p>' +
+      '<div class="grid cols-4 mb">' +
       UI.kpi("Начислено за месяц", fmt.money(DS.royalty.reduce((s, r) => s + r.royalty + r.marketing, 0)), "5% + 2%") +
       UI.kpi("Оплачено", fmt.money(DS.royalty.filter((r) => r.paid).reduce((s, r) => s + r.royalty + r.marketing, 0))) +
       UI.kpi("Просрочено", DS.royalty.filter((r) => !r.paid).length + " точки", "", false) +
+      UI.kpi("Собираемость (неделя)", lastW.share + "%", "цель ≥ 95%", lastW.share >= 95) +
+      "</div>" +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>Собираемость роялти — 8 недель</h3>' +
+      UI.svgBars(DS.royaltyWeeks.map((w) => ({
+        label: DS.fmtDay(w.ts), v: w.share,
+        title: "Неделя от " + DS.fmtDay(w.ts) + ": начислено " + fmt.money(w.accrued) + ", собрано " + fmt.money(w.paid) + " (" + w.share + "%)",
+        color: w.share >= 95 ? "#16a34a" : w.share >= 88 ? "#d97706" : "#dc2626"
+      })), { h: 150 }) +
+      '<div class="small muted">Столбец — процент сбора от начисленного. Наведите — суммы недели.</div></div>' +
+      '<div class="card"><h3>Старение задолженности</h3>' +
+      UI.table(
+        [{ k: "f", t: "Франчайзи" }, { k: "c", t: "Текущий", right: 1 }, { k: "d14", t: "1–14 дн", right: 1 }, { k: "d30", t: "15–30 дн", right: 1 }, { k: "d60", t: "30+ дн", right: 1 }],
+        DS.debtAging.map((d) => ({
+          cells: {
+            f: "<b>" + DS.tenants[d.tenant].name + "</b>",
+            c: d.cur ? fmt.money(d.cur) : "—",
+            d14: d.d14 ? fmt.money(d.d14) : "—",
+            d30: d.d30 ? '<b style="color:var(--warn)">' + fmt.money(d.d30) + "</b>" : "—",
+            d60: d.d60 ? '<b style="color:var(--err)">' + fmt.money(d.d60) + "</b>" : "—"
+          }
+        }))) +
+      '<div class="small muted mt">Всего к взысканию: <b>' + fmt.money(totalDebtAging) + "</b>. Долг старше 30 дней — автоматическая эскалация собственнику и остановка маркетингового фонда партнёра.</div></div>" +
       "</div>" +
       '<div class="card"><h3>Расчёт по точкам</h3>' +
       UI.table(
@@ -225,10 +286,29 @@
 
   // ---------- Заявки точек и франчайзи ----------
   route("erp/requests", (el) => {
+    const avgHNow = DS.reqWeeks[DS.reqWeeks.length - 1].avgH;
     el.innerHTML =
       "<h1>📨 Заявки точек и франчайзи</h1>" +
       '<p class="muted">Оборудование, маркетинг, обучение, ИТ. У каждой заявки — таймер SLA; просрочки видны собственнику в пульсе.</p>' +
       '<div class="grid cols-4 mb" id="req-kpis"></div>' +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>SLA по темам (30 дней)</h3>' +
+      UI.table(
+        [{ k: "t", t: "Тема" }, { k: "n", t: "Заявок", right: 1 }, { k: "a", t: "Ср. время", right: 1 }, { k: "s", t: "SLA соблюдён", right: 1 }],
+        DS.reqTopics.map((t) => ({
+          cells: {
+            t: "<b>" + t.t + "</b>", n: t.n, a: t.avgH + " ч",
+            s: UI.badge(t.slaOk + "%", t.slaOk >= 90 ? "ok" : t.slaOk >= 80 ? "warn" : "err")
+          }
+        }))) + "</div>" +
+      '<div class="card"><h3>Время решения — 8 недель</h3>' +
+      UI.svgBars(DS.reqWeeks.map((r) => ({
+        label: DS.fmtDay(r.ts), v: r.avgH,
+        title: "Неделя от " + DS.fmtDay(r.ts) + ": закрыто " + r.closed + ", среднее время " + r.avgH + " ч",
+        color: r.avgH <= 16 ? "#16a34a" : "#d97706"
+      })), { h: 140 }) +
+      '<div class="small muted">Среднее время решения снижается: автоназначение ответственных и эскалация просрочек. Цель ≤ 24 ч.</div></div>' +
+      "</div>" +
       '<div class="card pad0"><table class="tbl" id="req-tbl"></table></div>';
     function draw() {
       const open = DS.requests.filter((q) => q.status !== "Выполнена");
@@ -238,7 +318,7 @@
         UI.kpi("Открытых заявок", open.length) +
         UI.kpi("Просрочено", overdue.length, "SLA нарушен", overdue.length === 0) +
         UI.kpi("Новых за сутки", DS.requests.filter((q) => DS.NOW - q.ts < DS.DAY).length) +
-        UI.kpi("Среднее время решения", "14 ч", "цель ≤ 24 ч", true);
+        UI.kpi("Среднее время решения", avgHNow + " ч", "цель ≤ 24 ч", avgHNow <= 24);
       document.getElementById("req-tbl").innerHTML =
         "<tr><th>№</th><th>Точка / франчайзи</th><th>Заявка</th><th>SLA</th><th>Статус</th><th></th></tr>" +
         DS.requests.map((q) => {
@@ -284,6 +364,26 @@
         const s = stdIndex(l.id);
         return { label: l.name, v: s, text: s + "%", cls: s < 85 ? "err" : s < 92 ? "warn" : "ok" };
       }), 100) + "</div>" +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>Категории нарушений (последние аудиты)</h3>' +
+      UI.barsH(DS.violCats.map((v) => ({
+        label: v.cat, v: v.n, text: v.n + " наруш.",
+        cls: v.cat === "Кухня и ТТК" || v.cat === "Маркировка и сроки" ? "err" : "warn"
+      })), null) +
+      '<div class="small muted mt">Категория «Кухня и ТТК» связана с фудкостом: каждая недостача по инвентаризации уходит в отклонение точки.</div></div>' +
+      '<div class="card"><h3>Динамика стандарта по точкам (4 недели)</h3>' +
+      UI.table(
+        [{ k: "w", t: "Неделя от" }].concat(DS.locations.filter((l) => l.type !== "Производство").map((l) => ({ k: l.id, t: l.name.split("·")[1].trim(), right: 1 }))),
+        DS.stdWeeks.slice(-4).map((w) => {
+          const cells = { w: DS.fmtDay(w.ts) };
+          DS.locations.filter((l) => l.type !== "Производство").forEach((l) => {
+            const v = w.per[l.id];
+            cells[l.id] = '<span style="color:var(--' + (v >= 85 ? "ok" : "err") + ')"><b>' + v + "%</b></span>";
+          });
+          return { cells };
+        })) +
+      '<div class="small muted mt">«Кировский» стабильно ниже цели — там назначены внеплановые проверки и задачи по ТТК.</div></div>' +
+      "</div>" +
       '<div id="audit-detail"></div>';
     const latest = DS.audits.slice(0, 6);
     document.getElementById("audit-detail").innerHTML =
@@ -325,19 +425,26 @@
 
   // ---------- Рекомендации ----------
   route("erp/recs", (el) => {
+    const fcL3 = DS.foodcostPct("l3").toFixed(1);
     const recs = [
-      { sev: "err", t: "«Кировский»: фудкост 31,8% (+3,8 п.п. к цели)", d: "Рост цен «Рыбный Дом» на 12% + недостача 2,4 кг сыра по последней инвентаризации.", a: "Назначить слепую инвентаризацию; тендер по лососю среди 2 альтернативных поставщиков" },
-      { sev: "err", t: "ККТ 00004881: чеки не уходят в ОФД", d: "34 минуты без передачи фискальных документов — риск штрафов по 54-ФЗ.", a: "Проверить связь на точке; при недоступности — выезд техника сегодня" },
-      { sev: "warn", t: "«Северный»: просрочка кухонных тикетов 11%", d: "Пики 19:00–21:00; нормативы превышаются на горячем цехе.", a: "Вывести второго повара в слот 18:30–21:30; пересмотреть норматив пиццы" },
-      { sev: "warn", t: "Партии с истекающим сроком: 14 позиций по сети", d: "Наибольшее — «Аэропорт»: авокадо и сливочный сыр (2 дня).", a: "Акционная стоп-позиция «недельное меню» + приоритет в заготовки" },
-      { sev: "info", t: "Доля прямых заказов растёт: 34% (+4 п.п. за месяц)", d: "Витрина и приложение обгоняют агрегаторов по марже в 3,1 раза.", a: "Масштабировать промо «бонус за прямой заказ» на все точки" }
+      { sev: "err", t: "«Кировский»: фудкост " + fcL3 + "% (цель ≤ 30%)", d: "Рост цен «Рыбный Дом» на 12% + недостача 2,4 кг сыра по последней инвентаризации.", a: "Назначить слепую инвентаризацию; тендер по лососю среди 2 альтернативных поставщиков", eff: "экономия ~86 тыс ₽/мес" },
+      { sev: "err", t: "ККТ 00004881: чеки не уходят в ОФД", d: "34 минуты без передачи фискальных документов — риск штрафов по 54-ФЗ.", a: "Проверить связь на точке; при недоступности — выезд техника сегодня", eff: "предотвращение штрафа до 100 тыс ₽" },
+      { sev: "warn", t: "«Северный»: просрочка кухонных тикетов 11%", d: "Пики 19:00–21:00; нормативы превышаются на горячем цехе.", a: "Вывести второго повара в слот 18:30–21:30; пересмотреть норматив пиццы", eff: "+4% заказов в пик ≈ 120 тыс ₽/мес" },
+      { sev: "warn", t: "Партии с истекающим сроком: 14 позиций по сети", d: "Наибольшее — «Аэропорт»: авокадо и сливочный сыр (2 дня).", a: "Акционная стоп-позиция «недельное меню» + приоритет в заготовки", eff: "списания −38% ≈ 45 тыс ₽/мес" },
+      { sev: "info", t: "Доля прямых заказов растёт: 34% (+4 п.п. за месяц)", d: "Витрина и приложение обгоняют агрегаторов по марже в 3,1 раза.", a: "Масштабировать промо «бонус за прямой заказ» на все точки", eff: "+2 п.п. прямых ≈ 150 тыс ₽/мес маржи" }
     ];
     el.innerHTML =
       "<h1>💡 Рекомендации по сети</h1>" +
-      '<p class="muted">Правила считаются на витринах журнала событий: фудкост, скорость, сроки, фискальный мониторинг, каналы.</p>' +
+      '<p class="muted">Правила считаются на витринах журнала событий: фудкост, скорость, сроки, фискальный мониторинг, каналы. У каждой рекомендации — оценка эффекта.</p>' +
+      '<div class="grid cols-3 mb">' +
+      UI.kpi("Рекомендаций открыто", recs.length, "по всей сети") +
+      UI.kpi("Потенциал эффекта", "≈ 400 тыс ₽/мес", "сумма оценок", true) +
+      UI.kpi("Внедрено за месяц", "6 из 9", "эффект подтверждён журналом", true) +
+      "</div>" +
       recs.map((r) =>
         '<div class="card mb" style="border-left:4px solid var(--' + (r.sev === "err" ? "err" : r.sev === "warn" ? "warn" : "info") + ')">' +
-        "<b>" + r.t + "</b><div class='small mt'>" + r.d + "</div>" +
+        '<div class="rowline"><b>' + r.t + "</b>" + UI.badge(r.eff, r.sev === "err" ? "err" : r.sev === "warn" ? "warn" : "ok") + "</div>" +
+        "<div class='small mt'>" + r.d + "</div>" +
         '<div class="small mt"><b>Действие:</b> ' + r.a + '</div><div class="rowline mt">' +
         '<button class="btn small primary" data-ok>Взять в работу</button>' +
         (r.sev === "err" ? ' <button class="btn small" data-esc="' + esc(r.t) + '">Эскалировать собственнику</button>' : "") +
@@ -376,7 +483,17 @@
       "<div>📋 Чек-листы: 4 шаблона аудитов, ХАССП-журналы</div>" +
       "<div>🖥 Оборудование: ККТ АТОЛ 30Ф, KDS-планшеты, принтеры этикеток</div></div>" +
       '<div class="rowline mt"><button class="btn primary" id="clone-tpl">Склонировать точку новому франчайзи</button></div>' +
-      '<div id="clone-log" class="mt"></div></div>';
+      '<div id="clone-log" class="mt"></div></div>' +
+      '<div class="card mt2"><h3>Последние запуски из шаблона</h3>' +
+      UI.table(
+        [{ k: "n", t: "Точка" }, { k: "f", t: "Франчайзи" }, { k: "d", t: "Запуск до открытия", right: 1 }, { k: "h", t: "Онбординг" }, { k: "w", t: "Когда" }],
+        DS.launchHistory.map((l) => ({
+          cells: {
+            n: "<b>" + l.name + "</b>", f: l.fr,
+            d: l.days + " дн", h: UI.badge(l.h, "ok"), w: DS.fmtDay(l.ts)
+          }
+        }))) +
+      '<div class="small muted mt">«Запуск до открытия» — календарные дни от подписания договора до первой продажи; онбординг — время клонирования шаблона и настройки (часы, не недели).</div></div>';
     document.getElementById("clone-tpl").addEventListener("click", () => {
       const log = document.getElementById("clone-log");
       log.innerHTML = UI.badge("Клонирование…", "info");
