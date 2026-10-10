@@ -134,16 +134,20 @@
   }
   function render() {
     let h = parseHash();
-    const el = document.getElementById("main");
+    const main = document.getElementById("main");
     // совместимость со старыми ссылками кабинета УК
     if (h.entrance === "uk") { nav("erp", h.screen || "pulse"); return; }
     document.querySelectorAll("#entrance-tabs button").forEach((b) =>
       b.classList.toggle("active", b.dataset.e === h.entrance));
+    const dark = document.body.classList.contains("dark");
     if (!h.entrance) {
-      document.body.className = document.body.classList.contains("dark") ? "dark" : "";
+      // приветственный экран: кабинета ещё нет — бокового меню нет
+      document.body.className = (dark ? "dark " : "") + "landing";
+      shellFor = null;
       document.getElementById("addr-label").innerHTML = '<span class="lock">🔒</span> https://<b>lovii.ru</b>/demo';
-      drawLanding(el);
-      window.scrollTo(0, 0);
+      main.innerHTML = "";
+      drawLanding(main);
+      main.scrollTop = 0;
       return;
     }
     if (!cabinetOf(h.entrance)) { nav("app", "shop"); return; }
@@ -156,20 +160,31 @@
       emit("ПЛАТФОРМА", "Вход в кабинет «" + ent.title + "» под ролью: " + roleOf().title, "info");
     }
     state.entrance = h.entrance;
-    document.body.className = (document.body.classList.contains("dark") ? "dark " : "") + "cab-" + h.entrance;
-    const key = h.entrance + "/" + (h.screen || ent.home);
+    document.body.className = (dark ? "dark " : "") + "cab-" + h.entrance;
+    const screen = h.screen || ent.home;
     document.getElementById("addr-label").innerHTML =
       '<span class="lock">🔒</span> https://<b>' + ent.url + '</b>/' + (h.screen || "");
-    renderSidebar(h.screen);
-    el.innerHTML = "";
-    if (screens[key]) screens[key](el);
-    else el.innerHTML = '<div class="card"><h2>Экран «' + esc(h.screen || "") + '» в очереди сборки</h2><p class="muted">Демо собирается поэтапно — этот экран появится в следующей итерации.</p></div>';
-    if (window.LOVII.guide) window.LOVII.guide.roleBanner(el);
-    window.scrollTo(0, 0);
+    // меню кабинета пересобирается только при смене кабинета/роли;
+    // навигация внутри кабинета лишь двигает подсветку активного пункта
+    if (shellFor !== h.entrance + ":" + state.role) buildSidebar();
+    else setActiveItem(screen);
+    renderContent(main, ent, screen);
+  }
+
+  // Правая область — единственное, что перерисовывается при навигации
+  function renderContent(main, ent, screen) {
+    const key = ent.id + "/" + screen;
+    const wrap = document.createElement("div");
+    wrap.className = "screen-in";
+    main.innerHTML = "";
+    main.appendChild(wrap);
+    if (screens[key]) screens[key](wrap);
+    else wrap.innerHTML = '<div class="card"><h2>Экран «' + esc(screen || "") + '» в очереди сборки</h2><p class="muted">Демо собирается поэтапно — этот экран появится в следующей итерации.</p></div>';
+    if (window.LOVII.guide) window.LOVII.guide.roleBanner(main);
+    main.scrollTop = 0;
   }
 
   function drawLanding(el) {
-    renderSidebarLanding();
     const roleIntro = {
       guest: "Закажите и оплатите: банк → касса → ОФД → кухня → курьер → отзыв.",
       cashier: "Откройте смену, пробейте чек, оформите возврат, закройте смену.",
@@ -229,13 +244,6 @@
     });
   }
 
-  function renderSidebarLanding() {
-    document.getElementById("sidebar").innerHTML =
-      '<div class="nav-section">Кабинеты платформы</div>' +
-      ENTRANCES.map((e) => '<a class="nav-item" href="#/' + e.id + "/" + e.home + '"><span>▸</span><span>' + e.title + " · " + e.url + "</span></a>").join("") +
-      '<div class="nav-section">О демо</div>' +
-      '<div class="small muted" style="padding:6px 12px">Роли ограничены своим кабинетом. Все взаимодействия видны через переключение кабинетов и ролей в шапке.</div>';
-  }
   window.addEventListener("hashchange", render);
 
   // ---------- UI-компоненты ----------
@@ -468,10 +476,15 @@
     }, 25000);
   }
 
-  function renderSidebar(activeScreen) {
+  // ---------- Каркас (SPA-оболочка) ----------
+  // Правила каркаса: шапка и левое меню живут постоянно; при навигации
+  // перерисовывается ТОЛЬКО правая область (#main). Меню пересобирается
+  // лишь при смене кабинета или роли (другой набор пунктов/контекста).
+  let shellFor = null; // «кабинет:роль», под которые построено меню
+  function buildSidebar() {
     const groups = NAV[state.entrance] || [];
     const ent = cabinetOf(state.entrance);
-    if (!activeScreen) activeScreen = parseHash().screen;
+    const activeScreen = parseHash().screen || ent.home;
     let html = '<div class="cab-head">' + ent.title + '<div class="small muted">' + ent.url + "</div></div>";
     groups.forEach((g) => {
       if (g.sec) html += '<div class="nav-section">' + g.sec + "</div>";
@@ -492,10 +505,19 @@
           "</select>";
       }
     }
-    document.getElementById("sidebar").innerHTML = html;
+    const sb = document.getElementById("sidebar");
+    sb.innerHTML = html;
     const ls = document.getElementById("loc-select");
     if (ls) ls.addEventListener("change", () => { state.loc = ls.value; render(); });
+    shellFor = state.entrance + ":" + state.role;
   }
+  // подсветка активного пункта без пересборки меню
+  function setActiveItem(s) {
+    const sb = document.getElementById("sidebar");
+    sb.querySelectorAll(".nav-item").forEach((a) =>
+      a.classList.toggle("active", a.dataset.s === s));
+  }
+  function renderSidebar(activeScreen) { buildSidebar(); if (activeScreen) setActiveItem(activeScreen); }
 
   window.LOVII = {
     state, fmt, esc, route, nav, render, renderSidebar, UI, toast, emit,
