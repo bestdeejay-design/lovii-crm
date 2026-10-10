@@ -40,6 +40,9 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
+      slugify: !!python/object/apply:pymdownx.slugs.slugify
+        kwds:
+          casefold: true
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
@@ -49,8 +52,12 @@ markdown_extensions:
 extra:
   generator: false
 
+extra_javascript:
+  - javascripts/mermaid-theme.js
+
 nav:
   - Главная: README.md
+  - "Каталог схем": research/diagram-catalog.md
   - Резюме и аудит:
     - Резюме исследования: research/executive-summary.md
     - Аудит корпуса документации: research/audit-report.md
