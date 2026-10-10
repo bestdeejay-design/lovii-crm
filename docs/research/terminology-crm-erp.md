@@ -243,4 +243,4 @@
 - Buttle F., Maklan S. Customer Relationship Management: Concepts and Technologies.
 - Zablah A. R., Bellenger D. N., Johnston W. J. An Evaluation of the Theoretical Foundations of CRM // Industrial Marketing Management, 2004.
 - Berry L. L. Relationship Marketing // Emerging Perspectives on Services Marketing, 1983.
-- Собственный глоссарий отрасли: [`../glossary.md`](../glossary.md).
+- Собственный глоссарий отрасли: [`glossary.md`](glossary.md).
