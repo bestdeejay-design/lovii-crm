@@ -97,6 +97,24 @@
 | [`research/saas/02-demo-cabinet.md`](research/saas/02-demo-cabinet.md) | Спецификация демо-кабинета: три кабинета (Витрина / CRM / ERP), 10 ролей по контурам, 30 экранов полного периметра, отчёты и рекомендации, аудиты, онбординг. **Демо собрано** → [открыть демо-кабинет](https://bestdeejay-design.github.io/lovii-crm/demo/) · живой прототип витрины: [lovii.mobiap.com](http://lovii.mobiap.com) |
 | [`research/saas/03-role-scenarios.md`](research/saas/03-role-scenarios.md) | Аудит кабинетов: боли каждой из 10 ролей, полная матрица сценариев с действиями, подсказки «что делать дальше» и прогноз итога, сквозные сценарии через все роли |
 
+### 2.8. Бизнес: модель и тарифы
+
+| Файл | Содержание |
+|---|---|
+| [`research/business/01-financial-model.md`](research/business/01-financial-model.md) | Финансовая модель платформы: 4 потока выручки, затраты на постройку, сценарии на 24 мес, чувствительность |
+| [`research/business/02-pricing.md`](research/business/02-pricing.md) | Тарифная сетка «Старт/Базовый/Про/УК», принципы монетизации, положение на рынке против 30+ вендоров, франшизные условия |
+
+### 2.9. Юридический пакет и франч-бук
+
+| Файл | Содержание |
+|---|---|
+| [`research/legal/01-legal-package.md`](research/legal/01-legal-package.md) | Юрминимум запуска: карта документов, операторы данных, обязательства платформы, что отдаётся внешнему юристу |
+| [`research/legal/02-privacy-policy-draft.md`](research/legal/02-privacy-policy-draft.md) | Драфт политики ПДн и обособленных согласий (152-ФЗ) |
+| [`research/legal/03-loyalty-offer-draft.md`](research/legal/03-loyalty-offer-draft.md) | Драфт публичной оферты программы лояльности |
+| [`research/legal/04-terms-of-use-draft.md`](research/legal/04-terms-of-use-draft.md) | Драфт пользовательского соглашения платформы: данные клиента, экспорт, ответственность |
+| [`research/legal/05-franchise-contract-outline.md`](research/legal/05-franchise-contract-outline.md) | Драфт структуры договора коммерческой концессии (глава 54 ГК РФ) |
+| [`research/franchise/franchise-book-v0.md`](research/franchise/franchise-book-v0.md) | Франч-бук (v0): сделка в цифрах, путь франчайзи, стандарты и контроль |
+
 ### 3. Аудиты аналогов
 
 **Россия**

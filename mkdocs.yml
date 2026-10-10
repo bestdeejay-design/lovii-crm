@@ -120,6 +120,17 @@ nav:
     - "Правила и схемы движения информации": research/saas/01-information-flow.md
     - "Демо-кабинет: роли, мок-данные, отчёты": research/saas/02-demo-cabinet.md
     - "Сценарии ролей и боли: аудит кабинетов": research/saas/03-role-scenarios.md
+  - "Бизнес: модель и тарифы":
+    - "Финансовая модель платформы": research/business/01-financial-model.md
+    - "Тарифная сетка и ценообразование": research/business/02-pricing.md
+  - "Юридический пакет":
+    - "Юрминимум запуска: состав и статусы": research/legal/01-legal-package.md
+    - "Драфт: политика конфиденциальности и согласия": research/legal/02-privacy-policy-draft.md
+    - "Драфт: оферта программы лояльности": research/legal/03-loyalty-offer-draft.md
+    - "Драфт: пользовательское соглашение (SaaS)": research/legal/04-terms-of-use-draft.md
+    - "Драфт: структура договора концессии": research/legal/05-franchise-contract-outline.md
+  - "Франч-бук":
+    - "Франч-бук lovii (v0)": research/franchise/franchise-book-v0.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md
