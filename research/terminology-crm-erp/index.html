@@ -1,0 +1,3132 @@
+
+<!doctype html>
+<html lang="ru" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Исследование, аудит аналогов и продуктовые спецификации ресторанной CRM/ERP платформы полного цикла">
+      
+      
+      
+        <link rel="canonical" href="https://bestdeejay-design.github.io/lovii-crm/research/terminology-crm-erp/">
+      
+      
+        <link rel="prev" href="../audit-report/">
+      
+      
+        <link rel="next" href="../00-market-landscape/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>CRM и ERP: определения, границы, правила применения - lovii — платформа ресторанного бизнеса</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#crm-erp" class="md-skip">
+          Перейти к содержанию
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Верхний колонтитул">
+    <a href="../.." title="lovii — платформа ресторанного бизнеса" class="md-header__button md-logo" aria-label="lovii — платформа ресторанного бизнеса" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            lovii — платформа ресторанного бизнеса
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              CRM и ERP: определения, границы, правила применения
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Тёмная тема"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Тёмная тема" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="amber"  aria-label="Светлая тема"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Светлая тема" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Поиск" placeholder="Поиск" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Поиск">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Очистить" aria-label="Очистить" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Инициализация поиска
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/bestdeejay-design/lovii-crm" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bestdeejay-design/lovii-crm
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Навигация" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="lovii — платформа ресторанного бизнеса" class="md-nav__button md-logo" aria-label="lovii — платформа ресторанного бизнеса" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    lovii — платформа ресторанного бизнеса
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/bestdeejay-design/lovii-crm" title="Перейти к репозиторию" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    bestdeejay-design/lovii-crm
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Главная
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Резюме и аудит
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Резюме и аудит
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../executive-summary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Резюме исследования
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../audit-report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Аудит корпуса документации
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Терминология: академический разбор
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Терминология: академический разбор
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CRM и ERP: определения, границы, правила применения
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CRM и ERP: определения, границы, правила применения
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Предварительное различение
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ERP: планирование ресурсов предприятия
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. ERP: планирование ресурсов предприятия">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Этимология и генеалогия
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Академические определения
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Квалифицирующие признаки (без них «ERP» — маркетинг)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-saporacle1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Каноническая модульная структура (по образцу SAP/Oracle/1С)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CRM: управление взаимоотношениями с клиентами
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. CRM: управление взаимоотношениями с клиентами">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Происхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Пять перспектив определения (по Пейну и Фроу)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Квалифицирующие признаки «настоящего» CRM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Каноническая структура: три слоя + данные
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Метрический словарь CRM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-crm-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Граница между CRM и ERP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Граница между CRM и ERP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Сравнение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Зона пересечения
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Таксономия смежных классов: точное применение терминов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-lovii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Применение терминологии к общепиту и к платформе lovii
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Применение терминологии к общепиту и к платформе lovii">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Почему ресторанные системы — гибриды
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Правильные обозначения в наших документах
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Практический определитель «ситуация → термин»
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Практический определитель «ситуация → термин»">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Типичные антипаттерны употребления
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Мини-глоссарий (академический)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Источники и литература
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Рынок и архитектура
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Рынок и архитектура
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-market-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Обзор рынка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-reference-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Референс-архитектура
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-personas-cjm/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Персоны и сценарии (CJM)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../glossary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Глоссарий
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Компоненты
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Компоненты
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/01-pos-fiscal/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    01. Касса и фискализация
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/02-order-channels/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    02. Каналы приёма заказов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/03-kitchen-kds/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    03. Кухня и KDS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/04-inventory-procurement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    04. Склад, ТТК, закупки
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/05-delivery-couriers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    05. Доставка и курьеры
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/06-crm-loyalty-feedback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    06. CRM, лояльность, отзывы
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/07-hr-staff/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    07. Персонал
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/08-finance-analytics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    08. Финансы и аналитика
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/09-franchise-network/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    09. Франшиза и УК
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/10-compliance-safety/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Комплаенс и безопасность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/11-integration-platform/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Платформа и интеграции
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../components/12-data-model/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    12. Модель данных
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Аудиты аналогов
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Аудиты аналогов
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_1" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_1" id="__nav_6_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Россия
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_1_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Россия
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/iiko/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    iiko
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/rkeeper/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    r_keeper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/poster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Poster POS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/quick-resto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Quick Resto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/saby-presto/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Saby Presto
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/1c/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1С Общепит/Ресторан
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/ru-smaller/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tillypad, Fusion POS, Yuma
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_6_2" id="__nav_6_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Мир
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_6_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Мир
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/toast/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Toast
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/lightspeed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Lightspeed
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/square-touchbistro-revel/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Square, TouchBistro, Revel
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/middleware-delivery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Middleware доставки
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/loyalty-crm-vendors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Гостевые CRM и лояльность
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../competitors/audit-standards-vendors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Контроль стандартов
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Выводы и план
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Выводы и план
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gap-analysis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Разрывы рынка
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../product-blueprint/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Продуктовый blueprint
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    План реализации
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    План реализации
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan/01-implementation-plan/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    План: фазы, вехи, первые 90 дней
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan/02-systems-roadmap/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Карта систем (строить/покупать/интегрировать)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../plan/03-backbone-stack/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Опорный стек до целевых показателей
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Содержание">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Содержание
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Предварительное различение
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. ERP: планирование ресурсов предприятия
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. ERP: планирование ресурсов предприятия">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1. Этимология и генеалогия
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2. Академические определения
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3. Квалифицирующие признаки (без них «ERP» — маркетинг)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-saporacle1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4. Каноническая модульная структура (по образцу SAP/Oracle/1С)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. CRM: управление взаимоотношениями с клиентами
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. CRM: управление взаимоотношениями с клиентами">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1. Происхождение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2. Пять перспектив определения (по Пейну и Фроу)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3. Квалифицирующие признаки «настоящего» CRM
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.4. Каноническая структура: три слоя + данные
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#35-crm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.5. Метрический словарь CRM
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-crm-erp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Граница между CRM и ERP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Граница между CRM и ERP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1. Сравнение
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2. Зона пересечения
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Таксономия смежных классов: точное применение терминов
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-lovii" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Применение терминологии к общепиту и к платформе lovii
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. Применение терминологии к общепиту и к платформе lovii">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#61" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.1. Почему ресторанные системы — гибриды
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#62" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6.2. Правильные обозначения в наших документах
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Практический определитель «ситуация → термин»
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. Практический определитель «ситуация → термин»">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Типичные антипаттерны употребления
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Мини-глоссарий (академический)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Источники и литература
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+                
+
+
+
+  
+
+
+  <nav class="md-path" aria-label="Навигация" >
+    <ol class="md-path__list">
+      
+        
+  
+  
+    <li class="md-path__item">
+      <a href="../.." class="md-path__link">
+        
+  <span class="md-ellipsis">
+    Главная
+  </span>
+
+      </a>
+    </li>
+  
+
+      
+      
+        
+  
+  
+    
+    
+      <li class="md-path__item">
+        <a href="./" class="md-path__link">
+          
+  <span class="md-ellipsis">
+    Терминология: академический разбор
+  </span>
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ol>
+  </nav>
+
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="crm-erp">CRM и ERP: академическая терминология и правила применения<a class="headerlink" href="#crm-erp" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p>Цель документа — дать точное понимание, <strong>когда какой термин применять</strong>: в переговорах с вендорами, во внутренних документах, в маркетинге платформы и при постановке задач разработке. Изложение академическое: с происхождением терминов, каноническими определениями и критериями отнесения.</p>
+</blockquote>
+<h2 id="1">1. Предварительное различение<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<p>Прежде чем говорить о системах, фиксируем уровень абстракции:</p>
+<table>
+<thead>
+<tr>
+<th>Уровень</th>
+<th>Пример формулировки</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Дисциплина / стратегия</strong></td>
+<td>«Управление взаимоотношениями с клиентами», «планирование ресурсов предприятия»</td>
+</tr>
+<tr>
+<td><strong>Класс систем</strong></td>
+<td>«системы класса CRM», «системы класса ERP»</td>
+</tr>
+<tr>
+<td><strong>Конкретный продукт</strong></td>
+<td>«iiko — ERP для общепита», «Salesforce — CRM-платформа»</td>
+</tr>
+<tr>
+<td><strong>Модуль/подсистема</strong></td>
+<td>«модуль лояльности в составе гостевого контура»</td>
+</tr>
+</tbody>
+</table>
+<p>Ошибка большинства споров о терминах — смешение уровней: продукт называют «стратегией», а модуль — «системой класса».</p>
+<h2 id="2-erp">2. ERP: планирование ресурсов предприятия<a class="headerlink" href="#2-erp" title="Permanent link">&para;</a></h2>
+<h3 id="21">2.1. Этимология и генеалогия<a class="headerlink" href="#21" title="Permanent link">&para;</a></h3>
+<p><strong>ERP (Enterprise Resource Planning)</strong> — «планирование ресурсов предприятия». Генеалогия класса (исторически документирована):</p>
+<pre><code>1950–60-е  Inventory Control (управление запасами) — партии, точки заказа
+1960–70-е  MRP (Material Requirements Planning) — планирование потребности
+           в материалах по производственному плану и спецификациям (BOM)
+1980-е     MRP II (Manufacturing Resource Planning, термин О. Уайта, 1981) —
+           к материалам добавлены мощности, финансы, персонал; замкнутый цикл
+           планирования с обратной связью
+1990       Термин «ERP» введён аналитиком Gartner Ли Уайли как видение развития
+           MRP II и CIM: тиражируемые системы, объединяющие производство,
+           закупки, сбыт, финансы и кадры общей моделью данных [1](https://ru.wikipedia.org/wiki/Erp)
+2000       ERP II (Gartner) — межорганизационное расширение: цепочки поставок,
+           порталы, партнёрские процессы
+2010-е…    облачные/компонуемые («постмодерные») ERP, industry cloud
+</code></pre>
+<p>Ключевая мысль генеалогии: <strong>каждое следующее поколение добавляло новый класс ресурсов</strong> (материалы → мощности → все ресурсы предприятия → ресурсы экосистемы).</p>
+<h3 id="22">2.2. Академические определения<a class="headerlink" href="#22" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Классическое (интеграционное):</strong> «Набор интегрированных приложений, управляющих основными бизнес-процессами предприятия на основе единой базы данных» — общий знаменатель определений 1990-х (SAP, Oracle, Davenport).</li>
+<li><strong>Давенпорт (Davenport, 1998, HBR «Putting the Enterprise into the Enterprise System»):</strong> ERP — «технологический рецепт» (technology recipe), навязывающий организации стандартизированные процессы и единую модель данных; ценность — не в функциях, а в интеграции.</li>
+<li><strong>Процессное (по духу APICS):</strong> рамка для организации и стандартизации бизнес-процессов, необходимая для эффективного планирования и контроля, чтобы организация могла использовать свои знания для конкурентного преимущества.</li>
+</ol>
+<p>Обобщённое академическое определение:</p>
+<blockquote>
+<p><strong>ERP — интегрированный набор прикладных модулей, реализующих сквозные бизнес-процессы предприятия (финансы, снабжение, производство, сбыт, персонал) поверх единой транзакционной модели данных, с целью планирования и контроля использования всех видов ресурсов.</strong></p>
+</blockquote>
+<h3 id="23-erp">2.3. Квалифицирующие признаки (без них «ERP» — маркетинг)<a class="headerlink" href="#23-erp" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Единая модель данных</strong> (один факт — одна запись; отсутствие двойного ввода между модулями).</li>
+<li><strong>Транзакционная целостность:</strong> операции проводятся документами, меняющими состояние учёта атомарно.</li>
+<li><strong>Сквозные процессы</strong> (procure-to-pay, order-to-cash, plan-to-produce) пересекают модули без ручных переносов данных.</li>
+<li><strong>Планирование ресурсов:</strong> система не только фиксирует, но и планирует (потребность, мощности, деньги).</li>
+<li><strong>Замкнутый цикл «план → исполнение → учёт → анализ → пересмотр плана».</strong></li>
+</ol>
+<h3 id="24-saporacle1">2.4. Каноническая модульная структура (по образцу SAP/Oracle/1С)<a class="headerlink" href="#24-saporacle1" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Модуль</th>
+<th>Назначение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FI (Financial Accounting)</td>
+<td>Бухгалтерский учёт, отчётность</td>
+</tr>
+<tr>
+<td>CO (Controlling)</td>
+<td>Управленческий учёт, себестоимость по местам возникновения</td>
+</tr>
+<tr>
+<td>MM / SCM</td>
+<td>Закупки, запасы, управление поставщиками</td>
+</tr>
+<tr>
+<td>PP (Production Planning)</td>
+<td>Планирование производства: BOM/ТТК, маршруты, MRP-расчёт</td>
+</tr>
+<tr>
+<td>SD (Sales &amp; Distribution)</td>
+<td>Продажи, ценообразование, отгрузки</td>
+</tr>
+<tr>
+<td>HCM / HR</td>
+<td>Кадры, табель, расчёт оплаты труда</td>
+</tr>
+<tr>
+<td>PM, QM</td>
+<td>Ремонты и оборудование; управление качеством</td>
+</tr>
+</tbody>
+</table>
+<p>Для общепита аналогия прямая: ТТК = BOM, акт производства = производственный ордер, фудкост = управленческая себестоимость. Поэтому <strong>ресторанные системы с полноценным производственным учётом корректно называть отраслевыми ERP</strong> (так и позиционируется, например, iiko).</p>
+<h2 id="3-crm">3. CRM: управление взаимоотношениями с клиентами<a class="headerlink" href="#3-crm" title="Permanent link">&para;</a></h2>
+<h3 id="31">3.1. Происхождение<a class="headerlink" href="#31" title="Permanent link">&para;</a></h3>
+<p>Термин возник в середине 1990-х в среде ИТ-вендоров и практиков (эпоха Siebel и SFA — sales force automation), но <strong>теоретический фундамент старше</strong>: школа маркетинга взаимоотношений (relationship marketing), восходящая к Л. Берри (1983) и работам Парватияра и Шета. В академической литературе термины «маркетинг взаимоотношений» и «CRM» часто используются как взаимозаменяемые (Parvatiyar &amp; Sheth, 2001), но с разграничением: <strong>маркетинг взаимоотношений — стратегия и теория; CRM — её технологическая и управленческая реализация</strong> <a href="https://www.studocu.com/pl/document/akademia-finansow-i-biznesu-vistula/introduction-to-economics/a-strategic-framework-for-crm-insights-from-payne-frow-2005-7/">2</a>.</p>
+<h3 id="32">3.2. Пять перспектив определения (по Пейну и Фроу)<a class="headerlink" href="#32" title="Permanent link">&para;</a></h3>
+<p>Классическая работа <strong>Payne &amp; Frow (2005) «A Strategic Framework for Customer Relationship Management»</strong> (Journal of Marketing) показывает, что термин употребляют в пяти разных смыслах <a href="https://www.studocu.com/pl/document/akademia-finansow-i-biznesu-vistula/introduction-to-economics/a-strategic-framework-for-crm-insights-from-payne-frow-2005-7/">2</a>:</p>
+<ol>
+<li>CRM как <strong>процесс или стратегия</strong> (узко: процесс управления отношениями).</li>
+<li>CRM как <strong>стратегическая цель</strong> (создание стоимости для акционеров через отношения с ключевыми клиентами).</li>
+<li>CRM как <strong>философия и культура</strong> организации.</li>
+<li>CRM как <strong>способность</strong> (способность фирмы понимать и влиять на поведение клиентов).</li>
+<li>CRM как <strong>реализация интегрированных технологических решений</strong> (узко-тактический смысл — самое частое бытовое употребление).</li>
+</ol>
+<p>Их синтезированное определение:</p>
+<blockquote>
+<p><strong>CRM — стратегический подход, нацеленный на рост акционерной стоимости через развитие отношений с ключевыми клиентами и сегментами; объединяет потенциал маркетинга взаимоотношений и информационных технологий для создания прибыльных долгосрочных отношений с клиентами и другими заинтересованными сторонами</strong> <a href="https://www.studocu.com/pl/document/akademia-finansow-i-biznesu-vistula/introduction-to-economics/a-strategic-framework-for-crm-insights-from-payne-frow-2005-7/">2</a>.</p>
+</blockquote>
+<p>Другие канонические формулировки:</p>
+<ul>
+<li><strong>Swift (2000):</strong> «подход предприятия к пониманию и влиянию на поведение клиентов через осмысленные коммуникации для улучшения привлечения, удержания, лояльности и прибыльности клиентов» <a href="https://elearning.univ-biskra.dz/moodle2024/mod/resource/view.php?id=173743">2</a>.</li>
+<li><strong>Buttle &amp; Maklan:</strong> CRM — «ключевая бизнес-стратегия, стремящаяся создать ценность для стейкхолдеров через интеграцию процессов, людей, операций и технологий для привлечения, удержания и развития прибыльных клиентов».</li>
+<li><strong>Zablah et al. (2004):</strong> обзоры показывают, что «технологическая» трактовка термина доминирует на рынке, но академически корректно вести речь о <strong>стратегии, подкреплённой технологиями</strong>.</li>
+</ul>
+<h3 id="33-crm">3.3. Квалифицирующие признаки «настоящего» CRM<a class="headerlink" href="#33-crm" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Единый профиль клиента</strong> (склейка взаимодействий из всех каналов в одну запись).</li>
+<li><strong>Управление полным циклом отношений:</strong> привлечение → продажа → обслуживание → удержание → возврат.</li>
+<li><strong>Данные как основа решений:</strong> сегментация, аналитика ценности клиента, персонализация.</li>
+<li><strong>Ориентация на экономические метрики отношений</strong> (CLV, retention, доля кошелька), а не только на операционные (число звонков).</li>
+</ol>
+<h3 id="34">3.4. Каноническая структура: три слоя + данные<a class="headerlink" href="#34" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Слой</th>
+<th>Содержание</th>
+<th>Примеры функций</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Операционный CRM</strong></td>
+<td>Автоматизация фронтовых процессов</td>
+<td>Автоматизация продаж (управление сделками и воронкой), маркетинговая автоматизация, сервисное обслуживание</td>
+</tr>
+<tr>
+<td><strong>Аналитический CRM</strong></td>
+<td>Извлечение знаний из данных</td>
+<td>Сегментация, RFM-анализ, модели оттока и отклика, CLV</td>
+</tr>
+<tr>
+<td><strong>Коллаборативный CRM</strong></td>
+<td>Каналы взаимодействия</td>
+<td>Контакт-центры, мессенджеры, самообслуживание, отзывы</td>
+</tr>
+<tr>
+<td><strong>Данные (современный слой)</strong></td>
+<td>Единая платформа клиентских данных</td>
+<td><strong>CDP (Customer Data Platform)</strong> — объединение идентификаторов и событий из всех источников</td>
+</tr>
+</tbody>
+</table>
+<p>В общепите операционный CRM частично «растворён» в кассе (идентификация гостя при оплате), а аналитический — в истории заказов: отсюда иллюзия, что «касса = CRM» (см. §7).</p>
+<h3 id="35-crm">3.5. Метрический словарь CRM<a class="headerlink" href="#35-crm" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Термин</th>
+<th>Определение</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CLV / LTV</strong></td>
+<td>Customer (Lifetime) Value — дисконтированная прибыль, приносимая клиентом за всё время отношений</td>
+</tr>
+<tr>
+<td><strong>Retention / Churn</strong></td>
+<td>Доля удержанных / отток клиентов за период</td>
+</tr>
+<tr>
+<td><strong>Частота и регулярность</strong></td>
+<td>Среднее число покупок клиента за период</td>
+</tr>
+<tr>
+<td><strong>Доля кошелька (share of wallet)</strong></td>
+<td>Доля расходов клиента в категории, приходящаяся на нас</td>
+</tr>
+<tr>
+<td><strong>NPS / CSAT / CES</strong></td>
+<td>Готовность рекомендовать / удовлетворённость / лёгкость получения услуги</td>
+</tr>
+<tr>
+<td><strong>Стоимость привлечения (CAC)</strong></td>
+<td>Затраты на привлечение одного клиента</td>
+</tr>
+<tr>
+<td><strong>Коэффициент CLV:CAC</strong></td>
+<td>Экономическая устойчивость модели отношений (&gt;3:1 — здоровая)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-crm-erp">4. Граница между CRM и ERP<a class="headerlink" href="#4-crm-erp" title="Permanent link">&para;</a></h2>
+<h3 id="41">4.1. Сравнение<a class="headerlink" href="#41" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Основание</th>
+<th>ERP</th>
+<th>CRM</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Объект управления</td>
+<td>Ресурсы и внутренние процессы предприятия</td>
+<td>Отношения с клиентами и их экономическая ценность</td>
+</tr>
+<tr>
+<td>Направление взгляда</td>
+<td>Внутрь и «назад» (учёт исполнения), планирование</td>
+<td>Наружу и «вперёд» (потенциал отношений)</td>
+</tr>
+<tr>
+<td>Ядро данных</td>
+<td>Документ хозяйственной операции (заказ, накладная, проводка)</td>
+<td>Профиль клиента и история взаимодействий</td>
+</tr>
+<tr>
+<td>Первичный процесс</td>
+<td>Закупка → производство → продажа → учёт (P2P, O2C)</td>
+<td>Привлечение → продажа → обслуживание → удержание</td>
+</tr>
+<tr>
+<td>Ключевые метрики</td>
+<td>Себестоимость, оборачиваемость, маржа, исполнение плана</td>
+<td>CLV, retention, конверсия, NPS</td>
+</tr>
+<tr>
+<td>Историческая родина</td>
+<td>Производственное планирование (1960-е, промышленность)</td>
+<td>Маркетинг взаимоотношений + автоматизация продаж (1980–90-е)</td>
+</tr>
+<tr>
+<td>Цена ошибки</td>
+<td>Финансовая отчётность, налоги, производство</td>
+<td>Потеря клиентов, репутация</td>
+</tr>
+</tbody>
+</table>
+<h3 id="42">4.2. Зона пересечения<a class="headerlink" href="#42" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Order-to-Cash:</strong> заказ начинается в CRM-контексте (клиент, цена, договор), исполняется в ERP (резерв, отгрузка, счёт, выручка). Продукты на стыке: CPQ (конфигурация-цена-котировка), управление контрактами.</li>
+<li><strong>Сервис после продажи:</strong> заявки клиентов на сервис — данные клиента из CRM, запчасти и трудозатраты — из ERP.</li>
+<li><strong>Современная конвергенция:</strong> крупные платформы (SAP, Oracle, Microsoft Dynamics) содержат оба класса; рынок движется к «компонуемому предприятию» (composable enterprise), где классы систем — сменные компоненты, а граница между ними — вопрос архитектуры данных, а не бренда.</li>
+</ul>
+<p><strong>Правило различения одним вопросом:</strong> <em>«О чём факт?»</em> Если факт о ресурсе предприятия (деньги, запасы, мощности, люди) — это домен ERP. Если факт о клиенте и отношениях с ним (контакт, сделка, обращение, оценка, лояльность) — домен CRM. Факты вида «клиент купил» принадлежат обоим и связываются через заказ/чек.</p>
+<h2 id="5">5. Таксономия смежных классов: точное применение терминов<a class="headerlink" href="#5" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Класс</th>
+<th>Полное имя</th>
+<th>Определение</th>
+<th>Не путать</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SCM</strong></td>
+<td>Supply Chain Management</td>
+<td>Управление цепочкой поставок «поставщик → клиент» в целом</td>
+<td>С модулем закупок одной компании</td>
+</tr>
+<tr>
+<td><strong>SRM</strong></td>
+<td>Supplier Relationship Management</td>
+<td>Управление отношениями с поставщиками (квалификация, тендеры, контракты)</td>
+<td>С закупочным модулем</td>
+</tr>
+<tr>
+<td><strong>WMS</strong></td>
+<td>Warehouse Management System</td>
+<td>Управление складскими операциями (адресное хранение, отбор)</td>
+<td>Со складским учётом в бухгалтерии</td>
+</tr>
+<tr>
+<td><strong>TMS</strong></td>
+<td>Transportation Management System</td>
+<td>Планирование и исполнение перевозок, маршрутизация</td>
+<td>С курьерским приложением ресторана</td>
+</tr>
+<tr>
+<td><strong>MES</strong></td>
+<td>Manufacturing Execution System</td>
+<td>Оперативное управление исполнением производства на уровне цеха</td>
+<td>С производственным планированием в ERP</td>
+</tr>
+<tr>
+<td><strong>APS</strong></td>
+<td>Advanced Planning &amp; Scheduling</td>
+<td>Оптимизационное планирование с ограничениями мощностей</td>
+<td>С календарным планом «в экселе»</td>
+</tr>
+<tr>
+<td><strong>PLM</strong></td>
+<td>Product Lifecycle Management</td>
+<td>Жизненный цикл изделия/рецептуры от разработки до вывода</td>
+<td>С каталогом товаров</td>
+</tr>
+<tr>
+<td><strong>BI / BA</strong></td>
+<td>Business Intelligence / Analytics</td>
+<td>Анализ данных и отчётность поверх витрин</td>
+<td>С транзакционной системой</td>
+</tr>
+<tr>
+<td><strong>HRM / HCM</strong></td>
+<td>Human (Capital) Resource Management</td>
+<td>Кадры, расчёты, таланты</td>
+<td>С табельным модулем на кассе</td>
+</tr>
+<tr>
+<td><strong>WFM</strong></td>
+<td>Workforce Management</td>
+<td>Планирование графика работ под нагрузку</td>
+<td>С кадровым учётом</td>
+</tr>
+<tr>
+<td><strong>FSM</strong></td>
+<td>Field Service Management</td>
+<td>Управление выездным обслуживанием</td>
+<td>С доставкой еды</td>
+</tr>
+<tr>
+<td><strong>POS</strong></td>
+<td>Point of Sale</td>
+<td>Точка продажи: приём заказа и оплаты, фискализация</td>
+<td><strong>Не является ни CRM, ни ERP</strong> — операционный терминал; становится их источником данных</td>
+</tr>
+<tr>
+<td><strong>CDP</strong></td>
+<td>Customer Data Platform</td>
+<td>Платформа объединения клиентских данных из всех источников</td>
+<td>С CRM-системой (у CDP нет процессов продаж)</td>
+</tr>
+<tr>
+<td><strong>Loyalty platform</strong></td>
+<td>—</td>
+<td>Начисление/списание баллов, механики программ</td>
+<td>С CRM в целом (лояльность — подсистема)</td>
+</tr>
+<tr>
+<td><strong>MDM</strong></td>
+<td>Master Data Management</td>
+<td>Управление нормативно-справочными данными</td>
+<td>С обычной справочной таблицей</td>
+</tr>
+<tr>
+<td><strong>EDI / ЭДО</strong></td>
+<td>Electronic Data Interchange</td>
+<td>Юридически значимый электронный обмен документами</td>
+<td>С интеграционным API</td>
+</tr>
+<tr>
+<td><strong>KDS</strong></td>
+<td>Kitchen Display System</td>
+<td>Кухонный экран исполнения заказов</td>
+<td>С кассой</td>
+</tr>
+</tbody>
+</table>
+<h2 id="6-lovii">6. Применение терминологии к общепиту и к платформе lovii<a class="headerlink" href="#6-lovii" title="Permanent link">&para;</a></h2>
+<h3 id="61">6.1. Почему ресторанные системы — гибриды<a class="headerlink" href="#61" title="Permanent link">&para;</a></h3>
+<p>Ресторанная система полного цикла одновременно:</p>
+<ul>
+<li><strong>отраслевая ERP</strong> — ТТК (=BOM), производство полуфабрикатов, склад, закупки, себестоимость, персонал, финансы;</li>
+<li>содержит <strong>операционный и аналитический CRM</strong> — профиль гостя, лояльность, кампании, отзывы, NPS;</li>
+<li>содержит <strong>элементы других классов</strong>: KDS (MES-подобное исполнение), доставка (зачатки TMS), ХАССП-чек-листы (зачатки QM).</li>
+</ul>
+<p>Поэтому корректная формула: <strong>«отраслевая ERP для общепита с развитым гостевым контуром (встроенный CRM)»</strong>. Называть такую систему только «кассой» — принижение; только «CRM» — ошибка; «гибридная платформа» — маркетингово, но не академично.</p>
+<h3 id="62">6.2. Правильные обозначения в наших документах<a class="headerlink" href="#62" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Что говорим</th>
+<th>Как корректно</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>О платформе в целом</td>
+<td>«Отраслевая ERP-платформа для общепита со встроенным гостевым контуром (операционный + аналитический CRM)»</td>
+</tr>
+<tr>
+<td>О кассовом рабочем месте</td>
+<td>«Кассовый терминал (фронт-офис)», не «касса-программа»</td>
+</tr>
+<tr>
+<td>О работе с гостями</td>
+<td>«Гостевой контур: операционный и аналитический CRM»</td>
+</tr>
+<tr>
+<td>О программе лояльности</td>
+<td>«Подсистема лояльности гостевого контура»</td>
+</tr>
+<tr>
+<td>О складе/ТТК</td>
+<td>«Модуль производства и материального учёта (ядро отраслевой ERP)»</td>
+</tr>
+<tr>
+<td>О франшизе</td>
+<td>«Контур управления сетью/франшизой» (надстройка над обеими классами)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="7">7. Практический определитель «ситуация → термин»<a class="headerlink" href="#7" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Ситуация / вопрос</th>
+<th>Правильный термин</th>
+<th>Почему</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Система считает, сколько муки списано при продаже пиццы</td>
+<td>материальный учёт в составе отраслевой ERP</td>
+<td>факт о ресурсе</td>
+</tr>
+<tr>
+<td>Система предлагает начислить баллы гостю после заказа</td>
+<td>подсистема лояльности операционного CRM</td>
+<td>факт об отношениях</td>
+</tr>
+<tr>
+<td>Приложение курьера строит маршрут</td>
+<td>диспетчеризация доставки (элемент логистики, не «логистическая система» в строгом смысле)</td>
+<td>локальная функция, не класс</td>
+</tr>
+<tr>
+<td>Программа бьёт чеки и принимает карты</td>
+<td>касса / фискальный терминал</td>
+<td>не называть ни CRM, ни ERP</td>
+</tr>
+<tr>
+<td>Мы строим отчёт «фудкост по точкам»</td>
+<td>управленческий учёт (контур контроллинга)</td>
+<td>аналитика затрат</td>
+</tr>
+<tr>
+<td>Мы сегментируем гостей по частоте визитов</td>
+<td>аналитический CRM</td>
+<td>работа с клиентскими данными</td>
+</tr>
+<tr>
+<td>Мы согласовываем прайс с поставщиком</td>
+<td>закупочный процесс (модуль снабжения) / элементы SRM</td>
+<td>факт о ресурсах и поставках</td>
+</tr>
+<tr>
+<td>Мы собираем отзывы и отвечаем на негатив</td>
+<td>сервисный контур коллаборативного CRM</td>
+<td>взаимодействие с клиентом</td>
+</tr>
+<tr>
+<td>Мы считаем роялти от выручки точки</td>
+<td>франшизный биллинг (надстройка)</td>
+<td>не сводится ни к CRM, ни к ERP</td>
+</tr>
+<tr>
+<td>Мы планируем смены поваров под прогноз загрузки</td>
+<td>планирование трудовых ресурсов (элементы WFM в контуре персонала)</td>
+<td>ресурсное планирование</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_1">Типичные антипаттерны употребления<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>«Наша касса — это CRM»</strong> — касса лишь идентифицирует гостя; без полного цикла отношений это не CRM.</li>
+<li><strong>«Мы внедрили ERP за неделю»</strong> — академически корректно «внедрили модули отраслевой системы класса ERP»; «внедрение» относится к процессам, а не к установке ПО.</li>
+<li><strong>«Программа лояльности = CRM»</strong> — лояльность — подсистема; без профиля и аналитики это дисконтный механизм.</li>
+<li><strong>«Складская программа — это логистика»</strong> — складской учёт ≠ логистика; логистика предполагает управление потоком, а не остатками.</li>
+<li><strong>«Битрикс24/amoCRM закроет нам гостевой контур»</strong> — это системы автоматизации <strong>продаж</strong> (сделочный/воронковый тип), а не клиентский контур повторных транзакционных покупок общепита; применимы частично (входящие заявки, франшизные продажи).</li>
+</ol>
+<h2 id="8-">8. Мини-глоссарий (академический)<a class="headerlink" href="#8-" title="Permanent link">&para;</a></h2>
+<p><strong>Агрегация заказов</strong> — объединение заказов из разных каналов в единую очередь обработки.
+<strong>Аналитический CRM</strong> — подмножество функций извлечения знаний из клиентских данных (сегментация, прогнозы, оценка ценности).
+<strong>Бизнес-процесс</strong> — устойчивая совокупность действий, преобразующая входы в выходы с определённой ценностью для получателя.
+<strong>Взаимозаменяемость терминов</strong> — практика употребления «маркетинг взаимоотношений» и «CRM» как синонимов (зафиксирована у Парватияра и Шета, 2001).
+<strong>Замкнутый цикл планирования</strong> — механизм, при котором отклонения исполнения автоматически влияют на следующий цикл плана.
+<strong>Компонуемое предприятие (composable enterprise)</strong> — архитектурная доктрина сборки бизнеса из сменяемых программных компонентов.
+<strong>Коллаборативный CRM</strong> — подмножество функций управления каналами взаимодействия с клиентом.
+<strong>Маркетинг взаимоотношений</strong> — стратегическая школа, ставящая долгосрочные отношения выше разовых транзакций.
+<strong>Нормативно-справочочные данные (НСИ/MDM)</strong> — эталонные справочники, используемые всеми системами.
+<strong>Операционный CRM</strong> — автоматизация фронтовых клиентских процессов (продажи, маркетинг, сервис).
+<strong>Сквозной процесс</strong> — процесс, пересекающий несколько функциональных модулей без ручного переноса данных.
+<strong>Транзакционная целостность</strong> — свойство системы менять состояние учёта атомарными документами.
+<strong>Управление ресурсами</strong> — планирование, распределение и контроль ограниченных ресурсов предприятия.
+<strong>Фронт-офис / бэк-офис</strong> — разделение систем на клиентоориентированные и учётно-управленческие.</p>
+<h2 id="9">9. Источники и литература<a class="headerlink" href="#9" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="https://ru.wikipedia.org/wiki/Erp">Википедия: ERP (история, термин Ли Уайли, Gartner, 1990)</a></li>
+<li><a href="https://elearning.univ-biskra.dz/moodle2024/mod/resource/view.php?id=173743">Payne &amp; Frow (2005), A Strategic Framework for CRM — определения и перспективы</a></li>
+<li><a href="https://www.studocu.com/pl/document/akademia-finansow-i-biznesu-vistula/introduction-to-economics/a-strategic-framework-for-crm-insights-from-payne-frow-2005-7/">Обзор перспектив определения CRM по Payne &amp; Frow</a></li>
+<li>Davenport T. H. Putting the Enterprise into the Enterprise System // Harvard Business Review, 1998.</li>
+<li>Swift R. S. The New CRM: Customer Relationship Management at the Speed of Light, 2000.</li>
+<li>Buttle F., Maklan S. Customer Relationship Management: Concepts and Technologies.</li>
+<li>Zablah A. R., Bellenger D. N., Johnston W. J. An Evaluation of the Theoretical Foundations of CRM // Industrial Marketing Management, 2004.</li>
+<li>Berry L. L. Relationship Marketing // Emerging Perspectives on Services Marketing, 1983.</li>
+<li>Собственный глоссарий отрасли: <a href="../glossary.md"><code>../glossary.md</code></a>.</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  К началу
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.path", "toc.follow", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "\u0421\u043a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u043d\u043e \u0432 \u0431\u0443\u0444\u0435\u0440", "clipboard.copy": "\u041a\u043e\u043f\u0438\u0440\u043e\u0432\u0430\u0442\u044c \u0432 \u0431\u0443\u0444\u0435\u0440", "search.result.more.one": "\u0415\u0449\u0451 1 \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.more.other": "\u0415\u0449\u0451 # \u043d\u0430 \u044d\u0442\u043e\u0439 \u0441\u0442\u0440\u0430\u043d\u0438\u0446\u0435", "search.result.none": "\u0421\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439 \u043d\u0435 \u043d\u0430\u0439\u0434\u0435\u043d\u043e", "search.result.one": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e 1 \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0435", "search.result.other": "\u041d\u0430\u0439\u0434\u0435\u043d\u043e \u0441\u043e\u0432\u043f\u0430\u0434\u0435\u043d\u0438\u0439: #", "search.result.placeholder": "\u041d\u0430\u0447\u043d\u0438\u0442\u0435 \u043f\u0435\u0447\u0430\u0442\u0430\u0442\u044c \u0434\u043b\u044f \u043f\u043e\u0438\u0441\u043a\u0430", "search.result.term.missing": "\u041e\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442", "select.version": "\u0412\u044b\u0431\u0435\u0440\u0438\u0442\u0435 \u0432\u0435\u0440\u0441\u0438\u044e"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
