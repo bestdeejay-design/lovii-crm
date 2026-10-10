@@ -62,6 +62,16 @@
 | [`components/11-integration-platform.md`](research/components/11-integration-platform.md) | Платформа: API, события, офлайн-режим, мультитенантность, безопасность |
 | [`components/12-data-model.md`](research/components/12-data-model.md) | Модель данных: сущности, атрибуты, контракты |
 
+### 2.5. Технические спецификации (схемы Mermaid)
+
+| Файл | Содержание |
+|---|---|
+| [`research/specs/00-overview.md`](research/specs/00-overview.md) | Контекст системы и контейнерная схема |
+| [`research/specs/01-domain-model.md`](research/specs/01-domain-model.md) | ER-схемы доменов и стейт-машины заказов/доставки |
+| [`research/specs/02-processes.md`](research/specs/02-processes.md) | Последовательности: зал, онлайн-доставка, агрегаторы, закупки, офлайн, отзывы, роялти, инвентаризация |
+| [`research/specs/03-api-contracts.md`](research/specs/03-api-contracts.md) | Ресурсы REST, контракт заказа, каталог событий, вебхуки, надёжность |
+| [`research/specs/04-deployment-offline.md`](research/specs/04-deployment-offline.md) | Топология деплоя, мультитенантность, офлайн-синхронизация, безопасность |
+
 ### 3. Аудиты аналогов
 
 **Россия**

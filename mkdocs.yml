@@ -40,6 +40,11 @@ markdown_extensions:
   - md_in_html
   - toc:
       permalink: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
 
 extra:
   generator: false
@@ -88,6 +93,12 @@ nav:
     - 10. Комплаенс и безопасность: research/components/10-compliance-safety.md
     - 11. Платформа и интеграции: research/components/11-integration-platform.md
     - 12. Модель данных: research/components/12-data-model.md
+  - "Технические спецификации (схемы)":
+    - "00. Обзор: контекст и контейнеры": research/specs/00-overview.md
+    - "01. Доменная модель (схемы сущностей)": research/specs/01-domain-model.md
+    - "02. Ключевые процессы (последовательности)": research/specs/02-processes.md
+    - "03. Контракты API и событий": research/specs/03-api-contracts.md
+    - "04. Деплой, офлайн и безопасность": research/specs/04-deployment-offline.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md
