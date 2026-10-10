@@ -2,7 +2,7 @@
 
 > Каталог разборов академического уровня, которые можно выполнить по теме проекта (ресторанная платформа полного цикла: заказ → кухня → склад → доставка → гость → франшиза). Каждый пункт: академическое основание, польза для проекта, приоритет.
 >
-> Уже выполнены: [Терминология CRM и ERP](terminology-crm-erp.md), [Терминология франшизы и франчайзинга](terminology-franchise.md), отраслевой [глоссарий](glossary.md).
+> **Статус программы: все 17 разборов выполнены.** Готовые документы: [Терминология CRM и ERP](terminology-crm-erp.md), [Терминология франшизы и франчайзинга](terminology-franchise.md), отраслевой [глоссарий](glossary.md), разборы 1–17 в каталоге `academic/` (см. статус в конце документа).
 
 ## Блок 1. Терминологические серии
 
@@ -60,3 +60,25 @@
 5. **2.2 Экономика франчайзинга** — выполнено ✅ → [`academic/05-franchising-economics.md`](academic/05-franchising-economics.md)
 
 Формат каждого разбора идентичен выполненным: происхождение понятий, канонические определения, классификации, определитель «ситуация → термин», соответствие модели данных платформы, источники.
+
+## Статус программы (все разборы выполнены)
+
+| Пункт | Документ |
+|---|---|
+| 1.1 Управленческий учёт общепита | [`academic/01-management-accounting.md`](academic/01-management-accounting.md) |
+| 1.2 Пищевая безопасность и ХАССП | [`academic/06-food-safety-terminology.md`](academic/06-food-safety-terminology.md) |
+| 1.3 Операционный менеджмент | [`academic/07-operations-terminology.md`](academic/07-operations-terminology.md) |
+| 2.1 Юнит-экономика точки | [`academic/02-unit-economics.md`](academic/02-unit-economics.md) |
+| 2.2 Экономика франчайзинга | [`academic/05-franchising-economics.md`](academic/05-franchising-economics.md) |
+| 2.3 Модели ценности гостя (CLV) | [`academic/08-clv-models.md`](academic/08-clv-models.md) |
+| 3.1 Качество сервиса (SERVQUAL/DINESERV) | [`academic/03-service-quality.md`](academic/03-service-quality.md) |
+| 3.2 Инженерия меню | [`academic/09-menu-engineering.md`](academic/09-menu-engineering.md) |
+| 3.3 Психология ожидания | [`academic/10-waiting-psychology.md`](academic/10-waiting-psychology.md) |
+| 4.1 Принятие технологий (TAM/UTAUT) | [`academic/11-technology-adoption.md`](academic/11-technology-adoption.md) |
+| 4.2 Событийная архитектура и CQRS | [`academic/12-event-architecture-cqrs.md`](academic/12-event-architecture-cqrs.md) |
+| 4.3 Качество данных и MDM | [`academic/13-mdm-data-quality.md`](academic/13-mdm-data-quality.md) |
+| 5.1 Бережливая кухня (5S) | [`academic/14-lean-kitchen.md`](academic/14-lean-kitchen.md) |
+| 5.2 Текучесть персонала | [`academic/15-staff-turnover.md`](academic/15-staff-turnover.md) |
+| 5.3 Диффузия инноваций в сетях | [`academic/16-innovation-diffusion.md`](academic/16-innovation-diffusion.md) |
+| 6.1 Лояльность и персональные данные | [`academic/04-personal-data-loyalty.md`](academic/04-personal-data-loyalty.md) |
+| 6.2 Сравнительное право франчайзинга | [`academic/17-franchise-law-comparative.md`](academic/17-franchise-law-comparative.md) |

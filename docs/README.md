@@ -23,6 +23,18 @@
 | [`research/academic/03-service-quality.md`](research/academic/03-service-quality.md) | Качество сервиса: модель Оливера, SERVQUAL → DINESERV, сервис-рекавери |
 | [`research/academic/04-personal-data-loyalty.md`](research/academic/04-personal-data-loyalty.md) | Лояльность и ПДн: режим 152-ФЗ, сравнение с GDPR, чек-лист платформы |
 | [`research/academic/05-franchising-economics.md`](research/academic/05-franchising-economics.md) | Экономика франчайзинга: структуры роялти, агентские издержки, выживаемость |
+| [`research/academic/06-food-safety-terminology.md`](research/academic/06-food-safety-terminology.md) | Пищевая безопасность: Кодекс Алиментариус, ХАССП, ККТ, прослеживаемость |
+| [`research/academic/07-operations-terminology.md`](research/academic/07-operations-terminology.md) | Операционный менеджмент: теория ограничений, очереди, закон Литтла |
+| [`research/academic/08-clv-models.md`](research/academic/08-clv-models.md) | Модели ценности гостя: когорты, RFM, Парето/НБД, Гамма-Гамма, прогнозный CLV |
+| [`research/academic/09-menu-engineering.md`](research/academic/09-menu-engineering.md) | Инженерия меню: матрица Касаваны–Смита, поведенческая экономика меню |
+| [`research/academic/10-waiting-psychology.md`](research/academic/10-waiting-psychology.md) | Психология ожидания: принципы Мэйстера и требования к статусам/обещаниям |
+| [`research/academic/11-technology-adoption.md`](research/academic/11-technology-adoption.md) | Принятие технологий персоналом: TAM, UTAUT/UTAUT2 и требования к интерфейсам |
+| [`research/academic/12-event-architecture-cqrs.md`](research/academic/12-event-architecture-cqrs.md) | Событийная архитектура и CQRS в мультитенантной платформе |
+| [`research/academic/13-mdm-data-quality.md`](research/academic/13-mdm-data-quality.md) | Качество данных и MDM: мастер-данные сети, золотая запись, владение |
+| [`research/academic/14-lean-kitchen.md`](research/academic/14-lean-kitchen.md) | Бережливая кухня: семь потерь, 5S, визуальный менеджмент |
+| [`research/academic/15-staff-turnover.md`](research/academic/15-staff-turnover.md) | Текучесть линейного персонала: модели ухода и интервенции |
+| [`research/academic/16-innovation-diffusion.md`](research/academic/16-innovation-diffusion.md) | Диффузия инноваций в сетях: механика раскатки изменений (Роджерс) |
+| [`research/academic/17-franchise-law-comparative.md`](research/academic/17-franchise-law-comparative.md) | Сравнительное право франчайзинга: Россия, США (Правило ФТК), ЕС |
 
 ### 1. Рынок и архитектура
 

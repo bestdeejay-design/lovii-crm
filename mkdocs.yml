@@ -52,12 +52,24 @@ nav:
   - "Академические разборы":
     - "Терминология: CRM и ERP": research/terminology-crm-erp.md
     - "Терминология: франшиза и франчайзинг": research/terminology-franchise.md
-    - "Программа дальнейших разборов": research/academic-research-agenda.md
+    - "Программа разборов (статус)": research/academic-research-agenda.md
     - "Разбор 1: управленческий учёт общепита": research/academic/01-management-accounting.md
     - "Разбор 2: юнит-экономика точки": research/academic/02-unit-economics.md
     - "Разбор 3: качество сервиса, SERVQUAL и DINESERV": research/academic/03-service-quality.md
     - "Разбор 4: лояльность и персональные данные": research/academic/04-personal-data-loyalty.md
     - "Разбор 5: экономика франчайзинга": research/academic/05-franchising-economics.md
+    - "Разбор 6: пищевая безопасность и ХАССП": research/academic/06-food-safety-terminology.md
+    - "Разбор 7: операционный менеджмент, ограничения и очереди": research/academic/07-operations-terminology.md
+    - "Разбор 8: модели ценности гостя (RFM, BG/NBD, CLV)": research/academic/08-clv-models.md
+    - "Разбор 9: инженерия меню": research/academic/09-menu-engineering.md
+    - "Разбор 10: психология ожидания": research/academic/10-waiting-psychology.md
+    - "Разбор 11: принятие технологий персоналом (TAM/UTAUT)": research/academic/11-technology-adoption.md
+    - "Разбор 12: событийная архитектура и CQRS": research/academic/12-event-architecture-cqrs.md
+    - "Разбор 13: качество данных и MDM": research/academic/13-mdm-data-quality.md
+    - "Разбор 14: бережливая кухня (5S, потери)": research/academic/14-lean-kitchen.md
+    - "Разбор 15: текучесть линейного персонала": research/academic/15-staff-turnover.md
+    - "Разбор 16: диффузия инноваций в сетях": research/academic/16-innovation-diffusion.md
+    - "Разбор 17: сравнительное право франчайзинга": research/academic/17-franchise-law-comparative.md
   - Рынок и архитектура:
     - Обзор рынка: research/00-market-landscape.md
     - Референс-архитектура: research/01-reference-architecture.md
