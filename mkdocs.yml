@@ -112,6 +112,10 @@ nav:
     - "04. Деплой, офлайн и безопасность": research/specs/04-deployment-offline.md
   - "Платёжная инфраструктура":
     - "Банки, онлайн-кассы и ОФД: роли, экономика, лучшие примеры": research/infrastructure/banks-kassa-ofd.md
+  - "SaaS-платформа":
+    - "Карта платформы: app, crm, erp — один комплекс": research/saas/00-platform-map.md
+    - "Правила и схемы движения информации": research/saas/01-information-flow.md
+    - "Демо-кабинет: роли, мок-данные, отчёты": research/saas/02-demo-cabinet.md
   - Аудиты аналогов:
     - Россия:
       - iiko: research/competitors/iiko.md

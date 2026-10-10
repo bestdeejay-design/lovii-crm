@@ -81,6 +81,14 @@
 |---|---|
 | [`research/infrastructure/banks-kassa-ofd.md`](research/infrastructure/banks-kassa-ofd.md) | Банки-эквайеры, онлайн-кассы и ОФД: роли, экономика (сколько съедают от выручки), лучшие примеры 2026, контракт мок-сервисов |
 
+### 2.7. SaaS-платформа и демо
+
+| Файл | Содержание |
+|---|---|
+| [`research/saas/00-platform-map.md`](research/saas/00-platform-map.md) | Карта-цель: `app.lovii.ru`, `crm.lovii.ru`, `erp.lovii.ru` — три входа одной платформы, роли и принципы единства |
+| [`research/saas/01-information-flow.md`](research/saas/01-information-flow.md) | Семь правил движения информации; схемы «источники → журнал → контуры», путь заказа и путь поставки |
+| [`research/saas/02-demo-cabinet.md`](research/saas/02-demo-cabinet.md) | Спецификация демо-кабинета: роли, периметр мок-данных, отчёты и рекомендации, аудиты, план этапа |
+
 ### 3. Аудиты аналогов
 
 **Россия**
