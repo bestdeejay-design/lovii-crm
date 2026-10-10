@@ -223,6 +223,57 @@
       }));
   });
 
+  // ---------- Заявки точек и франчайзи ----------
+  route("uk/requests", (el) => {
+    el.innerHTML =
+      "<h1>📨 Заявки точек и франчайзи</h1>" +
+      '<p class="muted">Оборудование, маркетинг, обучение, ИТ. У каждой заявки — таймер SLA; просрочки видны собственнику в пульсе.</p>' +
+      '<div class="grid cols-4 mb" id="req-kpis"></div>' +
+      '<div class="card pad0"><table class="tbl" id="req-tbl"></table></div>';
+    function draw() {
+      const open = DS.requests.filter((q) => q.status !== "Выполнена");
+      const overdue = DS.requests.filter((q) => q.status === "Просрочена" ||
+        (q.status !== "Выполнена" && (DS.NOW - q.ts) / 3600000 > q.slaH));
+      document.getElementById("req-kpis").innerHTML =
+        UI.kpi("Открытых заявок", open.length) +
+        UI.kpi("Просрочено", overdue.length, "SLA нарушен", overdue.length === 0) +
+        UI.kpi("Новых за сутки", DS.requests.filter((q) => DS.NOW - q.ts < DS.DAY).length) +
+        UI.kpi("Среднее время решения", "14 ч", "цель ≤ 24 ч", true);
+      document.getElementById("req-tbl").innerHTML =
+        "<tr><th>№</th><th>Точка / франчайзи</th><th>Заявка</th><th>SLA</th><th>Статус</th><th></th></tr>" +
+        DS.requests.map((q) => {
+          const ageH = (DS.NOW - q.ts) / 3600000;
+          const late = q.status !== "Выполнена" && ageH > q.slaH;
+          return "<tr><td><b>" + q.id + "</b></td>" +
+            "<td>" + locName(q.from) + "<div class='small muted'>" + DS.tenants[q.tenant].name + "</div></td>" +
+            "<td><b>" + q.subject + "</b><div class='small muted'>" + esc(q.text) + "</div></td>" +
+            "<td>" + (late ? UI.badge("просрочен " + Math.round(ageH - q.slaH) + " ч", "err") :
+              q.status === "Выполнена" ? UI.badge("соблюдён", "ok") : UI.badge(fmt.ago(q.ts) + " · лимит " + q.slaH + " ч", "gray")) + "</td>" +
+            "<td>" + UI.badge(q.status, q.status === "Выполнена" ? "ok" : q.status === "Просрочена" ? "err" : q.status === "В работе" ? "info" : "gray") + "</td>" +
+            '<td class="right">' +
+            (q.status === "Новая" ? '<button class="btn small" data-take="' + q.id + '">Взять в работу</button>' :
+              q.status === "В работе" || q.status === "Просрочена" ? '<button class="btn small ok" data-close="' + q.id + '">Выполнено</button>' : UI.badge("✓", "ok")) +
+            "</td></tr>";
+        }).join("");
+      el.querySelectorAll("[data-take]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const q = DS.requests.find((x) => x.id === b.dataset.take);
+          q.status = "В работе";
+          emit("ПЛАТФОРМА", "Заявка " + q.id + " («" + q.subject + "») взята УК в работу, назначен ответственный", "info");
+          draw();
+        }));
+      el.querySelectorAll("[data-close]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const q = DS.requests.find((x) => x.id === b.dataset.close);
+          q.status = "Выполнена";
+          emit("ПЛАТФОРМА", "Заявка " + q.id + " выполнена: франчайзи получил уведомление и оценку качества", "ok");
+          toast("Заявка закрыта, франчайзи уведомлён.");
+          draw();
+        }));
+    }
+    draw();
+  });
+
   // ---------- Аудиты ----------
   route("uk/audits", (el) => {
     el.innerHTML =

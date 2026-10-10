@@ -260,4 +260,187 @@
         nav("erp", "supplier");
       }));
   });
+
+  // ---------- Инвентаризация (слепая) ----------
+  route("erp/inventory", (el) => {
+    const locLots = DS.lots.filter((l) => l.loc === state.loc).slice(0, 16);
+    const preset = (i) => (i % 5 === 2 ? -0.4 : i % 7 === 3 ? 0.6 : 0);
+    let blind = true;
+    el.innerHTML =
+      "<h1>🔍 Инвентаризация — " + locName(state.loc) + "</h1>" +
+      '<p class="muted">Слепой пересчёт: счётчик вносит факт, система сравнивает с книжными остатками постфактум. Итоги идут в фудкост и журнал.</p>' +
+      '<div class="grid cols-4 mb" id="inv-kpis"></div>' +
+      '<div class="rowline mb"><label class="small"><input type="checkbox" id="inv-blind"' + (blind ? " checked" : "") + '> Слепой режим (скрыть книжный остаток)</label>' +
+      '<span class="spacer"></span><button class="btn primary" id="inv-confirm">Утвердить итоги</button></div>' +
+      '<div class="card pad0"><table class="tbl" id="inv-tbl"></table></div>' +
+      '<div id="inv-result" class="mt"></div>';
+
+    function readFact() {
+      const res = [];
+      locLots.forEach((l, i) => {
+        const inp = document.querySelector('[data-inv="' + i + '"]');
+        res.push(i % 5 === 2 || i % 7 === 3 ? l.qty + preset(i) : (inp ? +inp.value : l.qty + preset(i)));
+      });
+      return res;
+    }
+    function draw() {
+      document.getElementById("inv-blind").checked = blind;
+      const th = "<tr><th>Ингредиент</th><th>Ед.</th>" +
+        (blind ? "" : "<th class='right'>Книжный остаток</th>") +
+        "<th class='right'>Факт</th>" + (blind ? "" : "<th class='right'>Отклонение</th><th>Причина</th>") + "</tr>";
+      let body = "";
+      locLots.forEach((l, i) => {
+        const g = DS.ing.find((x) => x.id === l.ing);
+        const fact = l.qty + preset(i);
+        body += "<tr><td><b>" + g.name + "</b></td><td>" + g.unit + "</td>" +
+          (blind ? "" : "<td class='right muted'>" + l.qty + "</td>") +
+          "<td class='right'><input type='number' step='0.1' style='width:80px' data-inv='" + i + "' value='" + fact.toFixed(1) + "'></td>" +
+          (blind ? "" : "<td class='right'>" + devHtml(preset(i), g) + "</td><td>" + reasonSel(preset(i)) + "</td>") + "</tr>";
+      });
+      document.getElementById("inv-tbl").innerHTML = th + body;
+      drawKpis();
+    }
+    function devHtml(d, g) {
+      if (d === 0) return '<span class="muted">0</span>';
+      return '<b style="color:var(--' + (d < 0 ? "err" : "warn") + ')">' + (d > 0 ? "+" : "") + d.toFixed(1) + " " + g.unit + "</b>";
+    }
+    function reasonSel(d) {
+      if (d === 0) return "";
+      return "<select class='small'>" +
+        (d < 0 ? "<option>Недостача (разбор)</option><option>Списание без акта</option><option>Ошибка приёмки</option>" :
+          "<option>Неучтённая приёмка</option><option>Излишек поставщика</option>") + "</select>";
+    }
+    function drawKpis() {
+      const devSum = locLots.reduce((s, l, i) => {
+        const g = DS.ing.find((x) => x.id === l.ing);
+        return s + preset(i) * g.price;
+      }, 0);
+      const neg = locLots.filter((l, i) => preset(i) < 0).length;
+      document.getElementById("inv-kpis").innerHTML =
+        UI.kpi("Позиций в пересчёте", locLots.length, "зоны: склад, холод, заготовки") +
+        UI.kpi("Отклонение, ₽", (devSum > 0 ? "+" : "") + fmt.money(devSum), "недостачи и излишки", false) +
+        UI.kpi("Недостач", neg + " поз.", "требуют причины", false) +
+        UI.kpi("Следующая инвентаризация", "через 3 дня", "слепая, по зонам");
+    }
+    draw();
+    document.getElementById("inv-blind").addEventListener("change", (e) => { blind = e.target.checked; draw(); });
+    document.getElementById("inv-confirm").addEventListener("click", () => {
+      const facts = readFact();
+      let devSum = 0, shortages = 0;
+      locLots.forEach((l, i) => {
+        const g = DS.ing.find((x) => x.id === l.ing);
+        const d = facts[i] - l.qty;
+        devSum += d * g.price;
+        if (d < -0.05) shortages++;
+      });
+      emit("ПЛАТФОРМА", "Инвентаризация «" + locName(state.loc) + "» утверждена: отклонение " + (devSum > 0 ? "+" : "") + fmt.money(devSum) + ", недостач: " + shortages + " — итоги ушли в фудкост", devSum < 0 ? "warn" : "ok");
+      document.getElementById("inv-result").innerHTML =
+        '<div class="card" style="border-left:4px solid var(--' + (devSum < 0 ? "warn" : "ok") + ')"><b>Итоги утверждены.</b> ' +
+        (devSum < 0 ? "Недостача " + fmt.money(-devSum) + " увеличит фактический фудкост точки — система предложит слепую перепроверку зон и сверку ТТК." :
+          "Отклонения в пределах нормы. Корректировки остатков проведены, акты подписаны.") +
+        " <a href='#/erp/foodcost'>Смотреть влияние на фудкост →</a></div>";
+      toast("Итоги инвентаризации утверждены.");
+    });
+  });
+
+  // ---------- Производство (фабрика-кухня) ----------
+  route("erp/production", (el) => {
+    const shopIds = ["l1", "l2", "l3", "l4"];
+    const demand = (sf) => shopIds.reduce((s, id) => s + sf.per[id], 0);
+    el.innerHTML =
+      "<h1>🏗 Производство — фабрика-кухня</h1>" +
+      '<p class="muted">Задания на день считаются из прогноза заказов точек. Готовый полуфабрикат уходит перемещением по ЭДО-накладной.</p>' +
+      '<div class="grid cols-4 mb" id="prod-kpis"></div>' +
+      '<div class="card pad0"><table class="tbl" id="prod-tbl"></table></div>' +
+      '<div class="card mt2"><h3>Вчерашние перемещения</h3>' +
+      UI.table(
+        [{ k: "i", t: "Полуфабрикат" }, { k: "l", t: "Точка" }, { k: "q", t: "Кол-во", right: 1 }, { k: "s", t: "Статус" }],
+        [
+          { cells: { i: "Лосось порционированный", l: "Ловии Суши · Центральный", q: "6,0 кг", s: UI.badge("принято", "ok") } },
+          { cells: { i: "Тесто для пиццы", l: "Ловии Суши · Северный", q: "60 шт", s: UI.badge("принято", "ok") } },
+          { cells: { i: "Овощная нарезка микс", l: "Ловии Суши · Аэропорт", q: "4,2 кг", s: UI.badge("расхождение 0,3 кг", "warn") } }
+        ]) + "</div>";
+    function draw() {
+      const list = DS.semifinished;
+      const done = list.filter((s) => s.status === "Отгружено").length;
+      document.getElementById("prod-kpis").innerHTML =
+        UI.kpi("Заданий на день", list.length, "по прогнозу заказов") +
+        UI.kpi("Выполнено", done + " из " + list.length, "", done === list.length) +
+        UI.kpi("Общая потребность", fmt.num(list.reduce((s, x) => s + demand(x), 0)) + " ед.", "4 точки сети") +
+        UI.kpi("Дедлайн отгрузки", "17:00", "до вечернего пика", true);
+      document.getElementById("prod-tbl").innerHTML =
+        "<tr><th>Полуфабрикат</th><th class='right'>Потребность точек</th><th class='right'>Произведено</th><th>Статус</th><th></th></tr>" +
+        list.map((sf) => {
+          const dem = demand(sf);
+          const btns = sf.status === "Новое" ? '<button class="btn small primary" data-start="' + sf.id + '">Запустить</button>' :
+            sf.status === "В работе" ? '<button class="btn small ok" data-finish="' + sf.id + '">Завершить партию</button>' :
+              sf.status === "Произведено" ? '<button class="btn small primary" data-ship="' + sf.id + '">Переместить в точки</button>' :
+                UI.badge("отгружено", "ok");
+          return "<tr><td><b>" + sf.name + "</b><div class='small muted'>ТТК №" + (100 + +sf.id.slice(2)) + "</div></td>" +
+            "<td class='right'>" + dem + " " + sf.unit + "<div class='small muted'>Ц " + sf.per.l1 + " · С " + sf.per.l2 + " · К " + sf.per.l3 + " · А " + sf.per.l4 + "</div></td>" +
+            "<td class='right'>" + sf.produced + " " + sf.unit + "</td>" +
+            "<td>" + UI.badge(sf.status.toLowerCase(), sf.status === "Отгружено" ? "ok" : sf.status === "В работе" ? "info" : "gray") + "</td>" +
+            "<td class='right'>" + btns + "</td></tr>";
+        }).join("");
+      el.querySelectorAll("[data-start]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const sf = DS.semifinished.find((x) => x.id === b.dataset.start);
+          sf.status = "В работе";
+          sf.produced = Math.round(demand(sf) * 0.6 * 10) / 10;
+          emit("ПЛАТФОРМА", "Производство запущено: «" + sf.name + "» (фабрика-кухня)", "info");
+          draw();
+        }));
+      el.querySelectorAll("[data-finish]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const sf = DS.semifinished.find((x) => x.id === b.dataset.finish);
+          sf.status = "Произведено";
+          sf.produced = demand(sf);
+          emit("ПЛАТФОРМА", "Партия произведена: «" + sf.name + "», " + sf.produced + " " + sf.unit + " — контроль качества пройден", "ok");
+          draw();
+        }));
+      el.querySelectorAll("[data-ship]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const sf = DS.semifinished.find((x) => x.id === b.dataset.ship);
+          sf.status = "Отгружено";
+          emit("ПЛАТФОРМА", "Перемещение «" + sf.name + "»: 4 точки, накладная через ЭДО, курьер фабрики выехал", "ok");
+          toast("Перемещение оформлено, точки получили уведомление.");
+          draw();
+        }));
+    }
+    draw();
+  });
+
+  // ---------- Взаиморасчёты с поставщиками ----------
+  route("erp/settlements", (el) => {
+    const totalDebt = DS.settlements.reduce((s, x) => s + x.debt, 0);
+    el.innerHTML =
+      "<h1>💼 Взаиморасчёты с поставщиками</h1>" +
+      '<p class="muted">Сверка по данным приёмки (ЭДО) и платежей: задолженность видна до дня оплаты, просрочка подсвечивается.</p>' +
+      '<div class="grid cols-4 mb">' +
+      UI.kpi("К оплате поставщикам", fmt.money(totalDebt), "по всем договорам", false) +
+      UI.kpi("Платежей на этой неделе", "3", "на 1 240 000 ₽ по графику") +
+      UI.kpi("Средняя отсрочка", "17 дней", "по договорам") +
+      UI.kpi("Сверка актов", "ЭДО", "УПД по каждой поставке", true) +
+      "</div>" +
+      '<div class="card pad0"><table class="tbl" id="set-tbl"></table></div>';
+    function draw() {
+      document.getElementById("set-tbl").innerHTML =
+        "<tr><th>Поставщик</th><th class='right'>Поставки 30 дней</th><th class='right'>Оплачено</th><th class='right'>Задолженность</th><th>Отсрочка</th><th></th></tr>" +
+        DS.settlements.map((s) =>
+          "<tr><td><b>" + supName(s.sup) + "</b></td><td class='right'>" + fmt.money(s.delivered) + "</td><td class='right'>" + fmt.money(s.paid) + "</td>" +
+          "<td class='right'>" + (s.debt ? '<b style="color:var(--err)">' + fmt.money(s.debt) + "</b>" : UI.badge("0 ₽", "ok")) + "</td>" +
+          "<td>" + s.terms + " дней</td>" +
+          '<td class="right">' + (s.debt ? '<button class="btn small primary" data-pay="' + s.sup + '">Оплатить</button>' : UI.badge("рассчитано", "ok")) + "</td></tr>").join("");
+      el.querySelectorAll("[data-pay]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const s = DS.settlements.find((x) => x.sup === b.dataset.pay);
+          emit("БАНК", "Платёж поставщику «" + supName(s.sup) + "»: " + fmt.money(s.debt) + ", платёжное поручение отправлено", "ok");
+          s.paid = s.delivered;
+          s.debt = 0;
+          toast("Платёж отправлен в банк.");
+          draw();
+        }));
+    }
+    draw();
+  });
 })();

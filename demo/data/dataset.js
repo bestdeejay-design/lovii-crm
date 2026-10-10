@@ -312,6 +312,34 @@
     };
   });
 
+  // --- Заявки точек и франчайзи в УК ---
+  const requests = [
+    { id: "REQ-101", from: "l2", tenant: "fr1", subject: "Оборудование", text: "Холодильный стол на горячем цехе перестал держать температуру", ts: NOW - 1.2 * DAY, status: "В работе", slaH: 24 },
+    { id: "REQ-102", from: "l3", tenant: "fr2", subject: "Маркетинг", text: "Согласовать локальную акцию: ролл месяца по спеццене", ts: NOW - 2.6 * DAY, status: "Новая", slaH: 48 },
+    { id: "REQ-103", from: "l1", tenant: "uk", subject: "Зона доставки", text: "Расширить зону доставки на микрорайон «Северный парк»", ts: NOW - 3.4 * DAY, status: "Выполнена", slaH: 72 },
+    { id: "REQ-104", from: "l4", tenant: "fr2", subject: "Онбординг", text: "Обучить двух новых поваров работе с ТТК и KDS", ts: NOW - 0.4 * DAY, status: "Новая", slaH: 48 },
+    { id: "REQ-105", from: "l3", tenant: "fr2", subject: "ИТ", text: "KDS-планшет на горячем цехе зависает в пиковые часы", ts: NOW - 4.8 * DAY, status: "Просрочена", slaH: 24 }
+  ];
+
+  // --- Взаиморасчёты с поставщиками ---
+  const settlements = suppliers.map((s, i) => {
+    const delivered = ri(380, 940) * 1000;
+    const debtShare = [0.18, 0.32, 0, 0.11, 0.07][i];
+    const debt = Math.round(delivered * debtShare / 1000) * 1000;
+    return { sup: s.id, delivered, paid: delivered - debt, debt, terms: [14, 7, 14, 21, 30][i] };
+  });
+
+  // --- Полуфабрикаты фабрики-кухни ---
+  const semifinished = [
+    { id: "sf1", name: "Лосось порционированный", unit: "кг", per: { l1: 6, l2: 4.5, l3: 4, l4: 3.5 }, produced: 0, status: "Новое" },
+    { id: "sf2", name: "Угорь жареный", unit: "кг", per: { l1: 3, l2: 2, l3: 2.5, l4: 1.5 }, produced: 0, status: "Новое" },
+    { id: "sf3", name: "Сыр сливочный, фасовка 180 г", unit: "шт", per: { l1: 60, l2: 45, l3: 40, l4: 30 }, produced: 0, status: "Новое" },
+    { id: "sf4", name: "Омлет тамаго", unit: "шт", per: { l1: 40, l2: 30, l3: 25, l4: 20 }, produced: 0, status: "Новое" },
+    { id: "sf5", name: "Соус цезарь", unit: "л", per: { l1: 5, l2: 4, l3: 3, l4: 2 }, produced: 0, status: "Новое" },
+    { id: "sf6", name: "Тесто для пиццы", unit: "шт", per: { l1: 80, l2: 60, l3: 55, l4: 45 }, produced: 0, status: "Новое" },
+    { id: "sf7", name: "Овощная нарезка микс", unit: "кг", per: { l1: 9, l2: 7, l3: 6, l4: 5 }, produced: 0, status: "Новое" }
+  ];
+
   // --- Стоп-лист ---
   const stopList = menu.filter((m) => m.stop);
 
@@ -327,6 +355,7 @@
     suppliers, prices, lots, stock, staff, couriers, guests,
     channels, orders, dailyByLoc, tickets, reviews, purchaseOrders,
     auditTemplates, audits, royalty, stopList, foodcostPct,
+    requests, settlements, semifinished,
     helpers: { pick, ri, chance }
   };
 })();

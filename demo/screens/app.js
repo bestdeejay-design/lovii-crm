@@ -17,7 +17,8 @@
     const stop = new Set(DS.stopList.map((m) => m.id));
     el.innerHTML =
       "<h1>🍣 Ловии Суши — доставка и самовывоз</h1>" +
-      '<p class="muted">Меню синхронизировано со всеми каналами; стоп-лист точки применяется мгновенно.</p>' +
+      '<p class="muted">Меню синхронизировано со всеми каналами; стоп-лист точки применяется мгновенно. ' +
+      'Рабочий прототип гостевого контура живёт на <a href="http://lovii.mobiap.com" target="_blank" rel="noopener">lovii.mobiap.com</a>.</p>' +
       '<div class="rowline mb" id="cat-filter"></div>' +
       '<div class="grid cols-3" id="menu-grid"></div>' +
       '<div class="card mt2" id="cart-card"></div>';

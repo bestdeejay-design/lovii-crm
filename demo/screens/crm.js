@@ -226,6 +226,124 @@
     draw();
   });
 
+  // ---------- Задачи точки ----------
+  route("crm/tasks", (el) => {
+    const base = [];
+    DS.audits.filter((a) => a.loc === state.loc).forEach((a) =>
+      a.tasks.filter((t) => !t.done).forEach((t) =>
+        base.push({ id: "T-" + base.length, src: "Аудит", title: t.title, due: "48 ч", sev: "warn", status: "Новая" })));
+    DS.reviews.filter((r) => r.loc === state.loc && r.rating <= 2 && !r.recovery).slice(0, 2).forEach((r) =>
+      base.push({ id: "T-" + base.length, src: "Отзыв", title: "Сервис-рекавери: отзыв " + r.rating + "★ по заказу " + r.order, due: "24 ч", sev: "err", status: "Новая" }));
+    [
+      { title: "Слепая инвентаризация по зонам (склад, холод)", src: "Регулярная", due: "3 дня", sev: "info" },
+      { title: "Санитарный день: генеральная уборка цехов", src: "Регулярная", due: "5 дней", sev: "info" },
+      { title: "ТО кассы: проверка ФН и чековой ленты", src: "Регулярная", due: "7 дней", sev: "info" }
+    ].forEach((t) => base.push({ id: "T-" + base.length, src: t.src, title: t.title, due: t.due, sev: t.sev, status: "Новая" }));
+    if (state.loc === "l3") base.push({ id: "T-" + base.length, src: "УК", title: "Тендер по лососю: запросить цены у двух альтернативных поставщиков", due: "просрочено", sev: "err", status: "Новая" });
+
+    el.innerHTML =
+      "<h1>✅ Задачи точки — " + locName(state.loc) + "</h1>" +
+      '<p class="muted">Единый борд: аудиты, отзывы, поручения УК и регулярные работы. Источники задач видны — ничего не теряется между системами.</p>' +
+      '<div class="grid cols-4 mb" id="task-kpis"></div>' +
+      '<div class="card pad0"><table class="tbl" id="task-tbl"></table></div>';
+    function draw() {
+      const open = base.filter((t) => t.status !== "Выполнена");
+      document.getElementById("task-kpis").innerHTML =
+        UI.kpi("Открытых задач", open.length, "по этой точке") +
+        UI.kpi("В работе", base.filter((t) => t.status === "В работе").length) +
+        UI.kpi("Просрочено", base.filter((t) => t.due === "просрочено" && t.status !== "Выполнена").length, "контроль УК", false) +
+        UI.kpi("Закрыто за неделю", "12", "среднее время 1,8 дня", true);
+      document.getElementById("task-tbl").innerHTML =
+        "<tr><th>Задача</th><th>Источник</th><th>Срок</th><th>Статус</th><th></th></tr>" +
+        base.map((t, i) =>
+          "<tr><td><b>" + t.title + "</b></td><td>" + UI.badge(t.src, t.src === "Аудит" ? "warn" : t.src === "Отзыв" ? "err" : t.src === "УК" ? "brand" : "gray") + "</td>" +
+          "<td>" + (t.due === "просрочено" ? UI.badge("просрочено", "err") : '<span class="small">' + t.due + "</span>") + "</td>" +
+          "<td>" + UI.badge(t.status, t.status === "Выполнена" ? "ok" : t.status === "В работе" ? "info" : "gray") + "</td>" +
+          '<td class="right">' +
+          (t.status === "Новая" ? '<button class="btn small" data-take="' + i + '">Взять в работу</button>' :
+            t.status === "В работе" ? '<button class="btn small ok" data-done="' + i + '">Завершить</button>' : UI.badge("✓", "ok")) +
+          "</td></tr>").join("");
+      el.querySelectorAll("[data-take]").forEach((b) =>
+        b.addEventListener("click", () => {
+          base[+b.dataset.take].status = "В работе";
+          emit("ПЛАТФОРМА", "Задача взята в работу: «" + base[+b.dataset.take].title + "»", "info");
+          draw();
+        }));
+      el.querySelectorAll("[data-done]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const t = base[+b.dataset.done];
+          t.status = "Выполнена";
+          emit("ПЛАТФОРМА", "Задача выполнена: «" + t.title + "» — УК видит закрытие в реальном времени", "ok");
+          toast("Задача закрыта.");
+          draw();
+        }));
+    }
+    draw();
+  });
+
+  // ---------- Планирование смен ----------
+  route("crm/schedule", (el) => {
+    const days = [];
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(DS.NOW + i * DS.DAY);
+      const wd = d.getDay();
+      const peak = wd === 5 || wd === 6 || wd === 0;
+      days.push({
+        label: ["вс", "пн", "вт", "ср", "чт", "пт", "сб"][wd] + " " + d.getDate(),
+        peak,
+        need: { hall: peak ? 3 : 2, kitchen: peak ? 4 : 3, delivery: peak ? 4 : 3 }
+      });
+    }
+    const lines = [{ id: "hall", t: "Зал", staff: "Анна К., Виктор Л., Мария С., Тимур А." },
+      { id: "kitchen", t: "Кухня", staff: "Дмитрий В., Ольга П., Ренат Х., Иван Ч." },
+      { id: "delivery", t: "Доставка", staff: "5 курьеров на линии" }];
+    const plan = {};
+    days.forEach((d, di) => lines.forEach((l) => {
+      const gap = (di === 3 && l.id === "kitchen") || (di === 5 && l.id === "delivery") ? 1 : 0;
+      plan[di + "-" + l.id] = { have: d.need[l.id] - gap, filled: gap === 0 };
+    }));
+    const SHIFT_COST = 2400;
+    el.innerHTML =
+      "<h1>🗓 Планирование смен — " + locName(state.loc) + "</h1>" +
+      '<p class="muted">Потребность считается из прогноза заказов; разрывы на пиковые дни подсвечены. ФОТ обновляется автоматически.</p>' +
+      '<div class="grid cols-4 mb" id="sch-kpis"></div>' +
+      '<div class="card pad0" style="overflow-x:auto"><table class="tbl" id="sch-tbl"></table></div>';
+    function draw() {
+      let gaps = 0, shifts = 0;
+      days.forEach((d, di) => lines.forEach((l) => {
+        const c = plan[di + "-" + l.id];
+        shifts += c.have;
+        if (c.have < d.need[l.id]) gaps += d.need[l.id] - c.have;
+      }));
+      document.getElementById("sch-kpis").innerHTML =
+        UI.kpi("Покрытие недели", Math.round(shifts / (shifts + gaps) * 100) + "%", "цель 100%", gaps === 0) +
+        UI.kpi("Разрывов", gaps, gaps ? "нужно закрыть" : "график укомплектован", gaps === 0) +
+        UI.kpi("Смен за неделю", fmt.num(shifts)) +
+        UI.kpi("ФОТ недели", fmt.money(shifts * SHIFT_COST), "ставка 2 400 ₽/смена");
+      document.getElementById("sch-tbl").innerHTML =
+        "<tr><th>Линия</th>" + days.map((d) => "<th>" + d.label + (d.peak ? " 🔥" : "") + "</th>").join("") + "</tr>" +
+        lines.map((l) =>
+          "<tr><td><b>" + l.t + "</b><div class='small muted'>" + l.staff + "</div></td>" +
+          days.map((d, di) => {
+            const c = plan[di + "-" + l.id];
+            const gap = d.need[l.id] - c.have;
+            return "<td class='center'>" + (gap > 0
+              ? '<b style="color:var(--err)">' + c.have + "/" + d.need[l.id] + "</b><br><button class='btn small warn' data-fill='" + di + "-" + l.id + "'>Закрыть</button>"
+              : '<b style="color:var(--ok)">' + c.have + "/" + d.need[l.id] + "</b>") + "</td>";
+          }).join("") + "</tr>").join("");
+      el.querySelectorAll("[data-fill]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const c = plan[b.dataset.fill];
+          c.have += 1;
+          const l = lines.find((x) => x.id === b.dataset.fill.split("-")[1]);
+          emit("ПЛАТФОРМА", "Разрыв закрыт: " + l.t + " — выведен сотрудник из резерва, смена согласована", "ok");
+          toast("Разрыв закрыт.");
+          draw();
+        }));
+    }
+    draw();
+  });
+
   // ---------- Стоп-лист ----------
   route("crm/stoplist", (el) => {
     el.innerHTML =
@@ -325,7 +443,21 @@
             l: locName(r.loc), r: fmt.money(r.revenue), p: fmt.money(r.royalty), m: fmt.money(r.marketing),
             s: r.paid ? UI.badge("оплачено", "ok") : '<button class="btn small primary" data-pay="' + r.loc + '">Оплатить</button>'
           }
-        }))) + "</div>";
+        }))) + "</div>" +
+      '<div class="card mt2"><h3>Заявки в УК</h3>' +
+      UI.table(
+        [{ k: "id", t: "№" }, { k: "s", t: "Тема" }, { k: "l", t: "Точка" }, { k: "a", t: "Возраст" }, { k: "st", t: "Статус" }],
+        DS.requests.filter((q) => q.tenant === "fr1").map((q) => ({
+          cells: {
+            id: q.id, s: "<b>" + q.subject + "</b><div class='small muted'>" + q.text + "</div>",
+            l: locName(q.from), a: fmt.ago(q.ts),
+            st: UI.badge(q.status, q.status === "Выполнена" ? "ok" : q.status === "Просрочена" ? "err" : q.status === "В работе" ? "info" : "gray")
+          }
+        }))) +
+      '<div class="rowline mt"><select id="req-subj"><option>Оборудование</option><option>Маркетинг</option><option>Обучение</option><option>ИТ</option><option>Снабжение</option></select>' +
+      '<input type="text" id="req-text" style="flex:1" placeholder="Опишите проблему или запрос для УК…">' +
+      '<button class="btn primary" id="req-create">Отправить в УК</button></div>' +
+      '<p class="small muted mt">Заявка уходит менеджеру УК с таймером SLA; вы видите статусы в реальном времени.</p></div>';
     el.querySelectorAll("[data-pay]").forEach((b) =>
       b.addEventListener("click", () => {
         DS.royalty.find((r) => r.loc === b.dataset.pay).paid = true;
@@ -333,5 +465,17 @@
         toast("Оплата проведена.");
         nav("crm", "franchisee");
       }));
+    const rc = document.getElementById("req-create");
+    if (rc) rc.addEventListener("click", () => {
+      const text = document.getElementById("req-text").value || "Запрос от франчайзи (демо)";
+      DS.requests.unshift({
+        id: "REQ-" + (106 + DS.requests.length), from: "l1", tenant: "fr1",
+        subject: document.getElementById("req-subj").value, text,
+        ts: Date.now(), status: "Новая", slaH: 48
+      });
+      emit("ПЛАТФОРМА", "Новая заявка в УК от «Фуд Восток»: " + text, "warn");
+      toast("Заявка отправлена в УК. Таймер SLA запущен.");
+      nav("crm", "franchisee");
+    });
   });
 })();
