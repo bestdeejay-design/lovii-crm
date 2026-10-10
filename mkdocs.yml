@@ -64,6 +64,9 @@ nav:
   - Резюме и аудит:
     - Резюме исследования: research/executive-summary.md
     - Аудит корпуса документации: research/audit-report.md
+    - "Внешний аудит документации":
+      - "Внешний аудит: отчёт": research/audit/report.md
+      - "Внешний аудит: реестр находок": research/audit/register.md
   - "Академические разборы":
     - "Сравнение: CRM против ERP": research/crm-vs-erp.md
     - "Терминология: CRM и ERP": research/terminology-crm-erp.md

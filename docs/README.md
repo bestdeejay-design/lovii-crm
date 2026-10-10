@@ -13,6 +13,13 @@
 | [`research/executive-summary.md`](research/executive-summary.md) | Резюме исследования на одной странице — для руководства |
 | [`research/audit-report.md`](research/audit-report.md) | Аудит корпуса документации: проверки, пробелы, оценки |
 
+### 0.1. Внешний аудит документации (ревизия №1)
+
+| Файл | Содержание |
+|---|---|
+| [`research/audit/report.md`](research/audit/report.md) | Отчёт внешнего аудита корпуса (70 страниц): 43 находки — 4 критичных, 23 средних, 16 низких; методика, проверенное, план исправлений в 3 волны. [DOCX](research/audit/lovii_crm_audit_report.docx) |
+| [`research/audit/register.md`](research/audit/register.md) | Реестр находок F-01…F-43 с цитатами, привязкой к файлам и рекомендациями (рабочий чек-лист). [XLSX](research/audit/lovii_crm_audit_register.xlsx) |
+
 ### 0.5. Академические разборы
 
 | Файл | Содержание |
