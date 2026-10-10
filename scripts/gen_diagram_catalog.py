@@ -55,7 +55,7 @@ def parse_nav(items, group=""):
 
 
 def parse_diagrams(path: pathlib.Path):
-    """Список (заголовок раздела, тип диаграммы) по блокам ```mermaid."""
+    """Список (заголовок раздела, тип, title-директива) по блокам ```mermaid."""
     lines = path.read_text(encoding="utf-8").split("\n")
     out = []
     heading = ""
@@ -69,12 +69,16 @@ def parse_diagrams(path: pathlib.Path):
                 j += 1
             if lang == "mermaid":
                 first = ""
+                title = ""
                 for k in range(i + 1, j):
-                    if lines[k].strip():
-                        first = lines[k].strip()
-                        break
+                    stripped = lines[k].strip()
+                    if stripped and not first:
+                        first = stripped
+                    m = re.match(r"^title\s+(.+)$", stripped)
+                    if m and not title:
+                        title = m.group(1).strip()
                 typ = first.split()[0] if first else "?"
-                out.append((heading, typ))
+                out.append((heading, typ, title))
             i = j + 1
         else:
             m = re.match(r"^#{1,4}\s+(.*)$", line)
@@ -108,13 +112,14 @@ def main():
         if top not in rows_by_section:
             rows_by_section[top] = []
             order.append(top)
-        for heading, typ in diagrams:
+        for heading, typ, title in diagrams:
             tname = TYPE_NAMES.get(typ, typ)
             counts[tname] = counts.get(tname, 0) + 1
             total += 1
             anchor = slugify(heading) if heading else ""
             rel = os.path.relpath(path, "research")  # каталог в research/
-            rows_by_section[top].append((rel, heading, tname, anchor))
+            name = title if title else heading
+            rows_by_section[top].append((rel, name, tname, anchor))
 
     out = []
     out.append("# Каталог схем сайта")

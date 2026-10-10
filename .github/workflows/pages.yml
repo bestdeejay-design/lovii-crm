@@ -42,12 +42,12 @@ jobs:
       - name: Publish built site to branch root
         run: |
           # убираем ранее сгенерированные файлы сайта в корне (но не исходники)
-          rm -rf index.html 404.html assets javascripts search research sitemap.xml sitemap.xml.gz
+          rm -rf index.html 404.html assets javascripts stylesheets search research sitemap.xml sitemap.xml.gz
           cp -r site/. .
           touch .nojekyll
           git config user.name "lovii docs bot"
           git config user.email "lovii-docs-bot@users.noreply.github.com"
-          git add -A -- index.html 404.html assets javascripts search research sitemap.xml sitemap.xml.gz .nojekyll
+          git add -A -- index.html 404.html assets javascripts stylesheets search research sitemap.xml sitemap.xml.gz .nojekyll
           if ! git diff --cached --quiet; then
             git commit -m "docs(site): publish built documentation"
             git push

@@ -55,6 +55,9 @@ extra:
 extra_javascript:
   - javascripts/mermaid-theme.js
 
+extra_css:
+  - stylesheets/mermaid-dark.css
+
 nav:
   - Главная: README.md
   - "Каталог схем": research/diagram-catalog.md
