@@ -18,6 +18,11 @@
 | [`research/terminology-crm-erp.md`](research/terminology-crm-erp.md) | CRM и ERP: академические определения, происхождение, граница классов, определитель «ситуация → термин» |
 | [`research/terminology-franchise.md`](research/terminology-franchise.md) | Франшиза и франчайзинг: теории, правовой режим РФ, финансовая и операционная терминология |
 | [`research/academic-research-agenda.md`](research/academic-research-agenda.md) | Программа дальнейших академических разборов с приоритетами |
+| [`research/academic/01-management-accounting.md`](research/academic/01-management-accounting.md) | Терминология управленческого учёта общепита: фудкост, прайм-кост, P&L, EBITDA |
+| [`research/academic/02-unit-economics.md`](research/academic/02-unit-economics.md) | Юнит-экономика точки: модель расходов, чувствительность, экономика доставки и франчайзи |
+| [`research/academic/03-service-quality.md`](research/academic/03-service-quality.md) | Качество сервиса: модель Оливера, SERVQUAL → DINESERV, сервис-рекавери |
+| [`research/academic/04-personal-data-loyalty.md`](research/academic/04-personal-data-loyalty.md) | Лояльность и ПДн: режим 152-ФЗ, сравнение с GDPR, чек-лист платформы |
+| [`research/academic/05-franchising-economics.md`](research/academic/05-franchising-economics.md) | Экономика франчайзинга: структуры роялти, агентские издержки, выживаемость |
 
 ### 1. Рынок и архитектура
 
