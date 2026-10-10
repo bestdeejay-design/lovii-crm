@@ -49,6 +49,8 @@ nav:
   - Резюме и аудит:
     - Резюме исследования: research/executive-summary.md
     - Аудит корпуса документации: research/audit-report.md
+  - "Терминология: академический разбор":
+    - "CRM и ERP: определения, границы, правила применения": research/terminology-crm-erp.md
   - Рынок и архитектура:
     - Обзор рынка: research/00-market-landscape.md
     - Референс-архитектура: research/01-reference-architecture.md

@@ -11,6 +11,12 @@
 | [`research/executive-summary.md`](research/executive-summary.md) | Резюме исследования на одной странице — для руководства |
 | [`research/audit-report.md`](research/audit-report.md) | Аудит корпуса документации: проверки, пробелы, оценки |
 
+### 0.5. Терминология
+
+| Файл | Содержание |
+|---|---|
+| [`research/terminology-crm-erp.md`](research/terminology-crm-erp.md) | CRM и ERP: академические определения, происхождение, граница классов, определитель «ситуация → термин» |
+
 ### 1. Рынок и архитектура
 
 | Файл | Содержание |
