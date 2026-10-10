@@ -11,11 +11,13 @@
 | [`research/executive-summary.md`](research/executive-summary.md) | Резюме исследования на одной странице — для руководства |
 | [`research/audit-report.md`](research/audit-report.md) | Аудит корпуса документации: проверки, пробелы, оценки |
 
-### 0.5. Терминология
+### 0.5. Академические разборы
 
 | Файл | Содержание |
 |---|---|
 | [`research/terminology-crm-erp.md`](research/terminology-crm-erp.md) | CRM и ERP: академические определения, происхождение, граница классов, определитель «ситуация → термин» |
+| [`research/terminology-franchise.md`](research/terminology-franchise.md) | Франшиза и франчайзинг: теории, правовой режим РФ, финансовая и операционная терминология |
+| [`research/academic-research-agenda.md`](research/academic-research-agenda.md) | Программа дальнейших академических разборов с приоритетами |
 
 ### 1. Рынок и архитектура
 
