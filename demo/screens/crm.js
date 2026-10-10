@@ -96,7 +96,26 @@
       UI.donut(chMix) + '<div style="flex:1">' + chMix.map((c) => '<div class="rowline small" style="gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:' + c.color + ';display:inline-block"></span>' + c.label + '<span class="spacer"></span>' + c.v + "</div>").join("") + "</div></div></div>" +
       "</div>" +
       '<div class="card mt2"><h3>Топ блюд за 3 дня</h3>' +
-      UI.barsH(topDishes(state.loc), null) + "</div>";
+      UI.barsH(topDishes(state.loc), null) + "</div>" +
+      '<div class="grid cols-2 mt2">' +
+      '<div class="card"><h3>Гости — вернувшиеся против новых (сеть, 8 недель)</h3>' +
+      UI.svgBars(DS.retentionWeeks.map((r) => ({
+        label: DS.fmtDay(r.ts), v: r.retG + r.newG,
+        title: "Неделя от " + DS.fmtDay(r.ts) + ": " + r.retG + " вернувшихся + " + r.newG + " новых (" + r.share + "% удержание)",
+        color: r.share >= 72 ? "#16a34a" : "#7c3aed"
+      })), { h: 150 }) +
+      '<div class="small muted">Высота — все гости недели; цвет зелёный, если доля вернувшихся ≥ 72%. Наведите столбец — точные цифры.</div></div>' +
+      '<div class="card"><h3>Каналы за 30 дней (сеть)</h3>' +
+      UI.table(
+        [{ k: "n", t: "Канал" }, { k: "o", t: "Заказы", right: 1 }, { k: "r", t: "Выручка", right: 1 }, { k: "c", t: "Ср. чек", right: 1 }, { k: "k", t: "Комиссия", right: 1 }],
+        DS.channelKpi.map((c) => ({
+          cells: {
+            n: "<b>" + c.name + "</b>", o: fmt.num(c.orders30), r: fmt.money(c.rev30), c: fmt.money(c.avgCheck),
+            k: c.commission ? UI.badge(c.commission.toLocaleString("ru-RU") + "%", c.commission > 20 ? "err" : "warn") : UI.badge("0%", "ok")
+          }
+        }))) +
+      '<div class="small muted mt">Каждый процент доли прямых каналов (сайт + приложение) вместо агрегатора ≈ 45 тыс ₽/мес экономии комиссии при обороте сети.</div></div>' +
+      "</div>";
   });
 
   function topDishes(loc) {
@@ -109,11 +128,33 @@
   // ---------- Гости ----------
   route("crm/guests", (el) => {
     const seg = ["VIP", "Лояльный", "Регулярный", "Новый", "Спящий"];
-    const counts = seg.map((s) => ({ s, n: DS.guests.filter((g) => g.seg === s).length }));
+    const segStat = seg.map((s) => {
+      const gs = DS.guests.filter((g) => g.seg === s);
+      return {
+        s, n: gs.length,
+        avg: Math.round(gs.reduce((x, g) => x + g.total, 0) / (gs.length || 1)),
+        rev: gs.reduce((x, g) => x + g.total, 0)
+      };
+    });
+    const totalRev = segStat.reduce((x, r) => x + r.rev, 0);
     el.innerHTML =
       "<h1>👥 Гости и сегменты</h1>" +
       '<p class="muted">Единый профиль склеен по телефону/карте из всех каналов: зал, сайт, агрегаторы. Всего в базе: <b>' + fmt.num(DS.guests.length) + "</b>.</p>" +
-      '<div class="grid cols-4 mb">' + counts.slice(0, 4).map((c) => UI.kpi(c.s, fmt.num(c.n), "гостей")).join("") + "</div>" +
+      '<div class="grid cols-4 mb">' + segStat.slice(0, 4).map((c) => UI.kpi(c.s, fmt.num(c.n), "гостей")).join("") + "</div>" +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>Выручка по сегментам (накопленная)</h3>' +
+      UI.barsH(segStat.map((r) => ({
+        label: r.s + " · " + r.n + " чел", v: r.rev,
+        text: fmt.money(r.rev) + " (" + Math.round(r.rev / totalRev * 100) + "%)",
+        cls: r.s === "Спящий" ? "warn" : ""
+      })), null) +
+      '<div class="small muted">Доля «Спящих» в выручке — сигнал для реактивационных кампаний; VIP растят программу лояльности.</div></div>' +
+      '<div class="card"><h3>Средний накопленный чек сегмента</h3>' +
+      UI.barsH(segStat.map((r) => ({ label: r.s, v: r.avg, text: fmt.money(r.avg) })), null) +
+      '<div class="small mt">' + UI.badge("Спящий", "err") + ' <span class="small muted">средний риск оттока ' +
+      Math.round(DS.guests.filter((g) => g.seg === "Спящий").reduce((x, g) => x + DS.guestExtras[g.id].churn, 0) / (DS.guests.filter((g) => g.seg === "Спящий").length || 1)) +
+      '%</span> — автоматические кампании реактивации считаются в «Кампаниях».</div></div>' +
+      "</div>" +
       '<div class="rowline mb"><input type="text" id="g-search" placeholder="Поиск по имени или телефону" style="min-width:280px">' +
       '<select id="g-seg"><option value="all">Все сегменты</option>' + seg.map((s) => "<option>" + s + "</option>").join("") + "</select></div>" +
       '<div id="g-list"></div>';
@@ -122,13 +163,21 @@
       const s = document.getElementById("g-seg").value;
       const rows = DS.guests.filter((g) => (s === "all" || g.seg === s) && (g.name.toLowerCase().includes(q) || g.phone.includes(q))).slice(0, 25);
       document.getElementById("g-list").innerHTML = UI.table(
-        [{ k: "n", t: "Гость" }, { k: "p", t: "Телефон" }, { k: "s", t: "Сегмент" }, { k: "v", t: "Визиты", right: 1 }, { k: "t", t: "Потрачено", right: 1 }, { k: "b", t: "Бонусы", right: 1 }],
-        rows.map((g) => ({
-          cells: {
-            n: esc(g.name), p: g.phone, s: UI.badge(g.seg, g.seg === "VIP" ? "warn" : g.seg === "Спящий" ? "err" : "brand"),
-            v: g.visits, t: fmt.money(g.total), b: fmt.num(g.points)
-          }
-        })));
+        [{ k: "n", t: "Гость" }, { k: "s", t: "Сегмент" }, { k: "v", t: "Визиты", right: 1 }, { k: "l", t: "Был", right: 1 }, { k: "t", t: "Потрачено", right: 1 }, { k: "ltv", t: "Прогноз LTV", right: 1 }, { k: "c", t: "Риск оттока" }],
+        rows.map((g) => {
+          const ex = DS.guestExtras[g.id];
+          return {
+            cells: {
+              n: "<b>" + esc(g.name) + "</b><div class='small muted'>" + g.phone + " · любит: " + ex.favCat + "</div>",
+              s: UI.badge(g.seg, g.seg === "VIP" ? "warn" : g.seg === "Спящий" ? "err" : "brand"),
+              v: g.visits,
+              l: g.lastDaysAgo === 0 ? "сегодня" : g.lastDaysAgo + " дн назад",
+              t: fmt.money(g.total),
+              ltv: fmt.money(ex.ltv),
+              c: UI.badge(ex.churn + "%", ex.churn >= 50 ? "err" : ex.churn >= 25 ? "warn" : "ok")
+            }
+          };
+        }));
     }
     document.getElementById("g-search").addEventListener("input", draw);
     document.getElementById("g-seg").addEventListener("change", draw);
@@ -150,6 +199,20 @@
       "<h1>🎯 Кампании и триггеры</h1>" +
       '<p class="muted">Сегменты строятся из журнала заказов (RFM). Перед запуском система показывает прогноз: охват, заказы, выручку и ROMI.</p>' +
       '<div id="camp-table"></div>' +
+      '<div class="card mt2"><h3>Архив кампаний — факт против прогноза</h3>' +
+      UI.table(
+        [{ k: "n", t: "Кампания" }, { k: "g", t: "Сегмент" }, { k: "c", t: "Канал" }, { k: "r", t: "Охват", right: 1 }, { k: "o", t: "Заказы", right: 1 }, { k: "rev", t: "Выручка", right: 1 }, { k: "k", t: "ROMI", right: 1 }, { k: "d", t: "Завершена" }],
+        DS.campaignHistory.map((c) => ({
+          cells: {
+            n: "<b>" + c.name + "</b>", g: c.seg, c: c.ch, r: fmt.num(c.reach), o: fmt.num(c.orders),
+            rev: fmt.money(c.revenue),
+            k: UI.badge((c.romi > 0 ? "+" : "") + c.romi + "%", c.romi >= 300 ? "ok" : c.romi > 0 ? "warn" : "err"),
+            d: DS.fmtDay(c.ts)
+          }
+        }))) +
+      '<div class="small muted mt">Совокупный факт архива: ' +
+      fmt.money(DS.campaignHistory.reduce((s, c) => s + c.revenue, 0)) + " выручки при затратах " +
+      fmt.money(DS.campaignHistory.reduce((s, c) => s + c.cost, 0)) + ". ROMI считается по марже 35% от выручки кампаний.</div></div>" +
       '<div class="card mt2"><h3>Новая кампания — прогноз до запуска</h3><div class="rowline">' +
       '<select id="camp-seg"><option>Спящие</option><option>Именинники</option><option>VIP</option><option>Регулярный</option></select>' +
       '<select id="camp-ch"><option>Пуш</option><option>СМС</option><option>Мессенджер</option></select>' +
@@ -212,6 +275,21 @@
       UI.kpi("NPS", nps, "цель ≥ 50", nps >= 50) +
       UI.kpi("Негативных", neg.length, "требуют ответа за 24 ч", false) +
       UI.kpi("Закрыто рекавери", "7 из 9", "гостей возвращено", true) +
+      "</div>" +
+      '<div class="grid cols-2 mb">' +
+      '<div class="card"><h3>Динамика средней оценки (8 недель)</h3>' +
+      UI.svgBars(DS.ratingWeekly.map((r) => ({
+        label: DS.fmtDay(r.ts), v: r.avg, title: "Неделя от " + DS.fmtDay(r.ts) + ": " + r.avg + "★ (" + r.n + " отзывов, отвечено " + r.answered + "%)",
+        color: r.avg >= 4.3 ? "#16a34a" : r.avg >= 4.0 ? "#7c3aed" : "#d97706"
+      })), { h: 150 }) +
+      '<div class="small muted">Рост последних недель — эффект сервиса-рекавери и ответов на негатив. Зелёным — недели ≥ 4,3★.</div></div>' +
+      '<div class="card"><h3>Отзывы по площадкам</h3>' +
+      UI.barsH(["Яндекс Карты", "2ГИС", "Приложение", "Google Maps"].map((src) => {
+        const rs = revs.filter((r) => r.src === src);
+        const a = rs.length ? (rs.reduce((s, r) => s + r.rating, 0) / rs.length).toFixed(1) : "—";
+        return { label: src, v: rs.length, text: rs.length + " шт · " + a + "★" };
+      }), null) +
+      '<div class="small muted mt">Больше всего негатива приходит с агрегаторных площадок — туда в первую очередь публикуем ответы.</div></div>' +
       "</div>" +
       '<div class="rowline mb">Фильтр: ' +
       '<select id="rev-filter"><option value="all">Все отзывы</option><option value="neg">Только негатив (1–2★)</option><option value="pos">Только позитив (4–5★)</option></select>' +
@@ -284,6 +362,13 @@
       "<h1>✅ Задачи точки — " + locName(state.loc) + "</h1>" +
       '<p class="muted">Единый борд: аудиты, отзывы, поручения УК и регулярные работы. Источники задач видны — ничего не теряется между системами.</p>' +
       '<div class="grid cols-4 mb" id="task-kpis"></div>' +
+      '<div class="card mb"><h3>Закрытие задач точки — 8 недель</h3>' +
+      UI.svgBars(DS.taskWeeks.map((t) => ({
+        label: DS.fmtDay(t.ts), v: t.closed,
+        title: "Неделя от " + DS.fmtDay(t.ts) + ": закрыто " + t.closed + ", среднее время " + t.avgDays + " дн",
+        color: t.avgDays <= 2 ? "#16a34a" : "#d97706"
+      })), { h: 120 }) +
+      '<div class="small muted">Зелёным — недели со средним временем закрытия ≤ 2 дней. Просрочки видны УК в пульсе сети.</div></div>' +
       '<div class="card pad0"><table class="tbl" id="task-tbl"></table></div>';
     function draw() {
       const open = base.filter((t) => t.status !== "Выполнена");

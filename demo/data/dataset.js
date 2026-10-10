@@ -484,6 +484,95 @@
     trend: +(R2() * 24 - 9).toFixed(1)
   }));
 
+  // =====================================================================
+  // Обогащение CRM: профили гостей, динамика отзывов, архив кампаний,
+  // каналы, удержание, бонусная экономика (детерминированное, PRNG R3).
+  // =====================================================================
+  const R3 = rng(314159);
+  const ri3 = (a, b) => a + Math.floor(R3() * (b - a + 1));
+  const pick3 = (arr) => arr[Math.floor(R3() * arr.length)];
+
+  // 1) Расширение профиля гостя: любимый категория, отток, прогноз LTV
+  const guestExtras = {};
+  guests.forEach((g) => {
+    const churn = g.seg === "Спящий" ? ri3(55, 88) : g.seg === "Новый" ? ri3(24, 48)
+      : g.seg === "Регулярный" ? ri3(12, 30) : ri3(2, 14);
+    guestExtras[g.id] = {
+      favCat: pick3(cats).name,
+      churn,
+      ltv: Math.round(g.total * (1.4 + R3() * 1.3)),
+      channel: pick3(["зал", "сайт", "приложение", "агрегатор"])
+    };
+  });
+
+  // 2) Динамика рейтинга отзывов — 8 недель (сеть)
+  const ratingWeekly = Array.from({ length: 8 }, (_, i) => {
+    const drift = i >= 6 ? 0.12 : i >= 4 ? 0.03 : -0.04; // recentes недели растут после рекавери
+    return {
+      ts: NOW.getTime() - (7 - i) * 7 * DAY,
+      avg: +(4.05 + drift + (R3() * 0.24 - 0.12)).toFixed(2),
+      n: ri3(24, 46),
+      answered: ri3(68, 96)
+    };
+  });
+
+  // 3) Архив кампаний с фактическим ROMI (8 завершённых)
+  const CAMPGNAMES = [
+    ["Реактивация «Спящих»", "Спящий", "Пуш + СМС"], ["Именинники недели", "Лояльный", "Мессенджер"],
+    ["Вторая пицца −50%", "Регулярный", "Пуш"], ["Кофе в подарок к завтраку", "Регулярный", "Пуш"],
+    ["Вернись за роллом месяца", "Спящий", "СМС"], ["Семейный сет по пятницам", "Лояльный", "Мессенджер"],
+    ["Бонус ×2 за самовывоз", "Новый", "Пуш"], ["Ранний ужин −15% (16–18)", "Регулярный", "Пуш"]
+  ];
+  const campaignHistory = CAMPGNAMES.map((c, i) => {
+    const reach = ri3(120, 620);
+    const conv = +(0.06 + R3() * 0.16).toFixed(3);
+    const orders = Math.max(4, Math.round(reach * conv * 0.6));
+    const revenue = orders * ri3(1100, 1700);
+    const cost = Math.round(reach * (c[2].indexOf("СМС") >= 0 ? 2.1 : c[2] === "Мессенджер" ? 1.2 : 0.9));
+    return {
+      name: c[0], seg: c[1], ch: c[2],
+      ts: NOW.getTime() - (i + 1) * ri3(3, 9) * DAY,
+      reach, orders, revenue, cost,
+      romi: Math.round((revenue * 0.35 - cost) / Math.max(cost, 1) * 100)
+    };
+  });
+
+  // 4) Каналы за 30 дней (сеть): заказы, выручка, комиссия
+  const channelKpi = channels.map((c) => {
+    const share = c.w / 100;
+    const orders30 = Math.round(5400 * share * (0.92 + R3() * 0.16));
+    const avgCheck = c.id === "agg" ? ri3(1500, 1750) : c.id === "hall" ? ri3(1250, 1500) : ri3(1350, 1650);
+    const commission = c.id === "agg" ? 29.17 : c.id === "site" ? 2.4 : c.id === "app" ? 1.9 : 0;
+    return {
+      ch: c.id, name: c.name, orders30,
+      rev30: Math.round(orders30 * avgCheck),
+      avgCheck, commission
+    };
+  });
+
+  // 5) Удержание гостей — 8 недель: новые и вернувшиеся
+  const retentionWeeks = Array.from({ length: 8 }, (_, i) => {
+    const retG = ri3(340, 520), newG = ri3(90, 190);
+    return {
+      ts: NOW.getTime() - (7 - i) * 7 * DAY,
+      retG, newG,
+      share: Math.round(retG / (retG + newG) * 100)
+    };
+  });
+
+  // 6) Бонусная экономика — 8 недель
+  const bonusWeeks = Array.from({ length: 8 }, () => {
+    const issued = ri3(110, 210) * 1000;
+    return { issued, redeemed: Math.round(issued * (0.34 + R3() * 0.22)) };
+  }).map((b, i) => ({ ts: NOW.getTime() - (7 - i) * 7 * DAY, ...b }));
+
+  // 7) Задачи точек — динамика закрытия, 8 недель
+  const taskWeeks = Array.from({ length: 8 }, (_, i) => ({
+    ts: NOW.getTime() - (7 - i) * 7 * DAY,
+    closed: ri3(9, 22),
+    avgDays: +(1.2 + R3() * 1.6).toFixed(1)
+  }));
+
   // 8) Фудкост сети по неделям (8 недель, тренд вверх из-за роста цен)
   const foodcostWeeks = Array.from({ length: 8 }, (_, i) => ({
     ts: NOW.getTime() - (7 - i) * 7 * DAY,
@@ -498,6 +587,8 @@
     requests, settlements, semifinished,
     priceHistory, kitchenLoad, stationAvg, stockMoves, invHistory,
     supplierKpi, deliveryZones, dishAnalytics, foodcostWeeks,
+    guestExtras, ratingWeekly, campaignHistory, channelKpi,
+    retentionWeeks, bonusWeeks, taskWeeks,
     helpers: { pick, ri, chance }
   };
 })();
