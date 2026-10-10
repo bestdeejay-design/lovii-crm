@@ -1,0 +1,38 @@
+/*
+ * Читаемость схем Mermaid в тёмной теме.
+ *
+ * Диаграмма-квадрант (quadrantChart) в тёмной теме mermaid рисует
+ * почти чёрные области (#1f2020) и наследует цвета текста, которые
+ * на них теряются. Так как заливки ставятся инлайн-атрибутами,
+ * обычный CSS с !important (CSS сильнее presentation-атрибутов)
+ * принудительно задаёт контрастную пару: тёмные области — светлый текст.
+ *
+ * Классы групп соответствуют структуре рендерера mermaid:
+ * .quadrants (области), .labels (подписи осей), .title (заголовок),
+ * .data-points (точки), .border (рамки).
+ */
+
+/* Тёмная тема: области квадранта */
+[data-md-color-scheme="slate"] .mermaid .quadrants rect {
+  fill: #2b3040 !important;
+}
+
+/* Тёмная тема: все тексты квадранта (заголовок, подписи осей,
+   названия квадрантов, подписи точек) */
+[data-md-color-scheme="slate"] .mermaid .title text,
+[data-md-color-scheme="slate"] .mermaid .labels text,
+[data-md-color-scheme="slate"] .mermaid .quadrants text,
+[data-md-color-scheme="slate"] .mermaid .data-points text {
+  fill: #eceff4 !important;
+}
+
+/* Тёмная тема: точки данных — заметный акцентный цвет */
+[data-md-color-scheme="slate"] .mermaid .data-points circle {
+  fill: #ffc107 !important;
+}
+
+/* Тёмная тема: рамки и оси */
+[data-md-color-scheme="slate"] .mermaid .border rect,
+[data-md-color-scheme="slate"] .mermaid .border line {
+  stroke: #6b7280 !important;
+}
