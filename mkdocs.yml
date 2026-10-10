@@ -55,6 +55,7 @@ nav:
     - Резюме исследования: research/executive-summary.md
     - Аудит корпуса документации: research/audit-report.md
   - "Академические разборы":
+    - "Сравнение: CRM против ERP": research/crm-vs-erp.md
     - "Терминология: CRM и ERP": research/terminology-crm-erp.md
     - "Терминология: франшиза и франчайзинг": research/terminology-franchise.md
     - "Программа разборов (статус)": research/academic-research-agenda.md

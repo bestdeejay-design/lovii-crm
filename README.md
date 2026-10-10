@@ -20,9 +20,11 @@
 
 ## Ключевые документы (читать в этом порядке)
 
+> Если есть 10 минут — начните со [сравнения CRM и ERP](docs/research/crm-vs-erp.md): что это за классы систем, чем отличаются и почему ресторану нужны оба.
+
 1. [Обзор рынка](docs/research/00-market-landscape.md) — цифры, сегменты, игроки.
 2. [Референс-архитектура](docs/research/01-reference-architecture.md) — из каких компонентов состоит CRM/ERP «от заказа до клиента» и как они связаны.
-3. [Компоненты](docs/research/components/) — 11 детальных спецификаций доменов.
+3. [Компоненты](docs/research/components/) — 12 детальных спецификаций доменов.
 4. [Аудиты аналогов](docs/research/competitors/) — iiko, r_keeper, Poster, Quick Resto, Saby Presto, 1С, Tillypad, Fusion POS, Toast, Lightspeed, Square, TouchBistro/Revel, middleware доставки, CRM/лояльность, аудиты стандартов.
 5. [Разрывы рынка](docs/research/gap-analysis.md) — что не закрывает никто и где наше окно возможностей.
 6. [Продуктовый blueprint](docs/research/product-blueprint.md) — как это всё собирается в платформу lovii.

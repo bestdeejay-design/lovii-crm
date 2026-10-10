@@ -15,6 +15,7 @@
 
 | Файл | Содержание |
 |---|---|
+| [`research/crm-vs-erp.md`](research/crm-vs-erp.md) | Сравнение CRM и ERP лоб в лоб: отличия, связка, два контура общепита |
 | [`research/terminology-crm-erp.md`](research/terminology-crm-erp.md) | CRM и ERP: академические определения, происхождение, граница классов, определитель «ситуация → термин» |
 | [`research/terminology-franchise.md`](research/terminology-franchise.md) | Франшиза и франчайзинг: теории, правовой режим РФ, финансовая и операционная терминология |
 | [`research/academic-research-agenda.md`](research/academic-research-agenda.md) | Программа дальнейших академических разборов с приоритетами |
